@@ -1,0 +1,189 @@
+---
+title: "NikaGallery"
+description: "Showcase and discover published apps, solutions, maps, and notebooks from our community"
+---
+
+## Overview
+
+NikaGallery is a vibrant community platform where users can discover, share, and showcase their geospatial applications, data visualizations, maps, and analysis notebooks. It serves as a central hub for the Nika community to learn from each other and find inspiration for their own projects.
+
+![NikaGallery Interface](/products/nika-gallery.jpg)
+
+## Key Features
+
+### Discovery
+- **Browse by Category**: Filter content by type (apps, maps, notebooks, solutions)
+- **Search & Filter**: Advanced search with tags, technologies, and data types
+- **Trending**: Discover popular and trending content
+- **Collections**: Curated collections of related projects
+
+### Publishing
+- **Easy Publishing**: One-click publishing from NikaWorkspace and NikaStudio
+- **Version Control**: Track changes and maintain project history
+- **Collaboration**: Work together with team members
+- **Templates**: Use pre-built templates for common project types
+
+### Community
+- **User Profiles**: Showcase your work and expertise
+- **Comments & Reviews**: Engage with other creators
+- **Favorites**: Save and organize your favorite projects
+- **Following**: Follow creators and get notified of new content
+
+## Content Types
+
+### Applications
+- **Web Applications**: Interactive web apps built with NikaStudio
+- **Mobile Apps**: Cross-platform mobile applications
+- **Desktop Tools**: Standalone desktop applications
+- **APIs & Services**: Backend services and APIs
+
+### Maps & Visualizations
+- **Interactive Maps**: Dynamic, feature-rich maps
+- **Data Dashboards**: Comprehensive data visualization dashboards
+- **Infographics**: Static and animated infographics
+- **3D Visualizations**: Immersive 3D spatial experiences
+
+### Notebooks & Analysis
+- **Jupyter Notebooks**: Data analysis and research notebooks
+- **Tutorials**: Step-by-step guides and tutorials
+- **Research Papers**: Academic and research publications
+- **Case Studies**: Real-world application examples
+
+### Solutions
+- **Industry Solutions**: Sector-specific applications
+- **Templates**: Reusable project templates
+- **Plugins**: Extensions and add-ons
+- **Workflows**: Automated analysis pipelines
+
+## Getting Started
+
+### Browsing Content
+
+Visit the [NikaGallery](https://planet.nika.eco/gallery) to explore community content:
+
+1. **Use the search bar** to find specific content
+2. **Filter by category** to narrow down results
+3. **Sort by popularity, date, or rating**
+4. **Click on items** to view details and interact
+
+### Publishing Your Work
+
+#### From NikaWorkspace
+
+```javascript
+import { NikaWorkspace } from '@nika/workspace';
+
+const workspace = new NikaWorkspace();
+
+// After completing your analysis
+const project = await workspace.publishToGallery({
+  title: 'Urban Heat Island Analysis',
+  description: 'Analysis of temperature variations across city districts',
+  category: 'analysis',
+  tags: ['urban-planning', 'climate', 'heat-island'],
+  visibility: 'public'
+});
+```
+
+#### From NikaStudio
+
+```javascript
+import { NikaStudio } from '@nika/studio';
+
+const studio = new NikaStudio();
+
+// After building your application
+const app = await studio.publishToGallery({
+  title: 'Real-time Traffic Dashboard',
+  description: 'Live traffic monitoring dashboard for city planners',
+  category: 'application',
+  tags: ['traffic', 'real-time', 'dashboard'],
+  visibility: 'public'
+});
+```
+
+## Gallery Categories
+
+### Applications
+- **Urban Planning**: City planning and development tools
+- **Environmental Monitoring**: Climate and environmental applications
+- **Transportation**: Traffic and logistics solutions
+- **Real Estate**: Property and market analysis tools
+- **Public Health**: Health and epidemiology applications
+
+### Maps & Visualizations
+- **Choropleth Maps**: Regional data visualization
+- **Point Maps**: Location-based data display
+- **Flow Maps**: Movement and migration patterns
+- **3D Maps**: Elevation and terrain visualization
+- **Time Series Maps**: Temporal data visualization
+
+### Analysis & Research
+- **Spatial Analysis**: Geographic data analysis
+- **Statistical Analysis**: Statistical modeling and inference
+- **Machine Learning**: AI and ML applications
+- **Remote Sensing**: Satellite and aerial data analysis
+- **Survey Analysis**: Field data collection and analysis
+
+## Community Guidelines
+
+### Content Standards
+- **Original Work**: Only publish your own original content
+- **Quality**: Ensure your content is well-documented and functional
+- **Appropriate**: Content must be suitable for all audiences
+- **Accurate**: Provide accurate descriptions and documentation
+
+### Collaboration
+- **Respect**: Be respectful and constructive in comments
+- **Attribution**: Give credit to original sources and contributors
+- **Sharing**: Share knowledge and help other community members
+- **Feedback**: Provide helpful feedback on others' work
+
+## Featured Projects
+
+### Urban Heat Island Analysis
+A comprehensive analysis of temperature variations across urban areas using satellite data and ground measurements.
+
+### Real-time Traffic Dashboard
+Live traffic monitoring system with predictive analytics for urban mobility planning.
+
+### Environmental Impact Assessment
+Tool for assessing the environmental impact of development projects using spatial analysis.
+
+### Public Health Mapping
+Interactive maps for tracking disease outbreaks and public health metrics.
+
+## Integration
+
+NikaGallery integrates with other Nika products:
+
+- **NikaWorkspace**: Publish analysis results and notebooks
+- **NikaStudio**: Share applications and dashboards
+- **AI Agent**: Get recommendations for similar projects
+
+## API Access
+
+Access gallery content programmatically:
+
+```javascript
+import { NikaGallery } from '@nika/gallery';
+
+const gallery = new NikaGallery();
+
+// Search for content
+const results = await gallery.search({
+  query: 'traffic analysis',
+  category: 'application',
+  tags: ['urban-planning']
+});
+
+// Get project details
+const project = await gallery.getProject('project-id');
+
+// Download project
+const files = await gallery.downloadProject('project-id');
+```
+
+## Support
+
+Need help with NikaGallery? Check out our [support page](/support) or join our [community forum](/forum). 

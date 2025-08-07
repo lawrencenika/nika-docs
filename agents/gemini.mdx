@@ -1,0 +1,412 @@
+---
+title: "Gemini"
+description: "Gemini 2.5 Pro and Gemini 2.5 Flash - Multimodal capabilities and high-speed processing"
+---
+
+## Overview
+
+Google's Gemini models excel in multimodal understanding and processing, making them ideal for complex geospatial tasks that involve images, maps, and spatial data visualization in Nika.
+
+## Available Models
+
+### Gemini 2.5 Pro
+**Best for**: Multimodal analysis, complex spatial reasoning, and advanced visualization
+
+#### Key Capabilities
+- **Multimodal Understanding**: Exceptional processing of text, images, and spatial data
+- **Spatial Reasoning**: Advanced understanding of geographic relationships
+- **Visual Analysis**: Superior image and map interpretation
+- **Creative Generation**: Innovative visualization and design
+- **Context Integration**: Seamless combination of multiple data types
+
+#### Performance in Nika Tasks
+
+##### Coding
+- **Python**: Excellent code generation with spatial libraries
+- **JavaScript/TypeScript**: Outstanding mapping and visualization code
+- **SQL**: Very good spatial query optimization
+- **Geospatial Libraries**: Deep understanding of GDAL, PostGIS, Mapbox
+
+**Example Output Quality**:
+```python
+import rasterio
+import numpy as np
+import matplotlib.pyplot as plt
+from rasterio.plot import show
+from sklearn.cluster import KMeans
+import geopandas as gpd
+from shapely.geometry import Point
+import folium
+from folium.plugins import HeatMap
+
+class SpatialAnalysisPipeline:
+    """
+    Advanced spatial analysis pipeline with multimodal data processing.
+    Handles raster, vector, and tabular data with comprehensive visualization.
+    """
+    
+    def __init__(self, raster_path=None, vector_path=None, tabular_data=None):
+        self.raster_data = None
+        self.vector_data = None
+        self.tabular_data = tabular_data
+        self.analysis_results = {}
+        
+        if raster_path:
+            self.load_raster_data(raster_path)
+        if vector_path:
+            self.load_vector_data(vector_path)
+    
+    def load_raster_data(self, raster_path):
+        """Load and preprocess raster data with error handling."""
+        try:
+            with rasterio.open(raster_path) as src:
+                self.raster_data = {
+                    'data': src.read(1),  # Read first band
+                    'transform': src.transform,
+                    'crs': src.crs,
+                    'bounds': src.bounds,
+                    'meta': src.meta
+                }
+                print(f"Loaded raster: {src.width}x{src.height} pixels, CRS: {src.crs}")
+        except Exception as e:
+            print(f"Error loading raster data: {e}")
+            raise
+    
+    def load_vector_data(self, vector_path):
+        """Load vector data with spatial indexing."""
+        try:
+            self.vector_data = gpd.read_file(vector_path)
+            self.vector_data = self.vector_data.to_crs(epsg=4326)  # Standardize CRS
+            print(f"Loaded vector data: {len(self.vector_data)} features")
+        except Exception as e:
+            print(f"Error loading vector data: {e}")
+            raise
+    
+    def perform_clustering_analysis(self, n_clusters=5, method='kmeans'):
+        """
+        Perform spatial clustering analysis on raster data.
+        
+        Args:
+            n_clusters (int): Number of clusters
+            method (str): Clustering method ('kmeans', 'dbscan', 'hierarchical')
+        """
+        if self.raster_data is None:
+            raise ValueError("No raster data loaded")
+        
+        # Prepare data for clustering
+        valid_pixels = self.raster_data['data'][~np.isnan(self.raster_data['data'])]
+        valid_pixels = valid_pixels.reshape(-1, 1)
+        
+        if method == 'kmeans':
+            kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+            clusters = kmeans.fit_predict(valid_pixels)
+            
+            # Create clustered raster
+            clustered_raster = np.full_like(self.raster_data['data'], np.nan)
+            valid_indices = ~np.isnan(self.raster_data['data'])
+            clustered_raster[valid_indices] = clusters
+            
+            self.analysis_results['clustering'] = {
+                'method': method,
+                'n_clusters': n_clusters,
+                'clustered_raster': clustered_raster,
+                'cluster_centers': kmeans.cluster_centers_,
+                'inertia': kmeans.inertia_
+            }
+            
+            return self.analysis_results['clustering']
+    
+    def create_interactive_visualization(self, output_path='spatial_analysis.html'):
+        """
+        Create comprehensive interactive visualization combining all data types.
+        """
+        if not self.analysis_results:
+            raise ValueError("No analysis results available")
+        
+        # Create base map
+        center_lat = (self.raster_data['bounds'].top + self.raster_data['bounds'].bottom) / 2
+        center_lon = (self.raster_data['bounds'].left + self.raster_data['bounds'].right) / 2
+        
+        m = folium.Map(
+            location=[center_lat, center_lon],
+            zoom_start=10,
+            tiles='cartodbpositron'
+        )
+        
+        # Add vector data if available
+        if self.vector_data is not None:
+            folium.GeoJson(
+                self.vector_data,
+                name='Vector Features',
+                style_function=lambda x: {
+                    'fillColor': '#3186cc',
+                    'color': '#000000',
+                    'weight': 2,
+                    'fillOpacity': 0.7
+                },
+                popup=folium.GeoJsonPopup(fields=['name', 'type'])
+            ).add_to(m)
+        
+        # Add clustering results if available
+        if 'clustering' in self.analysis_results:
+            clustered_data = self.analysis_results['clustering']['clustered_raster']
+            
+            # Convert raster to points for heatmap
+            rows, cols = np.where(~np.isnan(clustered_data))
+            heatmap_data = []
+            
+            for row, col in zip(rows, cols):
+                # Convert pixel coordinates to geographic coordinates
+                lon, lat = rasterio.transform.xy(
+                    self.raster_data['transform'], row, col
+                )
+                cluster_value = clustered_data[row, col]
+                heatmap_data.append([lat, lon, cluster_value])
+            
+            HeatMap(
+                heatmap_data,
+                name='Clustering Results',
+                radius=15,
+                blur=10,
+                max_zoom=13
+            ).add_to(m)
+        
+        # Add layer control
+        folium.LayerControl().add_to(m)
+        
+        # Save the map
+        m.save(output_path)
+        print(f"Interactive visualization saved to: {output_path}")
+        return m
+    
+    def generate_analysis_report(self):
+        """Generate comprehensive analysis report with visualizations."""
+        report = {
+            'summary': {
+                'raster_info': {
+                    'dimensions': self.raster_data['data'].shape if self.raster_data else None,
+                    'crs': self.raster_data['crs'] if self.raster_data else None,
+                    'bounds': self.raster_data['bounds'] if self.raster_data else None
+                },
+                'vector_info': {
+                    'feature_count': len(self.vector_data) if self.vector_data is not None else 0,
+                    'geometry_types': list(self.vector_data.geom_type.unique()) if self.vector_data is not None else []
+                },
+                'analysis_performed': list(self.analysis_results.keys())
+            },
+            'results': self.analysis_results
+        }
+        
+        return report
+
+# Usage example
+if __name__ == "__main__":
+    # Initialize pipeline
+    pipeline = SpatialAnalysisPipeline(
+        raster_path='satellite_image.tif',
+        vector_path='boundaries.geojson'
+    )
+    
+    # Perform analysis
+    clustering_result = pipeline.perform_clustering_analysis(n_clusters=6)
+    
+    # Create visualization
+    map_obj = pipeline.create_interactive_visualization()
+    
+    # Generate report
+    report = pipeline.generate_analysis_report()
+    print("Analysis completed successfully!")
+```
+
+##### Map Creation
+- **Multimodal Maps**: Exceptional integration of raster and vector data
+- **Interactive Visualizations**: Advanced interactive mapping capabilities
+- **Spatial Analysis**: Sophisticated spatial operations and algorithms
+- **Performance Optimization**: Efficient handling of large datasets
+
+##### Data Analysis
+- **Multimodal Analysis**: Superior processing of mixed data types
+- **Spatial Statistics**: Advanced spatial statistical methods
+- **Pattern Recognition**: Sophisticated pattern detection in spatial data
+- **Insight Generation**: Deep interpretation of complex spatial relationships
+
+##### SQL Execution
+- **Spatial Queries**: Excellent spatial SQL operations
+- **Complex Joins**: Advanced spatial and temporal joins
+- **Performance Tuning**: Sophisticated query optimization
+- **Data Integration**: Seamless integration of multiple data sources
+
+### Gemini 2.5 Flash
+**Best for**: High-speed processing, real-time applications, and efficient workflows
+
+#### Key Capabilities
+- **Speed**: Ultra-fast response times for real-time applications
+- **Efficiency**: Optimized for high-throughput processing
+- **Reliability**: Consistent performance under load
+- **Scalability**: Excellent for batch processing and automation
+
+#### Performance in Nika Tasks
+
+##### Coding
+- **Speed**: Very fast code generation
+- **Quality**: Good code quality with basic optimization
+- **Documentation**: Adequate inline documentation
+- **Best For**: Rapid prototyping and standard applications
+
+##### Map Creation
+- **Quick Maps**: Fast generation of standard visualizations
+- **Performance**: Efficient rendering for typical datasets
+- **Styling**: Good visual design with templates
+- **Best For**: Real-time dashboards and monitoring
+
+##### Data Analysis
+- **Fast Analysis**: Quick processing of routine analyses
+- **Standard Methods**: Good performance on common statistical operations
+- **Interpretation**: Adequate result explanation
+- **Best For**: Regular reporting and monitoring
+
+##### SQL Execution
+- **Quick Queries**: Fast execution of standard queries
+- **Basic Optimization**: Adequate query tuning
+- **Error Handling**: Good error management
+- **Best For**: Routine database operations
+
+## Use Case Recommendations
+
+### Choose Gemini 2.5 Pro When:
+- **Multimodal Tasks**: Complex analysis involving images, maps, and data
+- **Advanced Visualization**: Sophisticated mapping and visualization needs
+- **Research Projects**: Academic or research-level spatial analysis
+- **Production Systems**: Critical business applications with complex data
+- **Innovation**: Cutting-edge spatial analysis and visualization
+
+### Choose Gemini 2.5 Flash When:
+- **Real-time Applications**: Live dashboards and monitoring systems
+- **High-throughput Processing**: Batch processing and automation
+- **Quick Prototyping**: Rapid development and testing
+- **Cost Optimization**: Budget-conscious projects
+- **Standard Tasks**: Routine analysis and reporting
+
+## Configuration Examples
+
+### Gemini 2.5 Pro Configuration
+```javascript
+const geminiProConfig = {
+  provider: 'gemini',
+  model: 'gemini-2.5-pro',
+  temperature: 0.3,
+  maxTokens: 4096,
+  systemPrompt: `You are an expert geospatial analyst specializing in multimodal data analysis. 
+  Create sophisticated spatial analysis pipelines with comprehensive visualization 
+  and interpretation of complex spatial relationships.`,
+  features: {
+    multimodal: 'enabled',
+    spatialReasoning: 'advanced',
+    visualization: 'comprehensive'
+  }
+};
+```
+
+### Gemini 2.5 Flash Configuration
+```javascript
+const geminiFlashConfig = {
+  provider: 'gemini',
+  model: 'gemini-2.5-flash',
+  temperature: 0.1,
+  maxTokens: 2048,
+  systemPrompt: `You are a fast, efficient geospatial assistant. 
+  Provide quick, reliable solutions for spatial analysis and visualization tasks.`,
+  features: {
+    speed: 'optimized',
+    efficiency: 'high',
+    reliability: 'excellent'
+  }
+};
+```
+
+## Performance Metrics
+
+| Metric | Gemini 2.5 Pro | Gemini 2.5 Flash |
+|--------|----------------|-------------------|
+| **Response Time** | 2-4 seconds | 0.5-1.5 seconds |
+| **Multimodal Quality** | 9.4/10 | 7.5/10 |
+| **Spatial Analysis** | 9.3/10 | 7.8/10 |
+| **Cost per Request** | $0.02 | $0.005 |
+| **Reliability** | 99.6% | 99.4% |
+
+## Best Practices
+
+### For Gemini 2.5 Pro
+1. **Leverage Multimodal**: Include images, maps, and spatial data in prompts
+2. **Provide Context**: Give detailed spatial context and relationships
+3. **Request Visualization**: Ask for comprehensive visual outputs
+4. **Iterative Refinement**: Build complex analyses step by step
+
+### For Gemini 2.5 Flash
+1. **Keep Prompts Focused**: Provide specific, targeted instructions
+2. **Use Templates**: Leverage pre-defined analysis patterns
+3. **Batch Operations**: Group related tasks for efficiency
+4. **Monitor Performance**: Track response times and quality
+
+## Integration with Nika
+
+### API Usage
+```python
+import nikaplanet.com as nai
+
+# Initialize with Gemini
+client = nai.Client(
+    llm_provider='gemini',
+    model='gemini-2.5-pro'
+)
+
+# Multimodal spatial analysis
+analysis_result = client.analyze_multimodal_spatial({
+    'raster_data': 'satellite_image.tif',
+    'vector_data': 'boundaries.geojson',
+    'tabular_data': 'demographics.csv',
+    'analysis_type': 'comprehensive_spatial_analysis',
+    'visualization': 'interactive_dashboard',
+    'output_format': 'html'
+})
+```
+
+### Workflow Integration
+```python
+# Multimodal workflow for complex spatial analysis
+workflow = nai.Workflow()
+
+# Use Gemini Pro for data preprocessing
+workflow.add_step(
+    'preprocess',
+    model='gemini-2.5-pro',
+    task='multimodal_data_preprocessing'
+)
+
+# Use Gemini Flash for quick analysis
+workflow.add_step(
+    'analyze',
+    model='gemini-2.5-flash',
+    task='spatial_analysis'
+)
+
+# Use Gemini Pro for visualization
+workflow.add_step(
+    'visualize',
+    model='gemini-2.5-pro',
+    task='advanced_visualization'
+)
+
+# Use Gemini Flash for reporting
+workflow.add_step(
+    'report',
+    model='gemini-2.5-flash',
+    task='generate_report'
+)
+
+results = workflow.execute()
+```
+
+## Support
+
+For questions about Gemini integration, visit our [support page](/support) or check the [AI Agents Overview](/models/ai-agents-overview). 

@@ -1,0 +1,145 @@
+---
+title: "Raster Layer Styling"
+description: "Customize raster layer visualization with band selection, color maps, and range adjustments"
+---
+
+## Raster Layer Styling
+
+Customize how your raster layers appear on the map using the Layer Styles panel. Control visualization types, band selection, color mapping, and data ranges to effectively display your raster data.
+
+![Raster Layer Styling Overview](/guides/become-map-expert/raster-styling-1.jpg)
+
+## How to Style Raster Layers
+
+### Access Styling Panel
+1. **Right-click on a raster layer** in the layers panel
+2. **Select "Layer Styles"** from the context menu
+3. **Styling panel opens** with all raster customization options
+
+### Available Styling Sections
+
+#### **General Section**
+- **Type**: Choose visualization method (Single channel, RGB channels, Hillshade)
+- **Band Selection**: Select which bands to display
+- **Range**: Set data range for each band
+
+#### **Raster Section**
+- **Color**: Choose color map or palette
+- **Opacity**: Adjust layer transparency (0-100%)
+- **Position**: Control layer stacking order
+- **Resample**: Select resampling method for zoom levels
+
+#### **Legend Section**
+- **Contents**: Set value range displayed in legend
+- **Caption**: Add descriptive text for the layer
+
+#### **Popups Section**
+- **Show**: Configure when popup information appears
+
+#### **Info Section**
+- **File type**: Shows raster format (e.g., Cloud Optimized GeoTIFF)
+- **File name**: Display file name
+- **CRS**: Show coordinate reference system
+
+## Visualization Types
+
+![Visualization Types](/guides/become-map-expert/raster-styling-2.jpg)
+
+### Single Channel
+- **Display one band** at a time
+- **Choose band**: Select b1, b2, b3, etc.
+- **Set range**: Adjust min/max values for the selected band
+- **Apply color map**: Use different color schemes
+
+### RGB Channels
+- **Display three bands** as red, green, and blue
+- **Band Red**: Select which band appears as red
+- **Band Green**: Select which band appears as green
+- **Band Blue**: Select which band appears as blue
+- **Individual ranges**: Set min/max for each color channel
+
+### Composite Band (NDVI, etc.)
+- **Mathematical combinations** of bands
+- **NDVI**: Normalized Difference Vegetation Index
+- **Other indices**: EVI, NDBI, and more
+- **Custom formulas**: Create your own band combinations
+
+## Band Range Adjustment
+
+![Band Range Control](/guides/become-map-expert/raster-styling-3.jpg)
+
+### Adjust Min/Max Values
+1. **Select a band** in the General section
+2. **View histogram** showing data distribution
+3. **Drag sliders** to set new min/max values
+4. **See real-time updates** on the map
+
+### Range Options
+- **Window**: Adjust range based on current map view
+- **Entire Layer**: Use full data range across the entire dataset
+- **Manual**: Set custom min/max values
+
+### Histogram Display
+- **Data distribution**: See how values are spread
+- **Peak identification**: Find concentration of values
+- **Outlier detection**: Identify extreme values
+
+## Color Map Selection
+
+![Color Map Options](/guides/become-map-expert/raster-styling-4.jpg)
+
+### Available Color Maps
+
+#### **Basic**
+- **None**: Grayscale gradient (black to white)
+- **Simple**: Basic color schemes
+
+#### **Perceptually Uniform**
+- **Blues**: Blue gradient for water, elevation
+- **Greens**: Green gradient for vegetation
+- **Oranges**: Orange gradient for temperature
+- **Purples**: Purple gradient for specialized data
+- **Reds**: Red gradient for intensity, heat
+
+#### **Specialized**
+- **Rainbow**: Full spectrum for complex data
+- **Viridis**: Colorblind-friendly gradient
+- **Plasma**: High-contrast gradient
+- **Inferno**: Dark-to-light gradient
+
+### Color Map Application
+- **Single channel mode**: Apply to individual bands
+- **Real-time preview**: See changes immediately
+- **Data-appropriate**: Choose based on data type and purpose
+
+## Auto-Save Feature
+
+All styling changes are **automatically saved** for future sessions:
+- **Settings persist** when you close and reopen the map
+- **No manual saving** required
+- **Consistent appearance** across sessions
+- **Team collaboration** benefits from saved settings
+
+## Best Practices
+
+### Choose Appropriate Visualization
+- **Single channel**: For individual band analysis
+- **RGB**: For natural color or false color composites
+- **Composite**: For derived indices and calculations
+
+### Set Optimal Ranges
+- **Use histogram** to understand data distribution
+- **Avoid extreme values** that hide important patterns
+- **Consider data type** when setting ranges
+
+### Select Suitable Color Maps
+- **Grayscale**: For general data visualization
+- **Sequential colors**: For continuous data (elevation, temperature)
+- **Diverging colors**: For data with meaningful center point
+- **Colorblind-friendly**: For accessibility
+
+## Next Steps
+
+- **Add More Raster Layers**: Combine multiple raster datasets
+- **Create Composites**: Build custom band combinations
+- **Publish Your Map**: Share your styled raster layers 

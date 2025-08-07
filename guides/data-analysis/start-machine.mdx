@@ -1,0 +1,122 @@
+---
+title: "Start Machine"
+description: "Learn how to start and manage VM kernels for Nika notebooks with different CPU and GPU configurations"
+---
+
+## Start Machine
+
+Learn how to start and manage VM kernels for your Nika notebooks. Choose from different CPU and GPU configurations to match your analysis needs.
+
+## Step 1: Select Machine Type
+
+### Available Configurations
+Choose from these pre-configured options:
+
+#### CPU Machines
+- **CPUx3**: 3 CPU cores, 24GB RAM, ready in under 30 seconds
+- **CPUx7**: 7 CPU cores, 53GB RAM, ready in over 2 minutes
+- **CPUx21**: 20 CPU cores, 156GB RAM, ready in over 2 minutes
+
+#### GPU Machines
+- **Nvidia T4 x1**: 6 CPU cores, 24GB RAM, 1x T4 GPU (16GB), ready in over 2 minutes
+- **Nvidia T4 x2**: 14 CPU cores, 50GB RAM, 2x T4 GPUs (32GB), ready in over 2 minutes
+- **Nvidia T4 x4**: 30 CPU cores, 100GB RAM, 4x T4 GPUs (64GB), ready in over 2 minutes
+
+### Advanced Configurations
+For larger machines (H100, more RAM, etc.):
+- **Contact Support**: Send email request for custom configurations
+- **Custom Specs**: Specify your exact requirements
+- **Availability Check**: Support will confirm availability and pricing
+
+![Machine Selection Options](/guides/data-analysis/start-machine-3.jpg)
+
+## Step 2: Start Your Machine
+
+### Quick Start
+1. **Select Configuration**: Choose your desired machine type from the dropdown
+2. **Click "Start Machine"**: Click the prominent white button
+3. **Wait for Ready**: Machine will be ready in 15-40 seconds depending on type
+
+### Start Times
+- **CPUx3**: ~15 seconds (fastest)
+- **Other Configurations**: ~40 seconds or more (varies by availability)
+
+![Start Machine Button](/guides/data-analysis/start-machine-1.jpg)
+
+## Step 3: Monitor Machine Status
+
+### Status Indicators
+Monitor your machine status in two ways:
+
+#### Method 1: Machine Panel
+- **Hover over green dot**: Shows detailed status information
+- **View metrics**: Uptime, CPU usage, memory usage
+- **Real-time updates**: Status updates automatically
+
+![Machine Status Panel](/guides/data-analysis/start-machine-2.jpg)
+
+#### Method 2: Bottom Left Icon
+- **Hover over machine icon**: Quick status overview
+- **Visual indicator**: Shows if machine is running or terminated
+- **Easy access**: Always visible in workspace
+
+![Bottom Left Status Icon](/guides/data-analysis/start-machine-4.jpg)
+
+## Step 4: Stop Machine
+
+### Stop Process
+1. **Click "Stop Machine"**: Click the white button in machine panel
+2. **Immediate Stop**: Machine stops running immediately
+3. **No Compute Cost**: No charges after stopping
+
+### Benefits of Stopping
+- **Save Resources**: Stop when not actively using
+- **Cost Control**: No charges when stopped
+- **Quick Restart**: Can restart anytime needed
+
+![Stop Machine Button](/guides/data-analysis/start-machine-5.jpg)
+
+## Auto-Shutdown Feature
+
+### Smart Shutdown
+- **15-Minute Timer**: Machine auto-shuts down 15 minutes after last user leaves
+- **No Code Running**: Only shuts down when no code is executing
+- **Retry Logic**: Retries shutdown every 15 minutes if conditions aren't met
+- **Cost Savings**: Helps save compute hour quota
+
+### When Auto-Shutdown Triggers
+- **All users left workspace**: No active users in the notebook
+- **No active code**: No code cells currently running
+- **Idle period**: 15 minutes of inactivity
+
+## Best Practices
+
+### Machine Selection
+- **Start Small**: Begin with CPUx3 for simple analysis
+- **Scale Up**: Upgrade to larger machines for complex tasks
+- **GPU for ML**: Use GPU machines for machine learning workloads
+- **Cost Consideration**: Larger machines consume more resources
+
+### Resource Management
+- **Stop When Done**: Stop machines when not actively working
+- **Monitor Usage**: Check status regularly
+- **Plan Sessions**: Start machines when ready to work
+- **Use Auto-Shutdown**: Let the system manage idle machines
+
+## Next Steps
+
+Now that your machine is running:
+
+1. **Start Coding**: Begin your analysis in the notebook
+2. **Load Data**: Access your workspace files
+3. **Use GPU**: Leverage GPU acceleration if available
+4. **Monitor Performance**: Keep an eye on resource usage
+
+## Need Help?
+
+- **Custom Configurations**: Email support for H100 or large machines
+- **Performance Issues**: Contact support for optimization help
+- **Billing Questions**: Support can explain compute costs
+- **Technical Issues**: Get help with machine management
+
+Happy computing!

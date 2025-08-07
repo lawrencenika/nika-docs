@@ -1,0 +1,268 @@
+---
+title: "NikaMap"
+description: "World's first collaborative auto-saving map that can visualize millions of vector polygons, GBs of raster images, even drone images out of box"
+---
+
+## Overview
+
+NikaMap is the world's first collaborative auto-saving map platform designed to handle massive geospatial datasets with unprecedented performance. Built for teams and organizations that need to visualize and collaborate on large-scale spatial data, NikaMap can handle millions of vector polygons, gigabytes of raster images, and even drone imagery out of the box.
+
+![NikaMap Interface](/products/nika-map.jpg)
+
+## Key Features
+
+### Massive Data Visualization
+- **Millions of Polygons**: Render millions of vector polygons without performance degradation
+- **Gigabyte Raster Support**: Handle massive raster datasets with intelligent tiling
+- **Drone Image Integration**: Native support for drone imagery and aerial photography
+- **Real-time Rendering**: Smooth performance even with complex datasets
+
+### Collaborative Mapping
+- **Auto-Save**: Never lose your work with automatic saving
+- **Real-time Collaboration**: Multiple users can edit maps simultaneously
+- **Version Control**: Track changes and maintain map history
+- **Conflict Resolution**: Intelligent conflict detection and resolution
+
+### Advanced Visualization
+- **Multiple Layer Types**: Vector, raster, point cloud, and 3D layers
+- **Custom Styling**: Advanced styling options for all data types
+- **Interactive Features**: Popups, tooltips, and dynamic interactions
+- **3D Visualization**: Immersive 3D mapping capabilities
+
+### Performance Optimization
+- **Spatial Indexing**: Advanced spatial indexing for fast queries
+- **Level-of-Detail**: Automatic detail management based on zoom level
+- **Caching**: Intelligent caching for improved performance
+- **Compression**: Advanced data compression for faster loading
+
+## Getting Started
+
+### Creating Your First Map
+
+```javascript
+import { NikaMap } from '@nika/map';
+
+// Initialize map
+const map = new NikaMap({
+  container: 'map-container',
+  center: [40.7128, -74.0060],
+  zoom: 10,
+  autoSave: true,
+  collaborative: true
+});
+
+// Add vector layer with millions of polygons
+await map.addLayer({
+  type: 'vector',
+  source: 'postgresql://user:pass@host/db',
+  table: 'large_polygon_dataset',
+  style: {
+    fillColor: '#ff0000',
+    fillOpacity: 0.7,
+    strokeColor: '#000000',
+    strokeWidth: 1
+  }
+});
+
+// Add raster layer with GBs of data
+await map.addLayer({
+  type: 'raster',
+  source: 's3://bucket/large-raster.tif',
+  tiling: 'auto',
+  compression: 'webp'
+});
+
+// Add drone imagery
+await map.addLayer({
+  type: 'drone',
+  source: 'drone-images/',
+  metadata: 'drone-metadata.json',
+  georeference: 'auto'
+});
+```
+
+## Data Sources
+
+### Vector Data
+- **PostgreSQL/PostGIS**: Direct database connections
+- **GeoJSON**: Large GeoJSON files with streaming
+- **Shapefiles**: Traditional GIS format support
+- **KML/KMZ**: Google Earth format support
+- **TopoJSON**: Topology-based vector format
+
+### Raster Data
+- **GeoTIFF**: High-resolution raster support
+- **Cloud Optimized GeoTIFF (COG)**: Optimized for web delivery
+- **JPEG2000**: Compressed raster format
+- **NetCDF**: Scientific raster format
+- **HDF5**: Hierarchical data format
+
+### Drone Data
+- **DJI**: Native DJI drone format support
+- **Pix4D**: Pix4D processing results
+- **Agisoft**: Metashape processing results
+- **Custom Formats**: Support for custom drone data formats
+
+## Collaboration Features
+
+### Real-time Editing
+```javascript
+// Enable real-time collaboration
+map.enableCollaboration({
+  roomId: 'project-123',
+  userId: 'user-456',
+  permissions: {
+    canEdit: true,
+    canAddLayers: true,
+    canDeleteLayers: false
+  }
+});
+
+// Listen for changes from other users
+map.on('collaboration:change', (change) => {
+  console.log('Change from user:', change.userId);
+  console.log('Change type:', change.type);
+  console.log('Change data:', change.data);
+});
+```
+
+### Version Control
+```javascript
+// Save a version
+await map.saveVersion({
+  name: 'Initial Setup',
+  description: 'First version of the map',
+  tags: ['initial', 'setup']
+});
+
+// List versions
+const versions = await map.getVersions();
+console.log('Available versions:', versions);
+
+// Restore a version
+await map.restoreVersion('version-id-123');
+```
+
+## Performance Features
+
+### Spatial Indexing
+```javascript
+// Create spatial index for large dataset
+await map.createSpatialIndex({
+  layerId: 'large-polygon-layer',
+  method: 'rtree',
+  fields: ['geometry', 'properties']
+});
+
+// Query with spatial index
+const results = await map.query({
+  layerId: 'large-polygon-layer',
+  bounds: [minLng, minLat, maxLng, maxLat],
+  useIndex: true
+});
+```
+
+### Level of Detail
+```javascript
+// Configure level of detail
+map.setLevelOfDetail({
+  layerId: 'large-polygon-layer',
+  levels: [
+    { zoom: 0, detail: 0.1 },
+    { zoom: 5, detail: 0.5 },
+    { zoom: 10, detail: 1.0 }
+  ]
+});
+```
+
+## Advanced Features
+
+### 3D Visualization
+```javascript
+// Enable 3D mode
+map.enable3D({
+  terrain: 'srtm',
+  buildings: 'osm',
+  atmosphere: true
+});
+
+// Add 3D layer
+await map.add3DLayer({
+  type: 'pointcloud',
+  source: 'laser-scan.las',
+  color: 'intensity'
+});
+```
+
+### Custom Styling
+```javascript
+// Advanced styling for vector layers
+map.setStyle({
+  layerId: 'polygon-layer',
+  style: {
+    fill: {
+      color: ['interpolate', ['linear'], ['zoom'], 0, '#ff0000', 10, '#00ff00'],
+      opacity: 0.8
+    },
+    stroke: {
+      color: '#000000',
+      width: 2,
+      dasharray: [5, 5]
+    }
+  }
+});
+```
+
+## Integration
+
+NikaMap integrates seamlessly with other Nika products:
+
+- **NikaWorkspace**: Use workspace data directly in maps
+- **NikaStudio**: Embed maps in custom applications
+- **NikaGallery**: Share and publish maps
+- **AI Agent**: Get intelligent suggestions for map styling and analysis
+
+## API Reference
+
+### Core Methods
+- `addLayer()`: Add new layer to map
+- `removeLayer()`: Remove layer from map
+- `setStyle()`: Apply styling to layer
+- `query()`: Query data from layer
+- `export()`: Export map as image or data
+
+### Collaboration Methods
+- `enableCollaboration()`: Enable real-time collaboration
+- `saveVersion()`: Save map version
+- `restoreVersion()`: Restore previous version
+- `share()`: Share map with team members
+
+### Performance Methods
+- `createSpatialIndex()`: Create spatial index for layer
+- `setLevelOfDetail()`: Configure detail levels
+- `optimize()`: Optimize map performance
+- `cache()`: Manage data caching
+
+## Best Practices
+
+### Performance
+1. **Use Spatial Indexing**: Always create spatial indexes for large datasets
+2. **Optimize Data Formats**: Use compressed formats like COG for rasters
+3. **Level of Detail**: Configure appropriate detail levels for different zoom levels
+4. **Caching**: Enable caching for frequently accessed data
+
+### Collaboration
+1. **Clear Naming**: Use descriptive names for layers and versions
+2. **Permissions**: Set appropriate permissions for team members
+3. **Communication**: Use comments and descriptions for changes
+4. **Backup**: Regularly save versions of important maps
+
+### Data Management
+1. **Data Validation**: Validate data before adding to map
+2. **Metadata**: Include comprehensive metadata for all layers
+3. **Documentation**: Document data sources and processing steps
+4. **Versioning**: Maintain version history for all datasets
+
+## Support
+
+Need help with NikaMap? Check out our [support page](/support) or join our [community forum](/forum). 

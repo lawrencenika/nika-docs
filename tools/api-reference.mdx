@@ -1,0 +1,690 @@
+---
+title: "API Reference"
+description: "Complete API documentation for Nika services"
+---
+
+## Overview
+
+The Nika API provides programmatic access to all Nika services including NikaWorkspace, NikaGallery, and NikaStudio. This reference documents all available endpoints, parameters, and responses.
+
+## Authentication
+
+### API Key Authentication
+All API requests require authentication using an API key in the request header:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+     https://api.nikaplanet.com/v1/workspaces
+```
+
+### Rate Limits
+- **Free Tier**: 1,000 requests per hour
+- **Pro Tier**: 10,000 requests per hour
+- **Enterprise Tier**: 100,000 requests per hour
+
+## Base URL
+```
+https://api.nikaplanet.com/v1
+```
+
+## Workspace API
+
+### List Workspaces
+```http
+GET /workspaces
+```
+
+#### Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number (default: 1) |
+| `limit` | integer | Items per page (default: 20, max: 100) |
+| `search` | string | Search workspaces by name |
+| `status` | string | Filter by status (active, archived) |
+
+#### Response
+```json
+{
+  "data": [
+    {
+      "id": "ws_123456789",
+      "name": "My Workspace",
+      "description": "Workspace description",
+      "status": "active",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "pages": 5
+  }
+}
+```
+
+### Create Workspace
+```http
+POST /workspaces
+```
+
+#### Request Body
+```json
+{
+  "name": "New Workspace",
+  "description": "Workspace description",
+  "settings": {
+    "default_coordinate_system": "EPSG:4326",
+    "auto_save": true
+  }
+}
+```
+
+#### Response
+```json
+{
+  "id": "ws_123456789",
+  "name": "New Workspace",
+  "description": "Workspace description",
+  "status": "active",
+  "created_at": "2024-01-01T00:00:00Z",
+  "settings": {
+    "default_coordinate_system": "EPSG:4326",
+    "auto_save": true
+  }
+}
+```
+
+### Get Workspace
+```http
+GET /workspaces/{workspace_id}
+```
+
+#### Response
+```json
+{
+  "id": "ws_123456789",
+  "name": "My Workspace",
+  "description": "Workspace description",
+  "status": "active",
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z",
+  "settings": {
+    "default_coordinate_system": "EPSG:4326",
+    "auto_save": true
+  },
+  "usage": {
+    "storage_used": "1.5GB",
+    "storage_limit": "10GB",
+    "api_calls_used": 500,
+    "api_calls_limit": 1000
+  }
+}
+```
+
+### Update Workspace
+```http
+PUT /workspaces/{workspace_id}
+```
+
+#### Request Body
+```json
+{
+  "name": "Updated Workspace Name",
+  "description": "Updated description",
+  "settings": {
+    "default_coordinate_system": "EPSG:3857",
+    "auto_save": false
+  }
+}
+```
+
+### Delete Workspace
+```http
+DELETE /workspaces/{workspace_id}
+```
+
+## Data API
+
+### Upload Data
+```http
+POST /workspaces/{workspace_id}/data
+```
+
+#### Request Body (multipart/form-data)
+```bash
+curl -X POST \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "file=@data.csv" \
+  -F "name=My Dataset" \
+  -F "description=Dataset description" \
+  -F "coordinate_system=EPSG:4326" \
+  https://api.nikaplanet.com/v1/workspaces/{workspace_id}/data
+```
+
+#### Response
+```json
+{
+  "id": "data_123456789",
+  "name": "My Dataset",
+  "description": "Dataset description",
+  "file_size": "2.5MB",
+  "record_count": 1000,
+  "columns": [
+    {"name": "id", "type": "integer"},
+    {"name": "name", "type": "string"},
+    {"name": "latitude", "type": "float"},
+    {"name": "longitude", "type": "float"}
+  ],
+  "coordinate_system": "EPSG:4326",
+  "status": "processing",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
+
+### List Data
+```http
+GET /workspaces/{workspace_id}/data
+```
+
+#### Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number |
+| `limit` | integer | Items per page |
+| `type` | string | Filter by data type (csv, geojson, shapefile) |
+| `status` | string | Filter by status (ready, processing, error) |
+
+### Get Data
+```http
+GET /workspaces/{workspace_id}/data/{data_id}
+```
+
+### Delete Data
+```http
+DELETE /workspaces/{workspace_id}/data/{data_id}
+```
+
+## Analysis API
+
+### Run Analysis
+```http
+POST /workspaces/{workspace_id}/analysis
+```
+
+#### Request Body
+```json
+{
+  "name": "Buffer Analysis",
+  "type": "buffer",
+  "data_id": "data_123456789",
+  "parameters": {
+    "distance": 1000,
+    "units": "meters",
+    "dissolve": true
+  },
+  "output_format": "geojson"
+}
+```
+
+#### Response
+```json
+{
+  "id": "analysis_123456789",
+  "name": "Buffer Analysis",
+  "type": "buffer",
+  "status": "running",
+  "progress": 0,
+  "created_at": "2024-01-01T00:00:00Z",
+  "estimated_completion": "2024-01-01T00:05:00Z"
+}
+```
+
+### Get Analysis Status
+```http
+GET /workspaces/{workspace_id}/analysis/{analysis_id}
+```
+
+#### Response
+```json
+{
+  "id": "analysis_123456789",
+  "name": "Buffer Analysis",
+  "type": "buffer",
+  "status": "completed",
+  "progress": 100,
+  "result": {
+    "output_id": "data_987654321",
+    "download_url": "https://api.nikaplanet.com/v1/data/987654321/download",
+    "preview_url": "https://api.nikaplanet.com/v1/data/987654321/preview"
+  },
+  "created_at": "2024-01-01T00:00:00Z",
+  "completed_at": "2024-01-01T00:04:30Z"
+}
+```
+
+### List Analysis
+```http
+GET /workspaces/{workspace_id}/analysis
+```
+
+## Visualization API
+
+### Create Map
+```http
+POST /workspaces/{workspace_id}/visualizations
+```
+
+#### Request Body
+```json
+{
+  "name": "Population Map",
+  "type": "choropleth",
+  "data_id": "data_123456789",
+  "config": {
+    "value_field": "population",
+    "color_scheme": "viridis",
+    "breaks": [0, 1000, 5000, 10000, 50000],
+    "labels": ["Low", "Medium", "High", "Very High"]
+  },
+  "style": "light"
+}
+```
+
+#### Response
+```json
+{
+  "id": "viz_123456789",
+  "name": "Population Map",
+  "type": "choropleth",
+  "status": "ready",
+  "url": "https://api.nikaplanet.com/v1/visualizations/123456789/view",
+  "embed_url": "https://api.nikaplanet.com/v1/visualizations/123456789/embed",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
+
+### Get Visualization
+```http
+GET /workspaces/{workspace_id}/visualizations/{visualization_id}
+```
+
+### Update Visualization
+```http
+PUT /workspaces/{workspace_id}/visualizations/{visualization_id}
+```
+
+### Delete Visualization
+```http
+DELETE /workspaces/{workspace_id}/visualizations/{visualization_id}
+```
+
+## Gallery API
+
+### List Projects
+```http
+GET /gallery/projects
+```
+
+#### Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number |
+| `limit` | integer | Items per page |
+| `category` | string | Filter by category |
+| `tags` | string | Filter by tags (comma-separated) |
+| `search` | string | Search projects |
+
+#### Response
+```json
+{
+  "data": [
+    {
+      "id": "proj_123456789",
+      "title": "Urban Heat Island Analysis",
+      "description": "Analysis of temperature variations",
+      "category": "analysis",
+      "tags": ["urban-planning", "climate"],
+      "author": {
+        "id": "user_123",
+        "name": "John Doe",
+        "avatar": "https://api.nikaplanet.com/v1/users/123/avatar"
+      },
+      "thumbnail": "https://api.nikaplanet.com/v1/projects/123456789/thumbnail",
+      "views": 150,
+      "likes": 25,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 500,
+    "pages": 25
+  }
+}
+```
+
+### Get Project
+```http
+GET /gallery/projects/{project_id}
+```
+
+### Create Project
+```http
+POST /gallery/projects
+```
+
+#### Request Body
+```json
+{
+  "title": "My Project",
+  "description": "Project description",
+  "category": "analysis",
+  "tags": ["urban-planning", "climate"],
+  "visibility": "public",
+  "workspace_id": "ws_123456789",
+  "analysis_ids": ["analysis_123", "analysis_456"],
+  "visualization_ids": ["viz_123", "viz_456"]
+}
+```
+
+### Update Project
+```http
+PUT /gallery/projects/{project_id}
+```
+
+### Delete Project
+```http
+DELETE /gallery/projects/{project_id}
+```
+
+## Studio API
+
+### List Applications
+```http
+GET /studio/applications
+```
+
+#### Parameters
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number |
+| `limit` | integer | Items per page |
+| `template` | string | Filter by template |
+| `status` | string | Filter by status |
+
+#### Response
+```json
+{
+  "data": [
+    {
+      "id": "app_123456789",
+      "name": "Traffic Dashboard",
+      "description": "Real-time traffic monitoring",
+      "template": "dashboard",
+      "status": "active",
+      "url": "https://app.nikaplanet.com/apps/123456789",
+      "components": [
+        {
+          "id": "comp_123",
+          "type": "map",
+          "config": {
+            "data_source": "traffic_data",
+            "style": "dark"
+          }
+        }
+      ],
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  ]
+}
+```
+
+### Create Application
+```http
+POST /studio/applications
+```
+
+#### Request Body
+```json
+{
+  "name": "My Application",
+  "description": "Application description",
+  "template": "dashboard",
+  "components": [
+    {
+      "type": "map",
+      "config": {
+        "data_source": "data_123456789",
+        "style": "light",
+        "center": [40.7128, -74.0060],
+        "zoom": 12
+      }
+    },
+    {
+      "type": "chart",
+      "config": {
+        "type": "line",
+        "data_source": "data_123456789",
+        "x_axis": "date",
+        "y_axis": "value"
+      }
+    }
+  ]
+}
+```
+
+### Get Application
+```http
+GET /studio/applications/{application_id}
+```
+
+### Update Application
+```http
+PUT /studio/applications/{application_id}
+```
+
+### Delete Application
+```http
+DELETE /studio/applications/{application_id}
+```
+
+### Deploy Application
+```http
+POST /studio/applications/{application_id}/deploy
+```
+
+#### Request Body
+```json
+{
+  "environment": "production",
+  "domain": "myapp.nikaplanet.com",
+  "settings": {
+    "auto_scale": true,
+    "ssl": true
+  }
+}
+```
+
+## AI Agent API
+
+### Generate Code
+```http
+POST /ai/generate-code
+```
+
+#### Request Body
+```json
+{
+  "prompt": "Create a buffer analysis around cities",
+  "language": "python",
+  "framework": "geopandas",
+  "context": {
+    "workspace_id": "ws_123456789",
+    "data_id": "data_123456789"
+  },
+  "model": "CodeGPT"
+}
+```
+
+#### Response
+```json
+{
+  "id": "gen_123456789",
+  "code": "import geopandas as gpd\n\n# Load data\ndata = gpd.read_file('cities.geojson')\n\n# Create buffer\nbuffer = data.buffer(1000)\n\n# Save result\nbuffer.to_file('buffer.geojson')",
+  "explanation": "This code creates a 1000-meter buffer around each city...",
+  "model": "CodeGPT",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
+
+### Generate Analysis
+```http
+POST /ai/generate-analysis
+```
+
+#### Request Body
+```json
+{
+  "prompt": "Perform hot spot analysis on crime data",
+  "data_id": "data_123456789",
+  "parameters": {
+    "variable": "incident_count",
+    "method": "getis_ord",
+    "significance": 0.05
+  },
+  "model": "AnalysisGPT"
+}
+```
+
+### Generate Visualization
+```http
+POST /ai/generate-visualization
+```
+
+#### Request Body
+```json
+{
+  "prompt": "Create a choropleth map showing population density",
+  "data_id": "data_123456789",
+  "type": "choropleth",
+  "config": {
+    "value_field": "population_density",
+    "color_scheme": "viridis"
+  },
+  "model": "VizGPT"
+}
+```
+
+## Error Responses
+
+### Standard Error Format
+```json
+{
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "Invalid request parameters",
+    "details": {
+      "field": "data_id",
+      "issue": "Data not found"
+    }
+  }
+}
+```
+
+### Common Error Codes
+| Code | Description |
+|------|-------------|
+| `INVALID_API_KEY` | API key is invalid or expired |
+| `RATE_LIMIT_EXCEEDED` | Rate limit exceeded |
+| `INVALID_REQUEST` | Request parameters are invalid |
+| `RESOURCE_NOT_FOUND` | Requested resource not found |
+| `PERMISSION_DENIED` | Insufficient permissions |
+| `INTERNAL_ERROR` | Internal server error |
+
+## SDKs and Libraries
+
+### JavaScript/TypeScript
+```bash
+npm install @nika/api
+```
+
+```javascript
+import { NikaAPI } from '@nika/api';
+
+const api = new NikaAPI({
+  apiKey: 'your-api-key'
+});
+
+const workspaces = await api.workspaces.list();
+```
+
+### Python
+```bash
+pip install nika-api
+```
+
+```python
+import nika_api
+
+api = nika_api.Client(api_key='your-api-key')
+workspaces = api.workspaces.list()
+```
+
+### R
+```r
+install.packages("nika")
+
+library(nika)
+api <- nika_client(api_key = "your-api-key")
+workspaces <- api$workspaces$list()
+```
+
+## Webhooks
+
+### Configure Webhook
+```http
+POST /webhooks
+```
+
+#### Request Body
+```json
+{
+  "url": "https://your-app.com/webhook",
+  "events": ["analysis.completed", "data.uploaded"],
+  "secret": "your-webhook-secret"
+}
+```
+
+### Webhook Events
+| Event | Description |
+|-------|-------------|
+| `analysis.completed` | Analysis job completed |
+| `analysis.failed` | Analysis job failed |
+| `data.uploaded` | New data uploaded |
+| `data.processed` | Data processing completed |
+| `visualization.created` | New visualization created |
+| `application.deployed` | Application deployed |
+
+### Webhook Payload
+```json
+{
+  "event": "analysis.completed",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "data": {
+    "analysis_id": "analysis_123456789",
+    "workspace_id": "ws_123456789",
+    "status": "completed",
+    "result": {
+      "output_id": "data_987654321"
+    }
+  }
+}
+```
+
+## Support
+
+Need help with the API? Check out our [support page](/support) or join our [community forum](/forum). 

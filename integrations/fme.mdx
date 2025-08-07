@@ -1,0 +1,317 @@
+---
+title: 'FME'
+description: 'Integrate with FME Server (FME Flow) for powerful ETL workflows and enhanced geospatial data processing'
+---
+
+# FME Integration (Enterprise Plan Only)
+
+Nika provides seamless integration with FME Server (now known as FME Flow), enabling you to leverage Safe Software's powerful ETL (Extract, Transform, Load) capabilities within your geospatial workflows while adding cloud-native analytics and visualization.
+
+## FME Server/FME Flow Integration
+
+### Direct Server Integration
+
+Nika connects directly to FME Server/FME Flow, allowing you to execute FME workspaces and workflows from within your Nika workspace, creating a powerful hybrid environment that combines FME's data transformation capabilities with Nika's cloud-native analytics.
+
+**Key Features:**
+- **Direct Workspace Execution**: Run FME workspaces from Nika
+- **Real-time Data Processing**: Stream data through FME workflows
+- **Automated ETL Pipelines**: Schedule and monitor FME jobs
+- **Data Quality Assurance**: Leverage FME's validation capabilities
+- **Multi-format Support**: Handle 400+ data formats through FME
+
+### Why FME Integration is Powerful
+
+FME (Feature Manipulation Engine) is the industry standard for spatial ETL, offering:
+
+- **400+ Supported Formats**: From CAD files to cloud databases
+- **Advanced Transformers**: 500+ spatial and non-spatial transformers
+- **Data Validation**: Built-in quality control and validation
+- **Automation**: Scheduled workflows and event-driven processing
+- **Scalability**: Enterprise-grade processing capabilities
+
+Our integration extends these capabilities into the cloud-native environment, enabling seamless data flow between traditional ETL processes and modern geospatial analytics.
+
+## Getting Started
+
+### Setting Up FME Server Connection
+
+1. **Configure FME Server**: Set up your FME Server instance
+2. **Create API Credentials**: Generate authentication tokens
+3. **Configure Nika Connection**: Add FME Server details to Nika workspace
+4. **Test Connection**: Verify workspace execution capabilities
+
+### Basic FME Workflow Integration
+
+```python
+# Example: Execute FME workspace from Nika
+from nika_fme import FMEConnector
+
+# Initialize FME connection
+fme = FMEConnector(
+    server_url="https://your-fme-server.com",
+    username="your-username",
+    password="your-password"
+)
+
+# Execute a workspace
+result = fme.run_workspace(
+    workspace_name="data_processing.fmw",
+    parameters={
+        "input_file": "path/to/input/data.shp",
+        "output_format": "geojson",
+        "coordinate_system": "EPSG:4326"
+    }
+)
+
+# Process results in Nika
+if result.success:
+    processed_data = result.output_data
+    # Continue with Nika analysis
+```
+
+### Advanced ETL Workflows
+
+```python
+# Example: Complex ETL pipeline with FME and Nika
+import nika_fme as fme
+import nika_analytics as analytics
+
+# Define ETL pipeline
+def complex_etl_pipeline():
+    # Step 1: Data extraction and cleaning with FME
+    fme_result = fme.run_workspace(
+        workspace_name="data_cleaning.fmw",
+        parameters={
+            "source_database": "postgresql://host/db",
+            "validation_rules": "quality_checks.json",
+            "output_format": "parquet"
+        }
+    )
+    
+    # Step 2: Load cleaned data into Nika
+    if fme_result.success:
+        cleaned_data = analytics.load_data(fme_result.output_path)
+        
+        # Step 3: Perform advanced analytics in Nika
+        analysis_result = analytics.spatial_analysis(
+            data=cleaned_data,
+            analysis_type="hotspot_analysis",
+            parameters={"bandwidth": 1000}
+        )
+        
+        # Step 4: Export results back through FME
+        fme.run_workspace(
+            workspace_name="result_export.fmw",
+            parameters={
+                "input_data": analysis_result,
+                "output_formats": ["shapefile", "geojson", "kml"]
+            }
+        )
+```
+
+## Use Cases
+
+### **Data Migration and Transformation**
+```python
+# Example: Legacy system migration
+def migrate_legacy_data():
+    # Extract from legacy system
+    fme.run_workspace("legacy_extract.fmw", {
+        "legacy_database": "oracle://legacy_system",
+        "tables": ["parcels", "buildings", "infrastructure"]
+    })
+    
+    # Transform data structure
+    fme.run_workspace("data_transform.fmw", {
+        "coordinate_system": "EPSG:4326",
+        "attribute_mapping": "field_mapping.json",
+        "data_validation": "validation_rules.json"
+    })
+    
+    # Load into modern system
+    fme.run_workspace("modern_load.fmw", {
+        "target_database": "postgresql://modern_system",
+        "spatial_indexing": True
+    })
+```
+
+### **Real-time Data Processing**
+```python
+# Example: Real-time sensor data processing
+def real_time_processing():
+    # Set up continuous monitoring
+    fme.run_workspace("sensor_monitor.fmw", {
+        "sensor_endpoints": ["sensor1", "sensor2", "sensor3"],
+        "polling_interval": 60,  # seconds
+        "data_format": "json"
+    })
+    
+    # Process incoming data
+    def process_sensor_data(data):
+        # FME processing
+        processed = fme.run_workspace("sensor_process.fmw", {
+            "input_data": data,
+            "calibration": "sensor_calibration.json"
+        })
+        
+        # Nika analytics
+        if processed.success:
+            analytics.real_time_analysis(processed.output_data)
+```
+
+### **Multi-format Data Integration**
+```python
+# Example: Integrating diverse data sources
+def integrate_diverse_sources():
+    sources = [
+        {"type": "cad", "path": "engineering_drawings.dwg"},
+        {"type": "gis", "path": "parcel_data.shp"},
+        {"type": "database", "path": "postgresql://host/asset_db"},
+        {"type": "api", "path": "https://api.weather.com/current"}
+    ]
+    
+    for source in sources:
+        # Use FME to handle format conversion
+        fme.run_workspace("format_converter.fmw", {
+            "input_source": source,
+            "output_format": "geojson",
+            "coordinate_system": "EPSG:4326"
+        })
+    
+    # Integrate all data in Nika
+    analytics.integrate_multiple_sources()
+```
+
+## Advanced FME Capabilities
+
+### **Spatial Analysis with FME**
+```python
+# Example: Advanced spatial processing
+def advanced_spatial_processing():
+    # Buffer analysis
+    fme.run_workspace("spatial_analysis.fmw", {
+        "analysis_type": "buffer",
+        "buffer_distance": 100,
+        "buffer_units": "meters"
+    })
+    
+    # Spatial joins
+    fme.run_workspace("spatial_joins.fmw", {
+        "join_type": "intersect",
+        "target_layer": "parcels",
+        "join_layer": "flood_zones"
+    })
+    
+    # Topology validation
+    fme.run_workspace("topology_check.fmw", {
+        "validation_rules": ["no_gaps", "no_overlaps"],
+        "tolerance": 0.001
+    })
+```
+
+### **Data Quality Assurance**
+```python
+# Example: Comprehensive data validation
+def data_quality_pipeline():
+    # Schema validation
+    fme.run_workspace("schema_validation.fmw", {
+        "schema_definition": "expected_schema.json",
+        "strict_mode": True
+    })
+    
+    # Spatial validation
+    fme.run_workspace("spatial_validation.fmw", {
+        "geometry_checks": ["valid_geometry", "correct_crs"],
+        "attribute_checks": ["no_null_values", "value_ranges"]
+    })
+    
+    # Business rule validation
+    fme.run_workspace("business_rules.fmw", {
+        "rules_file": "business_rules.json",
+        "error_handling": "log_and_continue"
+    })
+```
+
+## How Nika Adds Value to FME Workflows
+
+### **Cloud-Native Analytics**
+- **Scalable Processing**: Handle datasets too large for traditional FME
+- **AI/ML Integration**: Apply machine learning models to FME-processed data
+- **Real-time Dashboards**: Visualize FME workflow results instantly
+- **Collaborative Analysis**: Share results with team members
+
+### **Enhanced Visualization**
+- **Interactive Maps**: Dynamic visualization of FME outputs
+- **3D Rendering**: Immersive display of spatial data
+- **Time-series Analysis**: Temporal visualization of processed data
+- **Custom Styling**: Advanced cartographic capabilities
+
+### **Workflow Orchestration**
+- **Pipeline Management**: Coordinate complex FME + Nika workflows
+- **Error Handling**: Robust error management and recovery
+- **Monitoring**: Real-time workflow status and performance metrics
+- **Scheduling**: Automated execution of integrated workflows
+
+## Best Practices
+
+### **Performance Optimization**
+- **Parallel Processing**: Use FME's parallel processing capabilities
+- **Data Partitioning**: Split large datasets for efficient processing
+- **Caching Strategies**: Cache frequently accessed data
+- **Resource Management**: Monitor and optimize resource usage
+
+### **Data Quality**
+- **Validation at Source**: Validate data before processing
+- **Error Logging**: Comprehensive error tracking and reporting
+- **Data Lineage**: Track data transformations and sources
+- **Quality Metrics**: Monitor data quality over time
+
+### **Security**
+- **Secure Connections**: Use encrypted connections to FME Server
+- **Access Control**: Implement proper authentication and authorization
+- **Data Encryption**: Encrypt sensitive data in transit and at rest
+- **Audit Logging**: Track all data access and modifications
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Problems**
+- Verify FME Server accessibility
+- Check network connectivity and firewall settings
+- Validate authentication credentials
+- Ensure proper SSL/TLS configuration
+
+**Workflow Execution Issues**
+- Check workspace parameter validation
+- Verify input data availability and format
+- Monitor FME Server resource usage
+- Review error logs and debugging information
+
+**Performance Problems**
+- Optimize workspace design and transformer usage
+- Implement appropriate data filtering and sampling
+- Use FME's performance monitoring tools
+- Consider workspace parallelization
+
+## Support Resources
+
+### **Documentation**
+- [FME Documentation](https://docs.safe.com/)
+- [FME Server Administration Guide](https://docs.safe.com/fme/html/FME_Server_Documentation/)
+- [Nika FME Integration Guide](/guides/fme-integration)
+
+### **Community**
+- [FME Community](https://community.safe.com/)
+- [FME Knowledge Base](https://knowledge.safe.com/)
+- [Nika Community Forum](/forum)
+
+### **Training**
+- FME training courses and certifications
+- Nika-specific FME integration workshops
+- Custom training programs for enterprise users
+
+---
+
+*Ready to supercharge your ETL workflows with FME and Nika? [Get started with FME integration](/quickstart) or [contact our team](/support) for personalized assistance.* 

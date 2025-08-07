@@ -1,0 +1,267 @@
+---
+title: "NikaStudio"
+description: "Build map and dashboard applications with Nika's AI agent with brilliant UI and automated serverless backend"
+---
+
+## Overview
+
+NikaStudio is our AI-powered application development platform that enables you to build sophisticated geospatial applications, data dashboards, and interactive maps with minimal coding. Powered by our intelligent AI agent, NikaStudio generates brilliant UI components and provides automated serverless backend infrastructure.
+
+![NikaStudio Interface](/products/nika-studio.png)
+
+## Key Features
+
+### AI-Powered Development
+- **Natural Language Interface**: Describe your app in plain English
+- **Intelligent Code Generation**: AI generates production-ready code with brilliant UI
+- **Context Awareness**: AI understands your data and project requirements
+- **Iterative Refinement**: Continuously improve your application with AI feedback
+
+### Automated Backend
+- **Serverless Infrastructure**: Automated backend deployment and scaling
+- **Database Management**: Automatic database setup and optimization
+- **API Generation**: AI-generated REST APIs and GraphQL endpoints
+- **Authentication**: Built-in user authentication and authorization
+
+### Brilliant UI Components
+- **Modern Design System**: Beautiful, responsive UI components
+- **Interactive Maps**: Advanced mapping components with multiple layers
+- **Data Visualizations**: Rich chart and graph library
+- **Real-time Updates**: Live data integration and streaming
+
+## Key Features
+
+### AI-Powered Development
+- **Natural Language Interface**: Describe your app in plain English
+- **Intelligent Code Generation**: AI generates production-ready code
+- **Context Awareness**: AI understands your data and project requirements
+- **Iterative Refinement**: Continuously improve your application with AI feedback
+
+### Visual Development
+- **Drag & Drop Interface**: Build UI components visually
+- **Component Library**: Rich library of pre-built components
+- **Real-time Preview**: See changes instantly as you build
+- **Responsive Design**: Automatic responsive layouts
+
+### Geospatial Focus
+- **Map Components**: Interactive maps with multiple layers
+- **Spatial Widgets**: Location-based input and display components
+- **Data Visualization**: Charts and graphs optimized for spatial data
+- **Real-time Data**: Live data integration and updates
+
+### Dashboard Builder
+- **Dashboard Templates**: Pre-built dashboard layouts
+- **Widget Library**: Comprehensive widget collection
+- **Data Connectors**: Connect to various data sources
+- **Custom Styling**: Advanced theming and customization
+
+## Getting Started
+
+### Installation
+
+```bash
+# Install NikaStudio CLI
+npm install -g @nika/studio-cli
+
+# Create a new project
+nika studio create my-app
+
+# Navigate to project
+cd my-app
+
+# Start development server
+nika studio dev
+```
+
+### Basic Usage
+
+```javascript
+import { NikaStudio } from '@nika/studio';
+
+// Initialize studio
+const studio = new NikaStudio({
+  apiKey: 'your-api-key',
+  projectId: 'your-project-id'
+});
+
+// Create a new application
+const app = await studio.createApp({
+  name: 'Traffic Dashboard',
+  description: 'Real-time traffic monitoring dashboard',
+  template: 'dashboard'
+});
+
+// Add components using AI
+await studio.addComponent(app.id, {
+  type: 'map',
+  description: 'Interactive map showing traffic flow with color-coded congestion levels',
+  data: 'traffic-data-source'
+});
+
+await studio.addComponent(app.id, {
+  type: 'chart',
+  description: 'Line chart showing traffic volume over time',
+  data: 'traffic-metrics'
+});
+```
+
+## Application Types
+
+### Dashboards
+- **Analytics Dashboards**: Data analysis and reporting
+- **Monitoring Dashboards**: Real-time system monitoring
+- **Executive Dashboards**: High-level business metrics
+- **Operational Dashboards**: Day-to-day operations
+
+### Maps & Visualizations
+- **Interactive Maps**: Feature-rich map applications
+- **Data Visualizations**: Charts, graphs, and infographics
+- **3D Visualizations**: Immersive spatial experiences
+- **Story Maps**: Narrative-driven spatial presentations
+
+### Web Applications
+- **Data Entry Forms**: Spatial data collection tools
+- **Reporting Tools**: Automated report generation
+- **Workflow Applications**: Process automation tools
+- **Public Portals**: Community-facing applications
+
+## AI Agent Capabilities
+
+### Natural Language Processing
+- **Requirement Analysis**: Understand complex requirements
+- **Code Generation**: Generate appropriate code structures
+- **Error Detection**: Identify and fix common issues
+- **Optimization**: Suggest performance improvements
+
+### Context Understanding
+- **Data Schema**: Understand your data structure
+- **Project Context**: Maintain awareness of your project
+- **User Intent**: Interpret user requirements accurately
+- **Best Practices**: Apply industry best practices
+
+### Code Assistance
+- **Auto-completion**: Intelligent code suggestions
+- **Refactoring**: Suggest code improvements
+- **Documentation**: Generate inline documentation
+- **Testing**: Create test cases automatically
+
+## Component Library
+
+### Map Components
+- **Base Map**: Foundation map with various styles
+- **Layer Manager**: Control map layer visibility
+- **Geolocation**: User location services
+- **Spatial Search**: Location-based search functionality
+
+### Data Components
+- **Data Table**: Tabular data display
+- **Filter Panel**: Data filtering controls
+- **Search Box**: Text-based search
+- **Export Tools**: Data export functionality
+
+### Visualization Components
+- **Charts**: Various chart types (bar, line, pie, etc.)
+- **Gauges**: Progress and metric displays
+- **Heat Maps**: Density visualization
+- **Timeline**: Temporal data display
+
+### UI Components
+- **Navigation**: Menu and breadcrumb components
+- **Forms**: Input and validation components
+- **Modals**: Dialog and overlay components
+- **Notifications**: Alert and status components
+
+## Data Integration
+
+### Data Sources
+- **Databases**: PostgreSQL, MongoDB, SQLite
+- **APIs**: REST, GraphQL, OGC services
+- **Files**: CSV, GeoJSON, Shapefiles
+- **Cloud Storage**: AWS S3, Google Cloud, Azure
+
+### Real-time Data
+- **WebSockets**: Live data streaming
+- **Server-Sent Events**: Real-time updates
+- **Polling**: Regular data refresh
+- **Push Notifications**: Event-driven updates
+
+## Deployment
+
+### Cloud Deployment
+```bash
+# Deploy to Nika Cloud
+nika studio deploy
+
+# Deploy to custom domain
+nika studio deploy --domain myapp.com
+
+# Deploy with environment variables
+nika studio deploy --env production
+```
+
+### Self-Hosting
+```bash
+# Build for production
+nika studio build
+
+# Export static files
+nika studio export
+
+# Deploy to your server
+scp -r dist/ user@server:/var/www/myapp/
+```
+
+## Templates
+
+### Dashboard Templates
+- **Analytics Dashboard**: Data analysis and reporting
+- **Monitoring Dashboard**: System and process monitoring
+- **Executive Dashboard**: Business intelligence
+- **Operational Dashboard**: Daily operations
+
+### Map Templates
+- **Interactive Map**: Feature-rich map application
+- **Story Map**: Narrative spatial presentation
+- **Data Explorer**: Spatial data exploration tool
+- **Public Portal**: Community-facing map
+
+### Application Templates
+- **Data Collection**: Field data collection app
+- **Reporting Tool**: Automated reporting system
+- **Workflow App**: Process automation
+- **Public Portal**: Community engagement
+
+## Best Practices
+
+### Development
+1. **Start Simple**: Begin with basic functionality
+2. **Iterate**: Use AI feedback for improvements
+3. **Test**: Validate with real data
+4. **Document**: Maintain clear documentation
+5. **Version Control**: Use Git for project management
+
+### Performance
+1. **Optimize Data**: Use appropriate data formats
+2. **Lazy Loading**: Load data on demand
+3. **Caching**: Implement data caching
+4. **Compression**: Minimize file sizes
+5. **CDN**: Use content delivery networks
+
+### User Experience
+1. **Responsive Design**: Ensure mobile compatibility
+2. **Accessibility**: Follow accessibility guidelines
+3. **Loading States**: Provide user feedback
+4. **Error Handling**: Graceful error management
+5. **User Testing**: Validate with real users
+
+## Integration
+
+NikaStudio integrates with other Nika products:
+
+- **NikaWorkspace**: Use workspace data in your applications
+- **NikaGallery**: Publish and share your applications
+- **AI Agent**: Get intelligent development assistance
+
+## Support
+
+Need help with NikaStudio? Check out our [support page](/support) or join our [community forum](/forum). 

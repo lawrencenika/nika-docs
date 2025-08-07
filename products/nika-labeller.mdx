@@ -1,0 +1,366 @@
+---
+title: "NikaLabeller"
+description: "Annotate, preprocess image based datasets with team labelling capability and direct support of GEOTIFF format on top of traditional images"
+---
+
+## Overview
+
+NikaLabeller is a powerful image annotation and preprocessing platform designed specifically for geospatial datasets. With team labeling capabilities and native support for GeoTIFF format, NikaLabeller enables organizations to efficiently annotate and prepare image-based datasets for machine learning and analysis workflows.
+
+![NikaLabeller Interface](/products/nika-labeller.jpg)
+
+## Key Features
+
+### Geospatial Image Support
+- **GeoTIFF Native Support**: Direct support for GeoTIFF format with metadata preservation
+- **Traditional Image Formats**: Support for JPEG, PNG, TIFF, and other common formats
+- **Satellite Imagery**: Optimized for satellite and aerial imagery annotation
+- **Drone Imagery**: Specialized tools for drone and UAV imagery processing
+
+### Team Collaboration
+- **Multi-User Annotation**: Multiple team members can annotate simultaneously
+- **Role-Based Access**: Define different roles and permissions for team members
+- **Progress Tracking**: Monitor annotation progress across the team
+- **Quality Control**: Built-in review and validation workflows
+
+### Advanced Annotation Tools
+- **Polygon Annotation**: Precise polygon drawing for object boundaries
+- **Point Annotation**: Quick point marking for object centers
+- **Line Annotation**: Path and boundary line annotation
+- **Semantic Segmentation**: Pixel-level annotation for detailed analysis
+
+### AI-Assisted Annotation
+- **Auto-Segmentation**: AI-powered automatic object detection and segmentation
+- **Smart Suggestions**: Intelligent suggestions for annotation based on image content
+- **Batch Processing**: Process multiple images with AI assistance
+- **Quality Validation**: AI-powered quality checks for annotation accuracy
+
+## Getting Started
+
+### Setting Up a Project
+
+```javascript
+import { NikaLabeller } from '@nika/labeller';
+
+// Initialize labeller
+const labeller = new NikaLabeller({
+  projectId: 'project-123',
+  teamId: 'team-456',
+  apiKey: 'your-api-key'
+});
+
+// Create annotation project
+const project = await labeller.createProject({
+  name: 'Urban Building Detection',
+  description: 'Annotate buildings in urban satellite imagery',
+  imageType: 'geotiff',
+  annotationTypes: ['polygon', 'point'],
+  classes: [
+    { name: 'residential', color: '#ff0000' },
+    { name: 'commercial', color: '#00ff00' },
+    { name: 'industrial', color: '#0000ff' }
+  ]
+});
+```
+
+### Adding Images
+
+```javascript
+// Add GeoTIFF images
+await labeller.addImages(project.id, {
+  images: [
+    {
+      path: 'satellite-imagery/area1.tif',
+      metadata: {
+        resolution: '0.5m',
+        sensor: 'WorldView-3',
+        date: '2024-01-15'
+      }
+    },
+    {
+      path: 'drone-imagery/area2.tif',
+      metadata: {
+        resolution: '0.1m',
+        sensor: 'DJI Phantom 4',
+        date: '2024-01-20'
+      }
+    }
+  ],
+  preserveGeoreference: true
+});
+
+// Add traditional images
+await labeller.addImages(project.id, {
+  images: [
+    'traditional-images/photo1.jpg',
+    'traditional-images/photo2.png'
+  ],
+  preserveGeoreference: false
+});
+```
+
+## Annotation Workflow
+
+### Creating Annotations
+
+```javascript
+// Start annotation session
+const session = await labeller.startSession({
+  projectId: project.id,
+  imageId: 'image-123',
+  userId: 'user-456'
+});
+
+// Create polygon annotation
+const polygon = await labeller.createAnnotation({
+  sessionId: session.id,
+  type: 'polygon',
+  coordinates: [
+    [lat1, lng1],
+    [lat2, lng2],
+    [lat3, lng3],
+    [lat1, lng1]
+  ],
+  class: 'residential',
+  properties: {
+    confidence: 0.95,
+    notes: 'Large residential building'
+  }
+});
+
+// Create point annotation
+const point = await labeller.createAnnotation({
+  sessionId: session.id,
+  type: 'point',
+  coordinates: [lat, lng],
+  class: 'commercial',
+  properties: {
+    confidence: 0.87,
+    notes: 'Shopping center'
+  }
+});
+```
+
+### Team Collaboration
+
+```javascript
+// Assign images to team members
+await labeller.assignImages({
+  projectId: project.id,
+  assignments: [
+    {
+      imageId: 'image-123',
+      userId: 'user-456',
+      priority: 'high'
+    },
+    {
+      imageId: 'image-124',
+      userId: 'user-789',
+      priority: 'medium'
+    }
+  ]
+});
+
+// Review annotations
+const review = await labeller.reviewAnnotation({
+  annotationId: 'annotation-123',
+  reviewerId: 'reviewer-456',
+  status: 'approved',
+  comments: 'Good quality annotation'
+});
+```
+
+## AI-Assisted Features
+
+### Auto-Segmentation
+
+```javascript
+// Enable AI-assisted annotation
+await labeller.enableAI({
+  projectId: project.id,
+  features: ['auto-segmentation', 'smart-suggestions'],
+  model: 'building-detection-v2'
+});
+
+// Get AI suggestions
+const suggestions = await labeller.getAISuggestions({
+  imageId: 'image-123',
+  confidence: 0.8
+});
+
+// Apply AI suggestions
+await labeller.applyAISuggestions({
+  imageId: 'image-123',
+  suggestions: suggestions,
+  autoCreate: true
+});
+```
+
+### Quality Validation
+
+```javascript
+// Run quality checks
+const qualityReport = await labeller.validateQuality({
+  projectId: project.id,
+  checks: [
+    'annotation-completeness',
+    'class-distribution',
+    'spatial-consistency'
+  ]
+});
+
+// Get quality metrics
+const metrics = await labeller.getQualityMetrics({
+  projectId: project.id,
+  include: ['precision', 'recall', 'f1-score']
+});
+```
+
+## Data Export
+
+### Export Formats
+
+```javascript
+// Export as GeoJSON
+const geojson = await labeller.exportAnnotations({
+  projectId: project.id,
+  format: 'geojson',
+  includeMetadata: true,
+  preserveGeoreference: true
+});
+
+// Export as COCO format
+const coco = await labeller.exportAnnotations({
+  projectId: project.id,
+  format: 'coco',
+  includeImages: true,
+  includeCategories: true
+});
+
+// Export as YOLO format
+const yolo = await labeller.exportAnnotations({
+  projectId: project.id,
+  format: 'yolo',
+  imageSize: [1024, 1024],
+  normalize: true
+});
+```
+
+### Integration with ML Pipelines
+
+```javascript
+// Export for training
+const trainingData = await labeller.exportForTraining({
+  projectId: project.id,
+  format: 'tensorflow',
+  split: {
+    train: 0.7,
+    validation: 0.2,
+    test: 0.1
+  },
+  augmentation: {
+    rotation: true,
+    flip: true,
+    brightness: 0.1
+  }
+});
+```
+
+## Advanced Features
+
+### Custom Annotation Tools
+
+```javascript
+// Create custom annotation tool
+const customTool = await labeller.createCustomTool({
+  name: 'Building Footprint',
+  type: 'polygon',
+  validation: {
+    minVertices: 3,
+    maxVertices: 20,
+    minArea: 100
+  },
+  autoComplete: true
+});
+```
+
+### Batch Processing
+
+```javascript
+// Process multiple images
+const batchJob = await labeller.processBatch({
+  projectId: project.id,
+  images: ['image-123', 'image-124', 'image-125'],
+  operations: [
+    'auto-segmentation',
+    'quality-check',
+    'export-geojson'
+  ],
+  callback: 'https://api.example.com/webhook'
+});
+```
+
+## API Reference
+
+### Project Management
+- `createProject()`: Create new annotation project
+- `updateProject()`: Update project settings
+- `deleteProject()`: Delete project
+- `listProjects()`: List all projects
+
+### Image Management
+- `addImages()`: Add images to project
+- `removeImages()`: Remove images from project
+- `updateImage()`: Update image metadata
+- `listImages()`: List project images
+
+### Annotation Management
+- `createAnnotation()`: Create new annotation
+- `updateAnnotation()`: Update annotation
+- `deleteAnnotation()`: Delete annotation
+- `listAnnotations()`: List annotations
+
+### Team Management
+- `addTeamMember()`: Add team member
+- `removeTeamMember()`: Remove team member
+- `updatePermissions()`: Update user permissions
+- `listTeamMembers()`: List team members
+
+### Export Functions
+- `exportAnnotations()`: Export annotations in various formats
+- `exportForTraining()`: Export data for ML training
+- `exportQualityReport()`: Export quality validation report
+- `exportProgressReport()`: Export project progress report
+
+## Best Practices
+
+### Project Setup
+1. **Clear Objectives**: Define clear annotation goals and requirements
+2. **Class Definition**: Create comprehensive and non-overlapping classes
+3. **Quality Guidelines**: Establish clear quality standards and guidelines
+4. **Team Training**: Provide training for team members on annotation tools
+
+### Annotation Quality
+1. **Consistency**: Maintain consistent annotation style across team
+2. **Validation**: Regular quality checks and validation
+3. **Documentation**: Document edge cases and special instructions
+4. **Iteration**: Continuously improve based on feedback
+
+### Performance
+1. **Batch Processing**: Use batch operations for large datasets
+2. **Caching**: Enable caching for frequently accessed data
+3. **Optimization**: Optimize image loading and rendering
+4. **Monitoring**: Monitor system performance and usage
+
+## Integration
+
+NikaLabeller integrates with other Nika products:
+
+- **NikaWorkspace**: Use annotated data for analysis
+- **NikaStudio**: Create applications with annotated datasets
+- **NikaMap**: Visualize annotation results on maps
+- **AI Agent**: Get intelligent suggestions for annotation
+
+## Support
+
+Need help with NikaLabeller? Check out our [support page](/support) or join our [community forum](/forum). 

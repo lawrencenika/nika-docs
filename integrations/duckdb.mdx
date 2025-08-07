@@ -1,0 +1,511 @@
+---
+title: 'DuckDB'
+description: 'Connect to DuckDB databases with spatial extensions and leverage Nika AI for intelligent SQL execution'
+---
+
+# DuckDB Integration
+
+Nika provides seamless integration with DuckDB, the high-performance analytical database, including support for spatial extensions and MotherDuck cloud hosting, enabling lightning-fast geospatial analytics with AI-powered query capabilities.
+
+## Analytical Database Integration
+
+### DuckDB Spatial Support
+
+Nika fully supports DuckDB with spatial extensions, providing high-performance analytical capabilities for geospatial data processing and analysis within your workspace.
+
+**Key Features:**
+- **High-Performance Analytics**: Lightning-fast spatial queries and analysis
+- **Spatial Extensions**: Native support for spatial data types and functions
+- **Columnar Storage**: Optimized for analytical workloads
+- **In-Memory Processing**: Fast data processing without disk I/O
+- **SQL Compatibility**: Standard SQL with spatial extensions
+
+### Why DuckDB Integration Matters
+
+DuckDB is designed for analytical workloads, offering:
+
+- **Columnar Storage**: Optimized for analytical queries and aggregations
+- **High Performance**: Faster than traditional row-based databases for analytics
+- **Embedded Architecture**: No server setup required
+- **Spatial Extensions**: Native support for geospatial data types
+- **Cloud Integration**: Seamless integration with cloud storage
+- **Cost Effective**: Open-source with no licensing fees
+
+Our integration makes this powerful analytical database accessible through Nika's intuitive interface.
+
+## Getting Started
+
+### Setting Up DuckDB Connection
+
+1. **Install DuckDB**: Set up DuckDB with spatial extensions
+2. **Create Connection**: Add database credentials to Nika workspace
+3. **Enable Extensions**: Activate spatial and other required extensions
+4. **Test Connection**: Verify spatial data access
+
+### Basic Database Connection
+
+```python
+# Example: Connect to DuckDB with spatial extensions
+from nika_database import DuckDBConnector
+
+# Initialize connection
+db = DuckDBConnector(
+    database_path=":memory:",  # In-memory database
+    # Or use file path: "path/to/your/database.duckdb"
+)
+
+# Enable spatial extensions
+db.query("INSTALL spatial;")
+db.query("LOAD spatial;")
+
+# Test connection
+if db.test_connection():
+    print("Successfully connected to DuckDB with spatial extensions")
+```
+
+### Spatial Data Operations
+
+```python
+# Example: Basic spatial operations with DuckDB
+import nika_spatial as spatial
+
+# Create spatial table
+db.query("""
+    CREATE TABLE spatial_features AS
+    SELECT 
+        1 as id,
+        'Point A' as name,
+        ST_Point(-122.4194, 37.7749) as geom,
+        100.5 as value
+    UNION ALL
+    SELECT 
+        2 as id,
+        'Point B' as name,
+        ST_Point(-122.4000, 37.7800) as geom,
+        200.3 as value;
+""")
+
+# Perform spatial analysis
+spatial_analysis = db.query("""
+    SELECT 
+        id,
+        name,
+        ST_AsText(geom) as geometry_text,
+        ST_X(geom) as longitude,
+        ST_Y(geom) as latitude,
+        ST_Distance(
+            ST_Point(-122.4194, 37.7749),
+            geom
+        ) as distance_from_center
+    FROM spatial_features
+    ORDER BY distance_from_center;
+""")
+
+# Visualize results
+spatial.visualize(spatial_analysis, style={'color': 'blue', 'opacity': 0.7})
+```
+
+## Hosted Solutions
+
+### MotherDuck Integration
+
+Nika seamlessly integrates with MotherDuck, the cloud-hosted version of DuckDB, providing scalable analytical capabilities without the need for local infrastructure management.
+
+#### **Setting Up MotherDuck Connection**
+
+```python
+# Example: Connect to MotherDuck
+from nika_database import MotherDuckConnector
+
+# Initialize MotherDuck connection
+motherduck = MotherDuckConnector(
+    database="your-database-name",
+    token="your-motherduck-token"
+)
+
+# Enable spatial extensions
+motherduck.query("INSTALL spatial;")
+motherduck.query("LOAD spatial;")
+
+# Create spatial table in MotherDuck
+motherduck.query("""
+    CREATE TABLE IF NOT EXISTS spatial_analytics (
+        id INTEGER PRIMARY KEY,
+        feature_name VARCHAR,
+        geom GEOMETRY,
+        properties JSON,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+""")
+```
+
+#### **Cloud-Native Analytics**
+
+```python
+# Example: Cloud-native spatial analytics
+def cloud_spatial_analytics():
+    # Load data from cloud storage
+    motherduck.query("""
+        CREATE TABLE parcels AS
+        SELECT * FROM read_parquet('s3://your-bucket/parcels.parquet');
+    """)
+    
+    # Perform spatial analysis
+    analysis_result = motherduck.query("""
+        SELECT 
+            p.id,
+            p.parcel_id,
+            ST_Area(p.geom) as area_sq_meters,
+            ST_Centroid(p.geom) as centroid,
+            COUNT(i.id) as infrastructure_count
+        FROM parcels p
+        LEFT JOIN infrastructure i ON ST_Intersects(p.geom, i.geom)
+        WHERE ST_Area(p.geom) > 1000
+        GROUP BY p.id, p.parcel_id, p.geom
+        ORDER BY area_sq_meters DESC;
+    """)
+    
+    return analysis_result
+```
+
+### Local DuckDB
+
+For organizations requiring local data processing or offline capabilities, Nika supports local DuckDB instances.
+
+#### **Local Configuration**
+
+```python
+# Example: Local DuckDB setup
+from nika_database import LocalDuckDB
+
+# Configure local DuckDB with persistent storage
+local_db = LocalDuckDB(
+    database_path="/path/to/your/spatial_database.duckdb",
+    read_only=False,
+    memory_limit="8GB"
+)
+
+# Enable required extensions
+local_db.query("INSTALL spatial;")
+local_db.query("LOAD spatial;")
+local_db.query("INSTALL httpfs;")
+local_db.query("LOAD httpfs;")
+
+# Configure for cloud storage access
+local_db.query("SET s3_region='us-west-2';")
+local_db.query("SET s3_access_key_id='your-access-key';")
+local_db.query("SET s3_secret_access_key='your-secret-key';")
+```
+
+## AI-Powered SQL Execution
+
+### Nika AI SQL Assistant
+
+Nika AI can execute SQL queries and extract data from DuckDB databases directly through the GUI, making analytical database operations accessible to users of all technical levels.
+
+#### **Natural Language to SQL**
+
+```python
+# Example: AI-powered SQL generation for DuckDB
+from nika_ai import SQLAssistant
+
+# Initialize AI SQL assistant for DuckDB
+sql_ai = SQLAssistant(database_connection=db)
+
+# Natural language query
+natural_query = "Find all parcels larger than 1 hectare within 2 kilometers of major roads"
+
+# AI generates DuckDB SQL
+generated_sql = sql_ai.generate_sql(natural_query, dialect="duckdb")
+
+# Execute the query
+results = db.query(generated_sql)
+
+# Display results with visualization
+spatial.visualize(results, style={'color': 'green', 'opacity': 0.8})
+```
+
+#### **Intelligent Query Optimization**
+
+```python
+# Example: AI query optimization for DuckDB
+# AI analyzes query performance and suggests optimizations
+optimized_query = sql_ai.optimize_query("""
+    SELECT 
+        p.parcel_id,
+        p.area_hectares,
+        p.geom,
+        AVG(i.traffic_volume) as avg_traffic
+    FROM parcels p
+    JOIN infrastructure i ON ST_DWithin(p.geom, i.geom, 2000)
+    WHERE p.area_hectares > 1.0
+    GROUP BY p.parcel_id, p.area_hectares, p.geom
+""", dialect="duckdb")
+
+# AI suggests partitioning and indexing strategies
+sql_ai.suggest_optimizations("parcels", ["area_hectares", "geom"])
+```
+
+## Advanced Analytical Operations
+
+### High-Performance Spatial Analysis
+
+```python
+# Example: Advanced spatial analysis with DuckDB
+def advanced_spatial_analysis():
+    # Multi-criteria spatial analysis
+    analysis_query = """
+    WITH spatial_metrics AS (
+        SELECT 
+            p.parcel_id,
+            p.geom,
+            p.area_hectares,
+            -- Distance to transportation
+            MIN(ST_Distance(p.geom, t.geom)) as min_dist_to_transport,
+            -- Flood risk assessment
+            CASE 
+                WHEN EXISTS (
+                    SELECT 1 FROM flood_zones f 
+                    WHERE ST_Intersects(p.geom, f.geom)
+                ) THEN 1 ELSE 0 
+            END as in_flood_zone,
+            -- Slope analysis
+            AVG(s.slope) as avg_slope,
+            -- Land use diversity
+            COUNT(DISTINCT l.land_use_type) as land_use_diversity
+        FROM parcels p
+        LEFT JOIN transportation t ON ST_DWithin(p.geom, t.geom, 5000)
+        LEFT JOIN slope_data s ON ST_Intersects(p.geom, s.geom)
+        LEFT JOIN land_use l ON ST_Intersects(p.geom, l.geom)
+        WHERE p.area_hectares > 0.5
+        GROUP BY p.parcel_id, p.geom, p.area_hectares
+    )
+    SELECT 
+        *,
+        -- Composite suitability score
+        (1.0 / (1.0 + min_dist_to_transport/1000)) * 0.3 +
+        (1.0 - in_flood_zone) * 0.3 +
+        (1.0 - avg_slope/45) * 0.2 +
+        (land_use_diversity / 5.0) * 0.2 as suitability_score
+    FROM spatial_metrics
+    ORDER BY suitability_score DESC;
+    """
+    
+    results = db.query(analysis_query)
+    return results
+```
+
+### Time-Series Spatial Analysis
+
+```python
+# Example: Time-series spatial analysis
+def time_series_spatial_analysis():
+    # Load time-series spatial data
+    db.query("""
+        CREATE TABLE spatial_time_series AS
+        SELECT * FROM read_parquet('s3://your-bucket/spatial_time_series.parquet');
+    """)
+    
+    # Analyze spatial patterns over time
+    time_analysis = db.query("""
+        SELECT 
+            DATE_TRUNC('month', timestamp) as month,
+            ST_Centroid(ST_Union(geom)) as center_point,
+            COUNT(*) as feature_count,
+            AVG(value) as avg_value,
+            ST_Area(ST_ConvexHull(ST_Union(geom))) as spatial_extent
+        FROM spatial_time_series
+        WHERE timestamp >= '2023-01-01' AND timestamp <= '2023-12-31'
+        GROUP BY DATE_TRUNC('month', timestamp)
+        ORDER BY month;
+    """)
+    
+    return time_analysis
+```
+
+## Use Cases
+
+### **Real Estate Analytics**
+```python
+# Example: Real estate spatial analytics
+def real_estate_analytics():
+    # Property value analysis
+    property_analysis = db.query("""
+        SELECT 
+            p.property_id,
+            p.address,
+            p.geom,
+            p.sale_price,
+            p.square_feet,
+            -- Distance to amenities
+            MIN(ST_Distance(p.geom, a.geom)) as dist_to_nearest_amenity,
+            -- School district quality
+            AVG(s.rating) as avg_school_rating,
+            -- Crime rate in area
+            AVG(c.incident_rate) as avg_crime_rate,
+            -- Public transportation access
+            COUNT(t.id) as transit_stops_within_1km
+        FROM properties p
+        LEFT JOIN amenities a ON ST_DWithin(p.geom, a.geom, 2000)
+        LEFT JOIN schools s ON ST_DWithin(p.geom, s.geom, 3000)
+        LEFT JOIN crime_data c ON ST_DWithin(p.geom, c.geom, 1000)
+        LEFT JOIN transit_stops t ON ST_DWithin(p.geom, t.geom, 1000)
+        WHERE p.sale_price > 0
+        GROUP BY p.property_id, p.address, p.geom, p.sale_price, p.square_feet
+        ORDER BY p.sale_price DESC;
+    """)
+    
+    return property_analysis
+```
+
+### **Environmental Impact Assessment**
+```python
+# Example: Environmental impact analysis
+def environmental_impact_analysis():
+    # Habitat fragmentation analysis
+    habitat_analysis = db.query("""
+        WITH habitat_patches AS (
+            SELECT 
+                habitat_type,
+                ST_Union(geom) as habitat_geom,
+                COUNT(*) as patch_count,
+                SUM(area_hectares) as total_area
+            FROM natural_habitats
+            WHERE habitat_quality > 0.7
+            GROUP BY habitat_type
+        )
+        SELECT 
+            habitat_type,
+            patch_count,
+            total_area,
+            ST_Area(habitat_geom) / ST_Area(ST_ConvexHull(habitat_geom)) as fragmentation_index,
+            ST_Perimeter(habitat_geom) / SQRT(ST_Area(habitat_geom)) as shape_complexity
+        FROM habitat_patches
+        ORDER BY fragmentation_index DESC;
+    """)
+    
+    # Development impact assessment
+    impact_analysis = db.query("""
+        SELECT 
+            d.development_id,
+            d.geom,
+            d.area_hectares,
+            -- Impact on natural habitats
+            SUM(CASE WHEN ST_Intersects(d.geom, h.geom) THEN h.area_hectares ELSE 0 END) as habitat_loss,
+            -- Impact on water quality
+            COUNT(w.id) as affected_water_bodies,
+            -- Carbon sequestration loss
+            SUM(CASE WHEN ST_Intersects(d.geom, f.geom) THEN f.carbon_storage ELSE 0 END) as carbon_loss
+        FROM proposed_developments d
+        LEFT JOIN natural_habitats h ON ST_Intersects(d.geom, h.geom)
+        LEFT JOIN water_bodies w ON ST_DWithin(d.geom, w.geom, 500)
+        LEFT JOIN forests f ON ST_Intersects(d.geom, f.geom)
+        GROUP BY d.development_id, d.geom, d.area_hectares
+        ORDER BY habitat_loss DESC;
+    """)
+    
+    return habitat_analysis, impact_analysis
+```
+
+## Performance Optimization
+
+### **DuckDB-Specific Optimizations**
+
+```python
+# Example: Performance optimization for DuckDB
+def optimize_duckdb_performance():
+    # Enable parallel processing
+    db.query("SET threads=8;")
+    
+    # Configure memory settings
+    db.query("SET memory_limit='4GB';")
+    
+    # Enable vectorized execution
+    db.query("SET enable_progress_bar=true;")
+    
+    # Create optimized table structure
+    db.query("""
+        CREATE TABLE optimized_parcels AS
+        SELECT 
+            parcel_id,
+            area_hectares,
+            geom,
+            land_use_type,
+            zoning_category
+        FROM read_parquet('parcels.parquet')
+        ORDER BY area_hectares DESC;
+    """)
+    
+    # Create spatial index (DuckDB handles this automatically)
+    # But we can optimize with partitioning
+    db.query("""
+        CREATE TABLE partitioned_parcels AS
+        SELECT * FROM optimized_parcels
+        PARTITION BY (land_use_type);
+    """)
+```
+
+## Best Practices
+
+### **Performance Optimization**
+- **Columnar Storage**: Leverage DuckDB's columnar format for analytics
+- **Spatial Indexing**: DuckDB automatically optimizes spatial queries
+- **Memory Management**: Configure appropriate memory limits
+- **Parallel Processing**: Enable multi-threading for large datasets
+
+### **Data Management**
+- **File Formats**: Use Parquet for optimal performance
+- **Partitioning**: Partition large datasets by relevant attributes
+- **Compression**: Enable compression for storage efficiency
+- **Regular Maintenance**: Optimize tables periodically
+
+### **Cloud Integration**
+- **MotherDuck**: Use for scalable cloud analytics
+- **Cloud Storage**: Integrate with S3, GCS, or Azure Blob Storage
+- **Data Synchronization**: Keep local and cloud data in sync
+- **Cost Optimization**: Monitor and optimize cloud usage
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Problems**
+- Verify DuckDB installation and spatial extensions
+- Check file permissions for database files
+- Validate MotherDuck credentials and network access
+- Ensure proper SSL/TLS configuration for cloud connections
+
+**Performance Issues**
+- Monitor memory usage and adjust limits
+- Check query execution plans with EXPLAIN
+- Optimize table structure and partitioning
+- Use appropriate file formats (Parquet recommended)
+
+**Spatial Data Issues**
+- Validate spatial data with ST_IsValid
+- Check coordinate system consistency
+- Verify spatial extension installation
+- Monitor spatial query performance
+
+## Support Resources
+
+### **Documentation**
+- [DuckDB Documentation](https://duckdb.org/docs/)
+- [DuckDB Spatial Extensions](https://duckdb.org/docs/extensions/spatial)
+- [MotherDuck Documentation](https://motherduck.com/docs/)
+- [Nika DuckDB Integration Guide](/guides/duckdb)
+
+### **Community**
+- [DuckDB Community](https://duckdb.org/community/)
+- [MotherDuck Community](https://motherduck.com/community/)
+- [DuckDB GitHub Repository](https://github.com/duckdb/duckdb)
+- [Nika Community Forum](/forum)
+
+### **Training**
+- DuckDB training courses and workshops
+- MotherDuck cloud analytics tutorials
+- Nika-specific analytical database training
+
+---
+
+*Ready to unlock lightning-fast spatial analytics with DuckDB in your Nika workspace? [Get started with DuckDB integration](/quickstart) or [contact our team](/support) for personalized assistance.* 

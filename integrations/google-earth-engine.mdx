@@ -1,0 +1,330 @@
+---
+title: 'Google Earth Engine'
+description: 'Leverage Google Earth Engine vast satellite data through native Python API support and geemap integration'
+---
+
+# Google Earth Engine Integration
+
+Nika provides native integration with Google Earth Engine (GEE), enabling you to access the world's largest satellite imagery archive and perform cloud-based geospatial analysis directly within your Nika workspace.
+
+## Native Earth Engine API Support
+
+### Seamless Python Integration
+
+Nika supports the official `earthengine-api` Python library natively, allowing you to run Earth Engine code directly in your Nika workspace without additional setup or configuration.
+
+**Key Features:**
+- **Native API Support**: Full access to Earth Engine's Python API
+- **Credential Management**: Secure handling of GEE credentials
+- **Cloud Processing**: Leverage Earth Engine's distributed computing
+- **Real-time Results**: Instant visualization of analysis outputs
+- **Batch Processing**: Handle large-scale geospatial operations
+
+### Why Earth Engine Integration Matters
+
+Google Earth Engine provides access to:
+- **Petabytes of satellite imagery** from Landsat, Sentinel, and other missions
+- **Global-scale datasets** for environmental monitoring
+- **Cloud-based processing** for computationally intensive analysis
+- **Time-series analysis** capabilities for change detection
+- **Machine learning tools** for automated feature extraction
+
+Our integration makes this powerful platform accessible within your familiar Nika environment.
+
+## Getting Started
+
+### Setting Up Earth Engine Credentials
+
+1. **Create Earth Engine Account**: Sign up at [earthengine.google.com](https://earthengine.google.com)
+2. **Generate Service Account**: Create credentials in Google Cloud Console
+3. **Upload Credentials**: Add your `ee-credentials.json` to Nika workspace
+4. **Verify Connection**: Test your Earth Engine access
+
+### Basic Earth Engine Workflow
+
+```python
+# Example: Basic Earth Engine analysis in Nika
+import ee
+import geemap
+
+# Initialize Earth Engine
+ee.Initialize()
+
+# Load a Landsat collection
+landsat = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2') \
+    .filterBounds(ee.Geometry.Point([-122.2751, 37.8063])) \
+    .filterDate('2020-01-01', '2020-12-31') \
+    .filter(ee.Filter.lt('CLOUD_COVER', 20))
+
+# Calculate NDVI
+def addNDVI(image):
+    ndvi = image.normalizedDifference(['SR_B5', 'SR_B4']).rename('NDVI')
+    return image.addBands(ndvi)
+
+# Apply NDVI calculation
+landsat_ndvi = landsat.map(addNDVI)
+
+# Get the median NDVI
+median_ndvi = landsat_ndvi.select('NDVI').median()
+
+# Display in Nika
+nika_map = geemap.Map()
+nika_map.addLayer(median_ndvi, {'min': -1, 'max': 1, 'palette': ['red', 'yellow', 'green']}, 'NDVI')
+nika_map.display()
+```
+
+## Advanced Integration with geemap
+
+### Leveraging Dr. Wu Qiusheng's geemap
+
+Nika fully supports [geemap](https://github.com/giswqs/geemap), the powerful Python package created by Dr. Wu Qiusheng (@giswqs) that simplifies Earth Engine data visualization and analysis.
+
+#### **Enhanced Visualization Capabilities**
+```python
+# Example: Advanced geemap visualization
+import geemap
+import ee
+
+# Create an interactive map
+Map = geemap.Map(center=[40, -100], zoom=4)
+
+# Load and display multiple datasets
+dem = ee.Image('USGS/SRTMGL1_003')
+landcover = ee.Image('ESA/WorldCover/v100').select('Map')
+
+# Add layers with custom styling
+Map.addLayer(dem, {'min': 0, 'max': 3000, 'palette': ['006633', 'E5FFCC', '662A00', 'D8D8D8', 'F5F5F5']}, 'DEM')
+Map.addLayer(landcover, {}, 'Land Cover')
+
+# Add time series analysis
+Map.add_landsat_timeseries(
+    roi=ee.Geometry.Rectangle([-122.2751, 37.8063, -122.2750, 37.8064]),
+    start_year=2020,
+    end_year=2023
+)
+
+# Display in Nika workspace
+Map.to_streamlit()
+```
+
+#### **Interactive Analysis Tools**
+```python
+# Example: Interactive Earth Engine analysis
+import geemap.foliumap as geemap
+
+# Create interactive map with analysis tools
+Map = geemap.Map()
+
+# Add drawing tools for ROI selection
+Map.add_draw_control()
+
+# Add Earth Engine datasets
+Map.add_ee_layer(ee.Image('USGS/SRTMGL1_003'), {}, 'DEM')
+
+# Add analysis widgets
+Map.add_analysis_widgets()
+
+# Export functionality
+Map.add_export_control()
+```
+
+## Use Cases
+
+### **Environmental Monitoring**
+```python
+# Example: Forest cover change analysis
+import ee
+import geemap
+
+# Define study area
+roi = ee.Geometry.Rectangle([-122.5, 37.5, -122.0, 38.0])
+
+# Load Landsat collections for different years
+landsat_2015 = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2') \
+    .filterBounds(roi) \
+    .filterDate('2015-06-01', '2015-08-31') \
+    .filter(ee.Filter.lt('CLOUD_COVER', 10))
+
+landsat_2023 = ee.ImageCollection('LANDSAT/LC09/C02/T1_L2') \
+    .filterBounds(roi) \
+    .filterDate('2023-06-01', '2023-08-31') \
+    .filter(ee.Filter.lt('CLOUD_COVER', 10))
+
+# Calculate forest cover change
+def calculate_forest_cover(image):
+    ndvi = image.normalizedDifference(['SR_B5', 'SR_B4'])
+    forest = ndvi.gt(0.3).rename('forest')
+    return forest
+
+forest_2015 = landsat_2015.map(calculate_forest_cover).median()
+forest_2023 = landsat_2023.map(calculate_forest_cover).median()
+
+# Calculate change
+forest_change = forest_2023.subtract(forest_2015)
+
+# Visualize results
+Map = geemap.Map()
+Map.addLayer(forest_change, {'min': -1, 'max': 1, 'palette': ['red', 'white', 'green']}, 'Forest Change')
+```
+
+### **Agricultural Analysis**
+```python
+# Example: Crop monitoring with Sentinel-2
+import ee
+
+# Load Sentinel-2 data
+sentinel = ee.ImageCollection('COPERNICUS/S2_SR') \
+    .filterBounds(roi) \
+    .filterDate('2023-01-01', '2023-12-31') \
+    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
+
+# Calculate vegetation indices
+def add_vegetation_indices(image):
+    ndvi = image.normalizedDifference(['B8', 'B4']).rename('NDVI')
+    evi = image.expression('2.5 * ((NIR - RED) / (NIR + 6 * RED - 7.5 * BLUE + 1))', {
+        'NIR': image.select('B8'),
+        'RED': image.select('B4'),
+        'BLUE': image.select('B2')
+    }).rename('EVI')
+    return image.addBands([ndvi, evi])
+
+# Apply indices calculation
+sentinel_with_indices = sentinel.map(add_vegetation_indices)
+
+# Create time series
+time_series = sentinel_with_indices.select('NDVI')
+```
+
+### **Climate Research**
+```python
+# Example: Temperature analysis with MODIS
+import ee
+
+# Load MODIS land surface temperature
+modis_lst = ee.ImageCollection('MODIS/006/MOD11A1') \
+    .filterBounds(roi) \
+    .filterDate('2023-01-01', '2023-12-31')
+
+# Extract temperature data
+def extract_temperature(image):
+    lst = image.select('LST_Day_1km').multiply(0.02).subtract(273.15)
+    return lst.rename('temperature')
+
+# Calculate temperature statistics
+temperature_series = modis_lst.map(extract_temperature)
+mean_temp = temperature_series.mean()
+max_temp = temperature_series.max()
+min_temp = temperature_series.min()
+```
+
+## Best Practices
+
+### **Credential Management**
+- Store credentials securely in Nika workspace
+- Use service accounts for production applications
+- Regularly rotate credentials
+- Monitor API usage and quotas
+
+### **Performance Optimization**
+- Use appropriate spatial and temporal filters
+- Leverage Earth Engine's cloud processing
+- Implement efficient data structures
+- Cache frequently accessed datasets
+
+### **Data Quality**
+- Validate input data sources
+- Check for cloud cover and data gaps
+- Implement quality control measures
+- Document data processing workflows
+
+## Advanced Features
+
+### **Custom Earth Engine Functions**
+```python
+# Example: Custom analysis function
+def custom_analysis(roi, start_date, end_date):
+    """
+    Custom Earth Engine analysis function
+    """
+    # Load data
+    collection = ee.ImageCollection('LANDSAT/LC08/C02/T1_L2') \
+        .filterBounds(roi) \
+        .filterDate(start_date, end_date)
+    
+    # Custom processing
+    def process_image(image):
+        # Your custom analysis here
+        return image
+    
+    # Apply processing
+    result = collection.map(process_image)
+    
+    return result
+```
+
+### **Batch Processing**
+```python
+# Example: Batch processing multiple regions
+import ee
+import pandas as pd
+
+# Define multiple regions
+regions = [
+    {'name': 'Region 1', 'geometry': ee.Geometry.Rectangle([-122, 37, -121, 38])},
+    {'name': 'Region 2', 'geometry': ee.Geometry.Rectangle([-121, 37, -120, 38])},
+    # Add more regions...
+]
+
+# Process each region
+results = []
+for region in regions:
+    # Perform analysis
+    result = custom_analysis(region['geometry'], '2023-01-01', '2023-12-31')
+    results.append({
+        'region': region['name'],
+        'result': result
+    })
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Authentication Problems**
+- Verify Earth Engine account activation
+- Check credential file format and permissions
+- Ensure proper service account setup
+- Validate API quotas and limits
+
+**Performance Issues**
+- Optimize spatial and temporal filters
+- Use appropriate data collections
+- Implement efficient processing chains
+- Monitor Earth Engine usage quotas
+
+**Data Access Issues**
+- Verify dataset availability and access permissions
+- Check temporal and spatial coverage
+- Validate data quality and completeness
+- Monitor Earth Engine service status
+
+## Support Resources
+
+### **Documentation**
+- [Earth Engine Documentation](https://developers.google.com/earth-engine)
+- [geemap Documentation](https://geemap.org)
+- [Nika Earth Engine Integration Guide](/guides/earth-engine)
+
+### **Community**
+- [Earth Engine Community](https://groups.google.com/g/google-earth-engine-developers)
+- [geemap GitHub Repository](https://github.com/giswqs/geemap)
+- [Nika Community Forum](/forum)
+
+### **Training**
+- Earth Engine certification programs
+- geemap workshops and tutorials
+- Nika-specific training sessions
+
+---
+
+*Ready to unlock the power of Google Earth Engine in your Nika workspace? [Get started with Earth Engine](/quickstart) or [contact our team](/support) for personalized assistance.* 

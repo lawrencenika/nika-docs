@@ -1,0 +1,78 @@
+---
+title: "GDAL and CUDA Installation"
+description: "GDAL and CUDA are pre-installed on all ephemeral VM kernels for geospatial analysis and GPU acceleration"
+---
+
+## GDAL and CUDA Installation
+
+GDAL and CUDA are pre-installed on all ephemeral VM kernels that your notebooks have direct access to. No manual installation required.
+
+## Pre-Installed Software
+
+### Available Configurations
+All VM kernels come with:
+- **GDAL 3.9.1**: Geospatial Data Abstraction Library for raster and vector data
+- **CUDA 12.2**: NVIDIA CUDA for GPU acceleration
+- **Python 3.10/3.11**: Multiple Python versions available
+
+### Kernel Selection
+When starting your machine, you can choose from:
+- **Python 3.10, GDAL 3.9.1 CUDA 12.2**
+- **Python 3.11, GDAL 3.9.1 CUDA 12.2**
+- **Python 3.10, GDAL 3.9.1 CUDA 12**
+
+![GDAL CUDA Pre-installed](/guides/data-analysis/gdal-cuda-installation.jpg)
+
+## Ready to Use
+
+### No Installation Required
+- **Pre-configured**: All geospatial libraries are ready to use
+- **GPU Ready**: CUDA drivers and libraries are installed
+- **Immediate Access**: Start analyzing geospatial data right away
+
+### Direct Access
+- **Workspace Integration**: Direct access to workspace files
+- **Large Dataset Support**: Optimized for TB-PB sized geospatial data
+- **Performance Optimized**: GPU acceleration for raster processing
+
+## Usage Examples
+
+### GDAL Operations
+```python
+import rasterio
+import geopandas as gpd
+
+# Read raster data
+with rasterio.open('/workspace/data/satellite.tif') as src:
+    data = src.read()
+
+# Read vector data
+gdf = gpd.read_file('/workspace/data/shapefile.shp')
+```
+
+### CUDA Acceleration
+```python
+import cupy as cp
+import numpy as np
+
+# GPU-accelerated array operations
+gpu_array = cp.array(np.random.random((1000, 1000)))
+result = cp.linalg.svd(gpu_array)
+```
+
+## Next Steps
+
+Now that you have GDAL and CUDA ready:
+
+1. **Start Analysis**: Begin your geospatial analysis immediately
+2. **Load Data**: Access your workspace data files
+3. **Use GPU**: Leverage CUDA for accelerated processing
+4. **Scale Up**: Work with large geospatial datasets efficiently
+
+## Need Help?
+
+- **Guides**: Use the `/guides` tab for detailed tutorials
+- **Community**: Ask questions in our [community forum](/forum)
+- **Support**: Send us a [support request](/support)
+
+Happy analyzing! 

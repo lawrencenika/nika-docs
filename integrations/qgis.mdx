@@ -1,0 +1,248 @@
+---
+title: 'QGIS'
+description: 'Integrate QGIS with Nika through plugins and leverage cloud-native geospatial capabilities'
+---
+
+# QGIS Integration (Enterprise Plan Only)
+
+Nika provides seamless integration with QGIS, the world's leading open-source GIS platform, through dedicated plugins and enhanced visualization capabilities that extend your desktop GIS workflows into the cloud.
+
+## Plugin-Based Integration
+
+### QGIS Plugin for Nika
+
+Our QGIS plugin transforms your desktop GIS experience by enabling direct connectivity to Nika's cloud-native geospatial platform, providing the best of both worlds.
+
+**Key Features:**
+- **Seamless Data Transfer**: Import/export between QGIS and Nika
+- **Layer Synchronization**: Keep your QGIS projects in sync with cloud data
+- **Style Preservation**: Maintain cartographic styling during transfers
+- **Batch Operations**: Process multiple layers efficiently
+- **Real-time Collaboration**: Share data with team members instantly
+
+### Why QGIS + Nika Integration Matters
+
+QGIS excels at desktop GIS operations with its powerful analysis tools, extensive plugin ecosystem, and cost-effective licensing. However, modern geospatial workflows increasingly require:
+
+- **Cloud-based data storage** for accessibility and collaboration
+- **Web-based visualization** for stakeholders and public access
+- **AI/ML integration** for advanced analytics
+- **Scalable processing** for large datasets
+- **Real-time data feeds** for dynamic applications
+
+Our integration bridges these needs by allowing you to continue using QGIS's familiar interface while extending your capabilities into Nika's cloud environment.
+
+## Enhanced Visualization Capabilities
+
+### Beyond QGIS Web Client
+
+While QGIS Web Client provides basic web mapping, Nika offers enterprise-grade web visualization that complements your QGIS workflows:
+
+#### **Advanced Web Mapping**
+- **Vector Tiles**: High-performance rendering of complex geometries
+- **3D Visualization**: Immersive terrain and building models
+- **Time-series Maps**: Dynamic temporal data exploration
+- **Interactive Dashboards**: Rich data exploration interfaces
+
+#### **Performance Optimization**
+- **WebGL Rendering**: Hardware-accelerated graphics
+- **Smart Clustering**: Intelligent point aggregation
+- **Progressive Loading**: Smooth user experience with large datasets
+- **Caching Strategies**: Optimized data delivery
+
+#### **Developer Integration**
+- **REST APIs**: Easy integration with custom applications
+- **JavaScript SDK**: Rich client-side capabilities
+- **Web Components**: Reusable mapping widgets
+- **Plugin Architecture**: Extensible functionality
+
+## Getting Started
+
+### Installing the QGIS Plugin
+
+1. **Download Plugin**: Available from Nika's plugin repository
+2. **Install in QGIS**: Use QGIS Plugin Manager
+3. **Configure Connection**: Set up your Nika workspace
+4. **Test Integration**: Verify data transfer capabilities
+
+### Basic Workflow
+
+```python
+# Example: Export QGIS layer to Nika
+from qgis.core import QgsProject
+from nika_plugin import NikaExporter
+
+# Get active layer from QGIS
+layer = iface.activeLayer()
+
+# Initialize Nika exporter
+exporter = NikaExporter(workspace_id="your-workspace")
+
+# Export with full styling
+exporter.export_layer(
+    layer=layer,
+    preserve_styling=True,
+    include_metadata=True
+)
+```
+
+### Advanced Integration
+
+```python
+# Example: Automated data synchronization
+from nika_plugin import SyncManager
+from qgis.core import QgsProject
+
+# Set up project monitoring
+sync = SyncManager(
+    qgis_project=QgsProject.instance(),
+    nika_workspace="your-workspace",
+    auto_sync=True
+)
+
+# Monitor for changes and sync automatically
+sync.start_monitoring()
+```
+
+## Use Cases
+
+### **Academic Research**
+- Use QGIS for detailed analysis
+- Publish results on Nika for collaboration
+- Share interactive maps with research community
+
+### **Government Agencies**
+- Maintain QGIS workflows for internal use
+- Deploy public-facing maps on Nika
+- Enable citizen engagement through web interfaces
+
+### **Environmental Consulting**
+- Field data collection with QGIS
+- Cloud-based analysis and visualization
+- Client deliverables through web platforms
+
+### **Urban Planning**
+- Detailed planning in QGIS
+- Public consultation through Nika
+- Real-time stakeholder feedback
+
+## Best Practices
+
+### **Data Management**
+- Use consistent coordinate reference systems
+- Maintain comprehensive metadata
+- Implement version control for collaborative projects
+- Regular backup of critical datasets
+
+### **Performance Optimization**
+- Optimize layer styling for web delivery
+- Use appropriate data formats (GeoJSON, Vector Tiles)
+- Implement efficient spatial indexing
+- Consider data compression for large datasets
+
+### **Workflow Integration**
+- Establish clear data flow protocols
+- Document integration procedures
+- Train team members on both platforms
+- Regular testing of integration workflows
+
+## Advanced Features
+
+### **Custom Processing Chains**
+```python
+# Example: Custom QGIS processing with Nika output
+from qgis.core import QgsProcessing
+from nika_plugin import NikaProcessor
+
+# Define custom processing chain
+def custom_analysis():
+    # QGIS processing steps
+    result = processing.run("native:buffer", {
+        'INPUT': layer,
+        'DISTANCE': 100,
+        'OUTPUT': 'memory:'
+    })
+    
+    # Export to Nika for web visualization
+    nika_processor = NikaProcessor()
+    nika_processor.upload_result(result['OUTPUT'])
+```
+
+### **Real-time Data Feeds**
+```python
+# Example: Real-time sensor data integration
+from nika_plugin import RealTimeConnector
+
+# Connect to real-time data source
+connector = RealTimeConnector(
+    source_type="sensor_network",
+    update_interval=60  # seconds
+)
+
+# Update QGIS layer with live data
+connector.update_qgis_layer(layer_name="sensor_data")
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Plugin Installation**
+- Ensure QGIS version compatibility
+- Check Python dependencies
+- Verify plugin repository access
+
+**Data Transfer Issues**
+- Validate data formats and projections
+- Check network connectivity
+- Monitor available storage space
+- Verify API credentials
+
+**Performance Problems**
+- Optimize dataset size and complexity
+- Use appropriate data formats
+- Implement efficient spatial queries
+- Consider data partitioning strategies
+
+## Support Resources
+
+### **Documentation**
+- Comprehensive integration guides
+- Video tutorials and webinars
+- Best practices documentation
+- API reference materials
+
+### **Community Support**
+- User forums and discussion groups
+- GitHub repositories for examples
+- Community-contributed plugins
+- Knowledge sharing platforms
+
+### **Professional Support**
+- Technical support tickets
+- Custom integration consulting
+- Training and certification programs
+- Enterprise support packages
+
+## Migration Guide
+
+### **From QGIS-Only to Hybrid Workflow**
+
+1. **Assessment Phase**
+   - Identify datasets suitable for cloud deployment
+   - Evaluate current workflows and bottlenecks
+   - Plan integration strategy
+
+2. **Pilot Implementation**
+   - Start with non-critical datasets
+   - Test integration workflows
+   - Gather user feedback
+
+3. **Full Deployment**
+   - Migrate production datasets
+   - Train team members
+   - Establish monitoring and maintenance procedures
+
+---
+
+*Transform your QGIS workflows with Nika's cloud-native capabilities. [Get started with the plugin](/quickstart) or [contact our team](/support) for personalized assistance.* 

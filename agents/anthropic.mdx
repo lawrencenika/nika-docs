@@ -1,0 +1,276 @@
+---
+title: "Anthropic"
+description: "Claude Sonnet 4 and Claude Haiku 3.5 - Advanced reasoning and analysis capabilities"
+---
+
+## Overview
+
+Anthropic's Claude models provide exceptional reasoning capabilities and analytical thinking, making them ideal for complex geospatial analysis and data interpretation tasks in Nika.
+
+## Available Models
+
+### Claude Sonnet 4
+**Best for**: Complex analysis, reasoning, and detailed geospatial workflows
+
+#### Key Capabilities
+- **Advanced Reasoning**: Superior logical thinking and problem-solving
+- **Context Understanding**: Deep comprehension of spatial relationships
+- **Code Generation**: High-quality, well-documented code output
+- **Analysis**: Sophisticated statistical and spatial analysis
+- **Documentation**: Excellent technical writing and documentation
+
+#### Performance in Nika Tasks
+
+##### Coding
+- **Python**: Outstanding code generation with proper error handling
+- **JavaScript/TypeScript**: Excellent frontend and mapping code
+- **SQL**: Very good query optimization and complex joins
+- **Geospatial Libraries**: Deep understanding of GeoPandas, PostGIS, Leaflet
+
+**Example Output Quality**:
+```python
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import Point
+import folium
+
+def create_interactive_map(gdf, column_name, title="Interactive Map"):
+    """
+    Create an interactive choropleth map with proper styling and popups.
+    
+    Parameters:
+    gdf (GeoDataFrame): Input geospatial data
+    column_name (str): Column to visualize
+    title (str): Map title
+    
+    Returns:
+    folium.Map: Interactive map object
+    """
+    # Calculate statistics for better visualization
+    min_val = gdf[column_name].min()
+    max_val = gdf[column_name].max()
+    
+    # Create base map centered on data
+    center_lat = gdf.geometry.centroid.y.mean()
+    center_lon = gdf.geometry.centroid.x.mean()
+    
+    m = folium.Map(
+        location=[center_lat, center_lon],
+        zoom_start=10,
+        tiles='cartodbpositron'
+    )
+    
+    # Add choropleth layer with proper styling
+    folium.Choropleth(
+        geo_data=gdf.__geo_interface__,
+        name='choropleth',
+        data=gdf,
+        columns=['id', column_name],
+        key_on='feature.properties.id',
+        fill_color='YlOrRd',
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name=column_name,
+        bins=6
+    ).add_to(m)
+    
+    # Add interactive popups
+    for idx, row in gdf.iterrows():
+        folium.Popup(
+            f"<b>{row.get('name', 'Location')}</b><br>"
+            f"{column_name}: {row[column_name]:,.0f}",
+            parse_html=True
+        ).add_to(folium.GeoJson(
+            row.geometry,
+            style_function=lambda x: {'fillColor': 'transparent', 'color': 'black', 'weight': 1}
+        ).add_to(m))
+    
+    folium.LayerControl().add_to(m)
+    return m
+```
+
+##### Map Creation
+- **Interactive Maps**: Excellent Leaflet and Mapbox implementations
+- **Static Maps**: High-quality matplotlib and plotly outputs
+- **Custom Styling**: Sophisticated visual design and theming
+- **Performance Optimization**: Efficient rendering for large datasets
+
+##### Data Analysis
+- **Statistical Analysis**: Advanced statistical methods and interpretation
+- **Spatial Analysis**: Complex spatial operations and algorithms
+- **Trend Detection**: Sophisticated pattern recognition
+- **Data Quality**: Comprehensive data validation and cleaning
+
+##### SQL Execution
+- **Query Optimization**: Excellent performance tuning
+- **Complex Joins**: Advanced spatial and temporal joins
+- **Indexing**: Strategic index recommendations
+- **Error Handling**: Robust error management and recovery
+
+### Claude Haiku 3.5
+**Best for**: Fast processing, real-time applications, and cost-effective solutions
+
+#### Key Capabilities
+- **Speed**: Rapid response times for real-time applications
+- **Efficiency**: Cost-effective for high-volume tasks
+- **Reliability**: Consistent performance across different tasks
+- **Scalability**: Excellent for batch processing
+
+#### Performance in Nika Tasks
+
+##### Coding
+- **Speed**: Very fast code generation
+- **Quality**: Good code quality with basic error handling
+- **Documentation**: Adequate inline comments and docstrings
+- **Best For**: Simple to moderate complexity tasks
+
+##### Map Creation
+- **Basic Maps**: Good quality for standard visualizations
+- **Performance**: Fast rendering for simple maps
+- **Styling**: Basic but effective visual design
+- **Best For**: Quick prototypes and simple dashboards
+
+##### Data Analysis
+- **Basic Analysis**: Good for standard statistical operations
+- **Speed**: Fast processing of routine analyses
+- **Interpretation**: Adequate result explanation
+- **Best For**: Regular reporting and monitoring
+
+##### SQL Execution
+- **Standard Queries**: Good performance on common queries
+- **Basic Optimization**: Adequate query tuning
+- **Error Handling**: Basic error management
+- **Best For**: Routine database operations
+
+## Use Case Recommendations
+
+### Choose Claude Sonnet 4 When:
+- **Complex Analysis**: Multi-step geospatial workflows
+- **Research Projects**: Academic or research-level analysis
+- **Production Systems**: Critical business applications
+- **Documentation**: Technical documentation and reports
+- **Code Review**: High-quality code generation and review
+
+### Choose Claude Haiku 3.5 When:
+- **Real-time Applications**: Live dashboards and monitoring
+- **Batch Processing**: High-volume data processing
+- **Prototyping**: Quick iterations and testing
+- **Cost Optimization**: Budget-conscious projects
+- **Simple Tasks**: Routine analysis and reporting
+
+## Configuration Examples
+
+### Claude Sonnet 4 Configuration
+```javascript
+const sonnetConfig = {
+  provider: 'anthropic',
+  model: 'claude-sonnet-4',
+  temperature: 0.3,
+  maxTokens: 4096,
+  systemPrompt: `You are an expert geospatial analyst. Provide detailed, 
+  well-documented solutions with proper error handling and performance optimization.`,
+  features: {
+    reasoning: 'advanced',
+    analysis: 'comprehensive',
+    documentation: 'detailed'
+  }
+};
+```
+
+### Claude Haiku 3.5 Configuration
+```javascript
+const haikuConfig = {
+  provider: 'anthropic',
+  model: 'claude-haiku-3.5',
+  temperature: 0.1,
+  maxTokens: 2048,
+  systemPrompt: `You are a fast, efficient geospatial assistant. 
+  Provide quick, reliable solutions for common tasks.`,
+  features: {
+    speed: 'optimized',
+    cost: 'efficient',
+    reliability: 'high'
+  }
+};
+```
+
+## Performance Metrics
+
+| Metric | Claude Sonnet 4 | Claude Haiku 3.5 |
+|--------|-----------------|-------------------|
+| **Response Time** | 2-5 seconds | 0.5-2 seconds |
+| **Code Quality** | 9.2/10 | 7.8/10 |
+| **Analysis Depth** | 9.5/10 | 7.5/10 |
+| **Cost per Request** | $0.015 | $0.0025 |
+| **Reliability** | 99.5% | 99.2% |
+
+## Best Practices
+
+### For Claude Sonnet 4
+1. **Provide Context**: Give detailed background information
+2. **Specify Requirements**: Clearly define output format and quality
+3. **Use Iterative Refinement**: Build complex solutions step by step
+4. **Request Documentation**: Ask for detailed explanations and comments
+
+### For Claude Haiku 3.5
+1. **Keep Prompts Concise**: Focus on essential information
+2. **Use Templates**: Leverage pre-defined patterns for consistency
+3. **Batch Similar Tasks**: Group related operations for efficiency
+4. **Monitor Performance**: Track response times and quality
+
+## Integration with Nika
+
+### API Usage
+```python
+import nikaplanet.com as nai
+
+# Initialize with Anthropic
+client = nai.Client(
+    llm_provider='anthropic',
+    model='claude-sonnet-4'
+)
+
+# Complex analysis task
+analysis_result = client.analyze_spatial_data({
+    'data': 'cities.geojson',
+    'analysis_type': 'hot_spot_analysis',
+    'parameters': {
+        'variable': 'population_density',
+        'method': 'getis_ord_gi',
+        'significance_level': 0.05
+    }
+})
+```
+
+### Workflow Integration
+```python
+# Multi-step workflow with different models
+workflow = nai.Workflow()
+
+# Use Haiku for data preprocessing
+workflow.add_step(
+    'preprocess',
+    model='claude-haiku-3.5',
+    task='data_cleaning'
+)
+
+# Use Sonnet for complex analysis
+workflow.add_step(
+    'analyze',
+    model='claude-sonnet-4',
+    task='spatial_analysis'
+)
+
+# Use Haiku for visualization
+workflow.add_step(
+    'visualize',
+    model='claude-haiku-3.5',
+    task='create_map'
+)
+
+results = workflow.execute()
+```
+
+## Support
+
+For questions about Anthropic integration, visit our [support page](/support) or check the [AI Agents Overview](/models/ai-agents-overview). 

@@ -1,68 +1,113 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "linden",
+  "name": "Nika",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#003646",
+    "light": "#c5ff5a",
+    "dark": "#003646"
   },
-  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "system"
+  },
+  "fonts": {
+    "family": "Space Grotesk"
+  },
+  "background": {
+    "decoration": "windows"
+  },
+  "favicon": "/favicon.ico",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "concepts"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Products",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "products/nika-workspace",
+              "products/nika-gallery",
+              "products/nika-studio",
+              "products/nika-map",
+              "products/nika-labeller",
+              "products/nika-etl"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Integrations",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "integrations/arcgis",
+              "integrations/qgis",
+              "integrations/google-earth-engine",
+              "integrations/fme",
+              "integrations/postgresql",
+              "integrations/duckdb"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Agentic AI",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "agents/nika-ai-overview",
+              "agents/anthropic",
+              "agents/openai",
+              "agents/gemini",
+              "agents/xai"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Tutorials",
             "pages": [
-              "api-reference/introduction"
+              "guides/tutorials/getting-started-with-nikaworkspace",
+              "guides/tutorials/building-first-app",
+              "guides/tutorials/geospatial-analysis",
+              "guides/tutorials/map-visualization"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Map Visualization",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "guides/become-map-expert/create-your-first-map",
+              "guides/become-map-expert/add-layers-to-map",
+              "guides/become-map-expert/vector-styling",
+              "guides/become-map-expert/raster-styling",
+              "guides/become-map-expert/collaborative-mapping",
+              "guides/become-map-expert/change-base-map",
+              "guides/become-map-expert/sync-multiple-maps",
+              "guides/become-map-expert/set-initial-view",
+              "guides/become-map-expert/publish-map"
+            ]
+          },
+          {
+            "group": "Data Analysis",
+            "pages": [
+              "guides/data-analysis/create-your-first-notebook",
+              "guides/data-analysis/start-machine",
+              "guides/data-analysis/run-code-in-notebook",
+              "guides/data-analysis/ai-coding-in-notebook",
+              "guides/data-analysis/gdal-cuda-installation",
+              "guides/data-analysis/supported-python-libraries",
+              "guides/data-analysis/publish-notebook"
+            ]
+          },
+          {
+            "group": "Best Practices",
+            "pages": [
+              "guides/best-practices/best-practices",
+              "guides/best-practices/performance",
+              "guides/best-practices/security"
             ]
           }
         ]
@@ -71,38 +116,46 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Website",
+          "href": "https://nikaplanet.com",
+          "icon": "globe"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "anchor": "Forum",
+          "href": "https://forum.nikaplanet.com",
+          "icon": "bookmark"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Support",
+          "href": "mailto:support@nikaplanet.com",
+          "icon": "question"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/images/hero-light.png",
+    "dark": "/images/hero-dark.png"
   },
   "navbar": {
     "links": [
       {
+        "label": "Website",
+        "href": "https://nikaplanet.com"
+      },
+      {
+        "label": "Forum",
+        "href": "https://forum.nikaplanet.com"
+      },
+      {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@nikaplanet.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Go to App",
+      "href": "https://planet.nika.eco"
     }
   },
   "contextual": {
@@ -119,9 +172,10 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/nikaplanet",
+      "github": "https://github.com/nikaplanet",
+      "linkedin": "https://linkedin.com/company/nikaplanet"
     }
   }
 }
+

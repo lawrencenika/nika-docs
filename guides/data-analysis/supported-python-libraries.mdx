@@ -1,0 +1,249 @@
+---
+title: "Supported Python Libraries"
+description: "Learn about the Python libraries supported in NikaWorkspace for data analysis and geospatial processing"
+---
+
+## Supported Python Libraries
+
+NikaWorkspace supports almost all open-source Python libraries as long as Jupyter supports them. You can install any library you need using `!pip install` in code blocks.
+
+## Step 1: Installing Libraries
+
+### Using pip install
+```python
+# Install any library you need
+!pip install library_name
+
+# Example installations
+!pip install pandas numpy matplotlib
+!pip install scikit-learn tensorflow
+!pip install geemap leafmap
+```
+
+### Installation Process
+1. **Run Installation**: Execute the pip install command in a code cell
+2. **Wait for Installation**: Installation completes automatically
+3. **Restart Kernel**: Restart kernel if needed for some libraries
+4. **Import and Use**: Import and use the library in subsequent cells
+
+![Library Installation](/images/guides/supported-libraries-install.png)
+
+## Step 2: Popular Libraries
+
+### Data Analysis
+- **pandas**: Data manipulation and analysis
+- **numpy**: Numerical computing
+- **scipy**: Scientific computing
+- **scikit-learn**: Machine learning
+
+### Geospatial Libraries
+- **geemap**: Google Earth Engine integration
+- **leafmap**: Interactive mapping
+- **geopandas**: Geospatial data analysis
+- **rasterio**: Raster data processing
+- **folium**: Interactive maps
+- **pyproj**: Coordinate transformations
+
+### Machine Learning
+- **tensorflow**: Deep learning framework
+- **pytorch**: Machine learning library
+- **xgboost**: Gradient boosting
+- **lightgbm**: Light gradient boosting
+
+### Visualization
+- **matplotlib**: Basic plotting
+- **seaborn**: Statistical visualization
+- **plotly**: Interactive plots
+- **bokeh**: Interactive visualization
+
+![Popular Libraries](/images/guides/supported-libraries-popular.png)
+
+## Step 3: Geospatial Libraries
+
+### Earth Engine Integration
+```python
+# Install and use geemap
+!pip install geemap
+
+import geemap
+import ee
+
+# Initialize Earth Engine
+ee.Initialize()
+
+# Create a map
+Map = geemap.Map()
+Map.addLayer(ee.Image('USGS/SRTMGL1_003'), {}, 'SRTM')
+Map
+```
+
+### Interactive Mapping
+```python
+# Install and use leafmap
+!pip install leafmap
+
+import leafmap
+
+# Create interactive map
+m = leafmap.Map()
+m.add_basemap('OpenStreetMap')
+m
+```
+
+### Geospatial Analysis
+```python
+# Install and use geopandas
+!pip install geopandas
+
+import geopandas as gpd
+
+# Load geospatial data
+gdf = gpd.read_file('/workspace/data/shapefile.shp')
+gdf.plot()
+```
+
+## Step 4: Machine Learning Libraries
+
+### Deep Learning
+```python
+# Install and use TensorFlow
+!pip install tensorflow
+
+import tensorflow as tf
+print(f"TensorFlow version: {tf.__version__}")
+
+# Check GPU availability
+print(f"GPU available: {tf.config.list_physical_devices('GPU')}")
+```
+
+### Traditional ML
+```python
+# Install and use scikit-learn
+!pip install scikit-learn
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Train model
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+```
+
+## Step 5: Data Visualization
+
+### Static Plots
+```python
+# Install and use matplotlib/seaborn
+!pip install matplotlib seaborn
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create plots
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df, x='x', y='y')
+plt.show()
+```
+
+### Interactive Plots
+```python
+# Install and use plotly
+!pip install plotly
+
+import plotly.express as px
+
+# Create interactive plot
+fig = px.scatter(df, x='x', y='y', color='category')
+fig.show()
+```
+
+## Step 6: Specialized Libraries
+
+### Image Processing
+- **opencv-python**: Computer vision
+- **PIL/Pillow**: Image processing
+- **scikit-image**: Image processing
+
+### Statistical Analysis
+- **statsmodels**: Statistical modeling
+- **pingouin**: Statistical testing
+- **scipy.stats**: Statistical functions
+
+### Database Integration
+- **sqlalchemy**: Database ORM
+- **psycopg2**: PostgreSQL adapter
+- **pymongo**: MongoDB driver
+
+### Cloud Services
+- **boto3**: AWS SDK
+- **google-cloud-storage**: Google Cloud
+- **azure-storage-blob**: Azure Storage
+
+## Step 7: Library Management
+
+### Version Management
+```python
+# Check installed versions
+!pip list
+
+# Install specific versions
+!pip install pandas==1.5.3
+
+# Upgrade libraries
+!pip install --upgrade library_name
+```
+
+### Environment Management
+- **Automatic Installation**: Libraries install automatically
+- **Version Compatibility**: System handles version conflicts
+- **Dependency Resolution**: Automatic dependency management
+- **Clean Environment**: Fresh environment for each session
+
+### Best Practices
+- **Install as Needed**: Install libraries when you need them
+- **Check Compatibility**: Verify library compatibility
+- **Use Virtual Environments**: Consider virtual environments for complex setups
+- **Document Dependencies**: Keep track of required libraries
+
+### Enterprise Feature: Library Persistence (Coming Soon)
+- **Persistent Libraries**: Enterprise users can persist libraries across kernel sessions
+- **GUI Management**: Manage persistent libraries through a user-friendly interface
+- **Custom Environments**: Create and maintain custom library environments
+- **Contact Support**: Email support request for early access to this feature
+
+## Step 8: Troubleshooting
+
+### Common Issues
+- **Installation Fails**: Check library name and internet connection
+- **Import Errors**: Restart kernel after installation
+- **Version Conflicts**: Install compatible versions
+- **Memory Issues**: Use smaller libraries or optimize code
+
+### Solutions
+- **Restart Kernel**: Often resolves import issues
+- **Check Documentation**: Verify installation instructions
+- **Alternative Libraries**: Use alternative libraries if needed
+- **Contact Support**: Get help for persistent issues
+
+### Performance Tips
+- **Lazy Loading**: Import libraries only when needed
+- **Memory Management**: Monitor memory usage
+- **Efficient Libraries**: Use efficient library alternatives
+- **Caching**: Cache results to avoid recomputation
+
+## Next Steps
+
+Now that you know about supported libraries:
+
+1. **Install Libraries**: Start installing the libraries you need
+2. **GDAL Setup**: Check [GDAL Installation](/guides/gdal-installation) (pre-installed)
+3. **Run Code**: [Run Code in Notebook](/guides/run-code-in-notebook) with your libraries
+4. **Publish**: [Publish Your Notebook](/guides/publish-notebook) with your analysis
+
+## Need Help?
+
+- **Guides**: Use the `/guides` tab for detailed tutorials
+- **Community**: Ask questions in our [community forum](/forum)
+- **Support**: Send us a [support request](/support)
+
+Happy coding! 

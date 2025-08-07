@@ -1,0 +1,204 @@
+---
+title: "NikaWorkspace"
+description: "Advanced geospatial data analysis platform with PBs of dataset, directly integrated with AI agent"
+---
+
+## Overview
+
+NikaWorkspace is our flagship geospatial data analysis platform designed for handling petabytes of spatial data with direct AI agent integration. Built for data scientists, analysts, and developers who need powerful tools for large-scale geospatial processing, visualization, and insights.
+
+![NikaWorkspace Interface](/products/nika-workspace.jpg)
+
+## Key Features
+
+### Petabyte-Scale Data Processing
+- **Massive Dataset Support**: Handle petabytes of geospatial data efficiently
+- **Optimized Storage**: Advanced database management for large geospatial workloads
+- **Distributed Computing**: Parallel processing across multiple nodes
+- **Memory Optimization**: Intelligent caching and data streaming
+
+### AI Agent Integration
+- **Direct AI Assistance**: Seamless integration with Nika's AI agent for intelligent analysis
+- **Natural Language Queries**: Ask questions about your data in plain English
+- **Automated Insights**: AI-powered pattern recognition and anomaly detection
+- **Smart Recommendations**: Get suggestions for analysis approaches and visualizations
+
+### Advanced Geospatial Analysis
+- **Spatial Operations**: Complex spatial analysis and transformations
+- **Statistical Analysis**: Comprehensive statistical modeling for spatial data
+- **Machine Learning**: Built-in ML algorithms for spatial predictions
+- **Real-time Processing**: Live data analysis and streaming capabilities
+
+## Key Features
+
+### Data Processing
+- **Multi-format Support**: Import data from CSV, GeoJSON, Shapefiles, and more
+- **Spatial Operations**: Perform complex spatial analysis and transformations
+- **Data Cleaning**: Automated tools for cleaning and validating geospatial data
+- **Batch Processing**: Handle large datasets with efficient batch operations
+
+### Visualization
+- **Interactive Maps**: Create dynamic, interactive maps with multiple layers
+- **Chart Library**: Comprehensive charting capabilities for data visualization
+- **Custom Styling**: Advanced styling options for maps and visualizations
+- **Real-time Updates**: Live data updates and streaming capabilities
+
+### AI-Powered Insights
+- **Pattern Recognition**: AI algorithms to identify patterns in spatial data
+- **Predictive Analytics**: Machine learning models for spatial predictions
+- **Anomaly Detection**: Automatic detection of unusual patterns in data
+- **Recommendation Engine**: AI-powered suggestions for data analysis
+
+## Getting Started
+
+### Installation
+
+```bash
+# Install NikaWorkspace
+npm install @nika/workspace
+
+# Or using yarn
+yarn add @nika/workspace
+```
+
+### Basic Usage
+
+```javascript
+import { NikaWorkspace } from '@nika/workspace';
+
+// Initialize workspace
+const workspace = new NikaWorkspace({
+  apiKey: 'your-api-key',
+  projectId: 'your-project-id'
+});
+
+// Load geospatial data
+const data = await workspace.loadData('path/to/data.geojson');
+
+// Perform spatial analysis
+const analysis = await workspace.analyze(data, {
+  operation: 'buffer',
+  distance: 1000
+});
+
+// Create visualization
+const map = await workspace.createMap({
+  data: analysis,
+  style: 'dark',
+  layers: ['points', 'polygons']
+});
+```
+
+## Data Sources
+
+NikaWorkspace supports a wide variety of data sources:
+
+- **File Formats**: GeoJSON, Shapefile, KML, CSV, Excel
+- **Databases**: PostgreSQL/PostGIS, MongoDB, SQLite
+- **APIs**: REST APIs, GraphQL, OGC services
+- **Cloud Storage**: AWS S3, Google Cloud Storage, Azure Blob
+
+## Analysis Tools
+
+### Spatial Analysis
+- Buffer analysis
+- Intersection operations
+- Distance calculations
+- Spatial joins
+- Voronoi diagrams
+
+### Statistical Analysis
+- Descriptive statistics
+- Spatial autocorrelation
+- Hot spot analysis
+- Regression analysis
+- Clustering algorithms
+
+### Machine Learning
+- Spatial clustering
+- Classification
+- Regression
+- Time series analysis
+- Anomaly detection
+
+## Visualization Options
+
+### Map Types
+- **Choropleth Maps**: Color-coded regions based on data values
+- **Point Maps**: Scatter plots with customizable markers
+- **Heat Maps**: Density visualization for point data
+- **Flow Maps**: Movement and connection visualization
+- **3D Maps**: Elevation and terrain visualization
+
+### Chart Types
+- Bar charts
+- Line charts
+- Scatter plots
+- Histograms
+- Box plots
+- Correlation matrices
+
+## Integration
+
+NikaWorkspace integrates seamlessly with other Nika products:
+
+- **NikaGallery**: Share and publish your analyses
+- **NikaStudio**: Use workspace data in custom applications
+- **AI Agent**: Get intelligent suggestions for your analysis
+
+## API Reference
+
+For detailed API documentation, see our [API Reference](/tools/api-reference).
+
+## Examples
+
+### Basic Spatial Analysis
+
+```javascript
+// Load data
+const cities = await workspace.loadData('cities.geojson');
+const regions = await workspace.loadData('regions.geojson');
+
+// Perform spatial join
+const result = await workspace.spatialJoin(cities, regions, {
+  operation: 'within',
+  attributes: ['population', 'area']
+});
+
+// Create visualization
+const map = await workspace.createMap({
+  data: result,
+  style: 'light',
+  layers: ['regions', 'cities']
+});
+```
+
+### Advanced Analysis
+
+```javascript
+// Perform hot spot analysis
+const hotSpots = await workspace.hotSpotAnalysis(data, {
+  field: 'crime_rate',
+  distance: 5000,
+  significance: 0.05
+});
+
+// Create time series analysis
+const timeSeries = await workspace.timeSeriesAnalysis(data, {
+  dateField: 'date',
+  valueField: 'temperature',
+  interval: 'daily'
+});
+```
+
+## Best Practices
+
+1. **Data Preparation**: Always clean and validate your data before analysis
+2. **Performance**: Use appropriate data structures for large datasets
+3. **Visualization**: Choose the right visualization type for your data
+4. **Documentation**: Document your analysis workflow for reproducibility
+5. **Version Control**: Use version control for your analysis scripts
+
+## Support
+
+Need help with NikaWorkspace? Check out our [support page](/support) or join our [community forum](/forum). 

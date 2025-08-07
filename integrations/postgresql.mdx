@@ -1,0 +1,445 @@
+---
+title: 'PostgreSQL'
+description: 'Connect to PostgreSQL databases with spatial extensions and leverage Nika AI for intelligent SQL execution'
+---
+
+# PostgreSQL Integration
+
+Nika provides seamless integration with PostgreSQL databases, including support for PostGIS spatial extensions, enabling you to leverage the power of spatial databases within your geospatial workflows while using Nika AI for intelligent data querying and analysis.
+
+## Spatial Database Integration
+
+### PostGIS Support
+
+Nika fully supports PostgreSQL with PostGIS spatial extensions, providing native access to spatial data types, spatial indexing, and advanced spatial functions directly within your workspace.
+
+**Key Features:**
+- **Native PostGIS Support**: Full compatibility with spatial data types
+- **Spatial Indexing**: Leverage GiST and SP-GiST spatial indexes
+- **Advanced Spatial Functions**: Access PostGIS's comprehensive spatial library
+- **Real-time Queries**: Execute spatial queries with instant results
+- **Data Visualization**: Direct mapping of spatial query results
+
+### Why PostgreSQL + PostGIS Integration Matters
+
+PostgreSQL with PostGIS is the most powerful open-source spatial database, offering:
+
+- **ACID Compliance**: Reliable transaction processing
+- **Spatial Data Types**: Native support for geometries and geographies
+- **Advanced Spatial Functions**: 1000+ spatial analysis functions
+- **Spatial Indexing**: High-performance spatial queries
+- **Extensibility**: Custom functions and data types
+- **Enterprise Features**: Backup, replication, and clustering
+
+Our integration makes this powerful combination accessible through Nika's intuitive interface.
+
+## Getting Started
+
+### Setting Up Database Connection
+
+1. **Configure Database**: Set up PostgreSQL with PostGIS extension
+2. **Create Connection**: Add database credentials to Nika workspace
+3. **Test Connection**: Verify spatial data access
+4. **Configure Permissions**: Set up appropriate user access
+
+### Basic Database Connection
+
+```python
+# Example: Connect to PostgreSQL with PostGIS
+from nika_database import PostGISConnector
+
+# Initialize connection
+db = PostGISConnector(
+    host="your-postgresql-host",
+    port=5432,
+    database="your_database",
+    username="your_username",
+    password="your_password"
+)
+
+# Test connection
+if db.test_connection():
+    print("Successfully connected to PostgreSQL with PostGIS")
+```
+
+### Spatial Data Operations
+
+```python
+# Example: Basic spatial operations
+import nika_spatial as spatial
+
+# Load spatial data
+parcels = db.query("""
+    SELECT id, name, geom, area_hectares 
+    FROM parcels 
+    WHERE ST_Intersects(geom, ST_GeomFromText('POLYGON((-122.5 37.5, -122.0 37.5, -122.0 38.0, -122.5 38.0, -122.5 37.5))', 4326))
+""")
+
+# Perform spatial analysis
+buffer_analysis = db.query("""
+    SELECT 
+        p.id,
+        p.name,
+        ST_Buffer(p.geom, 100) as buffer_geom,
+        ST_Area(ST_Buffer(p.geom, 100)) as buffer_area
+    FROM parcels p
+    WHERE p.area_hectares > 1.0
+""")
+
+# Visualize results
+spatial.visualize(parcels, style={'color': 'blue', 'opacity': 0.7})
+spatial.visualize(buffer_analysis, style={'color': 'red', 'opacity': 0.3})
+```
+
+## Hosted Solutions
+
+### Supabase Integration
+
+Nika seamlessly integrates with Supabase, the open-source Firebase alternative built on PostgreSQL, providing a powerful combination of real-time capabilities and spatial data management.
+
+#### **Setting Up Supabase Connection**
+
+```python
+# Example: Connect to Supabase
+from nika_database import SupabaseConnector
+
+# Initialize Supabase connection
+supabase = SupabaseConnector(
+    url="https://your-project.supabase.co",
+    key="your-supabase-anon-key",
+    service_key="your-supabase-service-key"  # For admin operations
+)
+
+# Enable PostGIS extension
+supabase.enable_extension("postgis")
+
+# Create spatial table
+supabase.query("""
+    CREATE TABLE IF NOT EXISTS spatial_features (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255),
+        geom GEOMETRY(POINT, 4326),
+        properties JSONB,
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+""")
+```
+
+#### **Real-time Spatial Data**
+
+```python
+# Example: Real-time spatial data with Supabase
+import nika_realtime as realtime
+
+# Subscribe to real-time spatial updates
+def handle_spatial_update(payload):
+    new_feature = payload['new']
+    print(f"New spatial feature: {new_feature['name']}")
+    
+    # Update map visualization
+    spatial.add_feature(new_feature)
+
+# Subscribe to spatial_features table
+supabase.subscribe(
+    table="spatial_features",
+    event="INSERT",
+    callback=handle_spatial_update
+)
+```
+
+### Self-Hosted PostgreSQL
+
+For organizations requiring full control over their data, Nika supports self-hosted PostgreSQL instances with PostGIS extensions.
+
+#### **Enterprise Configuration**
+
+```python
+# Example: Enterprise PostgreSQL setup
+from nika_database import EnterprisePostGIS
+
+# Configure enterprise connection with connection pooling
+enterprise_db = EnterprisePostGIS(
+    host="your-enterprise-postgresql.com",
+    port=5432,
+    database="spatial_enterprise",
+    username="nika_user",
+    password="secure_password",
+    connection_pool_size=20,
+    ssl_mode="require"
+)
+
+# Enable advanced PostGIS features
+enterprise_db.query("CREATE EXTENSION IF NOT EXISTS postgis_topology;")
+enterprise_db.query("CREATE EXTENSION IF NOT EXISTS postgis_raster;")
+```
+
+## AI-Powered SQL Execution
+
+### Nika AI SQL Assistant
+
+Nika AI can execute SQL queries and extract data from PostgreSQL databases directly through the GUI, making database operations accessible to users of all technical levels.
+
+#### **Natural Language to SQL**
+
+```python
+# Example: AI-powered SQL generation
+from nika_ai import SQLAssistant
+
+# Initialize AI SQL assistant
+sql_ai = SQLAssistant(database_connection=db)
+
+# Natural language query
+natural_query = "Find all parcels within 500 meters of flood zones that are larger than 2 hectares"
+
+# AI generates SQL
+generated_sql = sql_ai.generate_sql(natural_query)
+
+# Execute the query
+results = db.query(generated_sql)
+
+# Display results with visualization
+spatial.visualize(results, style={'color': 'orange', 'opacity': 0.8})
+```
+
+#### **Intelligent Query Optimization**
+
+```python
+# Example: AI query optimization
+# AI analyzes query performance and suggests optimizations
+optimized_query = sql_ai.optimize_query("""
+    SELECT p.*, f.flood_risk
+    FROM parcels p
+    JOIN flood_zones f ON ST_Intersects(p.geom, f.geom)
+    WHERE p.area_hectares > 2.0
+""")
+
+# AI suggests adding spatial index
+sql_ai.suggest_indexes("parcels", ["geom"])
+sql_ai.suggest_indexes("flood_zones", ["geom"])
+```
+
+## Advanced Spatial Operations
+
+### Complex Spatial Analysis
+
+```python
+# Example: Advanced spatial analysis with PostGIS
+def advanced_spatial_analysis():
+    # Multi-criteria analysis
+    analysis_query = """
+    WITH ranked_parcels AS (
+        SELECT 
+            p.id,
+            p.name,
+            p.geom,
+            p.area_hectares,
+            -- Distance to transportation
+            ST_Distance(p.geom, t.geom) as dist_to_transport,
+            -- Flood risk score
+            CASE 
+                WHEN ST_Intersects(p.geom, f.geom) THEN f.risk_level
+                ELSE 0 
+            END as flood_risk,
+            -- Slope analysis
+            AVG(s.slope) as avg_slope
+        FROM parcels p
+        LEFT JOIN transportation t ON ST_DWithin(p.geom, t.geom, 1000)
+        LEFT JOIN flood_zones f ON ST_Intersects(p.geom, f.geom)
+        LEFT JOIN slope_data s ON ST_Intersects(p.geom, s.geom)
+        WHERE p.area_hectares > 1.0
+        GROUP BY p.id, p.name, p.geom, p.area_hectares, t.geom, f.geom, f.risk_level
+    )
+    SELECT 
+        *,
+        -- Composite suitability score
+        (1.0 / (1.0 + dist_to_transport/1000)) * 0.4 +
+        (1.0 - flood_risk/10) * 0.4 +
+        (1.0 - avg_slope/45) * 0.2 as suitability_score
+    FROM ranked_parcels
+    ORDER BY suitability_score DESC;
+    """
+    
+    results = db.query(analysis_query)
+    return results
+```
+
+### Spatial Data Processing
+
+```python
+# Example: Spatial data processing pipeline
+def spatial_processing_pipeline():
+    # Step 1: Data cleaning and validation
+    db.query("""
+        UPDATE parcels 
+        SET geom = ST_MakeValid(geom)
+        WHERE NOT ST_IsValid(geom);
+    """)
+    
+    # Step 2: Spatial indexing for performance
+    db.query("CREATE INDEX IF NOT EXISTS idx_parcels_geom ON parcels USING GIST(geom);")
+    
+    # Step 3: Calculate derived spatial attributes
+    db.query("""
+        ALTER TABLE parcels ADD COLUMN IF NOT EXISTS centroid GEOMETRY(POINT, 4326);
+        UPDATE parcels SET centroid = ST_Centroid(geom);
+    """)
+    
+    # Step 4: Spatial clustering analysis
+    clustering_query = """
+    SELECT 
+        ST_ClusterKMeans(centroid, 5) OVER() as cluster_id,
+        id, name, geom, centroid
+    FROM parcels
+    WHERE area_hectares > 0.5;
+    """
+    
+    clusters = db.query(clustering_query)
+    return clusters
+```
+
+## Use Cases
+
+### **Urban Planning**
+```python
+# Example: Urban planning analysis
+def urban_planning_analysis():
+    # Zoning analysis
+    zoning_query = """
+    SELECT 
+        z.zone_type,
+        COUNT(p.id) as parcel_count,
+        SUM(p.area_hectares) as total_area,
+        ST_Union(p.geom) as zone_boundary
+    FROM parcels p
+    JOIN zoning_districts z ON ST_Intersects(p.geom, z.geom)
+    GROUP BY z.zone_type;
+    """
+    
+    zoning_analysis = db.query(zoning_query)
+    
+    # Infrastructure proximity analysis
+    infrastructure_query = """
+    SELECT 
+        p.id,
+        p.name,
+        MIN(ST_Distance(p.geom, i.geom)) as min_dist_to_infrastructure,
+        COUNT(i.id) as infrastructure_count
+    FROM parcels p
+    CROSS JOIN LATERAL (
+        SELECT id, geom 
+        FROM infrastructure 
+        WHERE ST_DWithin(p.geom, geom, 2000)
+    ) i
+    GROUP BY p.id, p.name;
+    """
+    
+    infrastructure_analysis = db.query(infrastructure_query)
+    
+    return zoning_analysis, infrastructure_analysis
+```
+
+### **Environmental Monitoring**
+```python
+# Example: Environmental monitoring
+def environmental_monitoring():
+    # Habitat fragmentation analysis
+    habitat_query = """
+    WITH habitat_patches AS (
+        SELECT 
+            ST_Union(geom) as habitat_geom,
+            COUNT(*) as patch_count,
+            SUM(area_hectares) as total_habitat_area
+        FROM parcels
+        WHERE land_use = 'natural_habitat'
+    )
+    SELECT 
+        patch_count,
+        total_habitat_area,
+        ST_Area(habitat_geom) / ST_Area(ST_ConvexHull(habitat_geom)) as fragmentation_index
+    FROM habitat_patches;
+    """
+    
+    habitat_analysis = db.query(habitat_query)
+    
+    # Water quality monitoring
+    water_query = """
+    SELECT 
+        w.station_id,
+        w.water_quality_score,
+        w.geom,
+        COUNT(p.id) as nearby_parcels,
+        AVG(p.impervious_cover) as avg_impervious_cover
+    FROM water_quality_stations w
+    LEFT JOIN parcels p ON ST_DWithin(w.geom, p.geom, 500)
+    GROUP BY w.station_id, w.water_quality_score, w.geom;
+    """
+    
+    water_analysis = db.query(water_query)
+    
+    return habitat_analysis, water_analysis
+```
+
+## Best Practices
+
+### **Performance Optimization**
+- **Spatial Indexing**: Always create spatial indexes on geometry columns
+- **Query Optimization**: Use appropriate spatial functions and operators
+- **Connection Pooling**: Implement connection pooling for high-traffic applications
+- **Data Partitioning**: Partition large spatial tables by region or time
+
+### **Data Management**
+- **Spatial Data Validation**: Validate geometries before insertion
+- **Coordinate System Consistency**: Use consistent CRS throughout your database
+- **Backup Strategies**: Implement regular spatial data backups
+- **Version Control**: Track spatial data changes over time
+
+### **Security**
+- **Connection Security**: Use SSL/TLS for database connections
+- **Access Control**: Implement role-based access control
+- **Data Encryption**: Encrypt sensitive spatial data
+- **Audit Logging**: Track spatial data access and modifications
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Problems**
+- Verify database accessibility and credentials
+- Check network connectivity and firewall settings
+- Ensure PostGIS extension is properly installed
+- Validate SSL/TLS configuration
+
+**Performance Issues**
+- Check spatial index usage with EXPLAIN ANALYZE
+- Optimize spatial queries with appropriate functions
+- Monitor database resource usage
+- Consider query caching strategies
+
+**Spatial Data Issues**
+- Validate geometry data with ST_IsValid
+- Check coordinate system consistency
+- Verify spatial index integrity
+- Monitor spatial data quality metrics
+
+## Support Resources
+
+### **Documentation**
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+- [PostGIS Documentation](https://postgis.net/documentation/)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Nika PostgreSQL Integration Guide](/guides/postgresql)
+
+### **Community**
+- [PostgreSQL Community](https://www.postgresql.org/community/)
+- [PostGIS Community](https://postgis.net/community/)
+- [Supabase Community](https://github.com/supabase/supabase/discussions)
+- [Nika Community Forum](/forum)
+
+### **Training**
+- PostgreSQL and PostGIS training courses
+- Supabase workshops and tutorials
+- Nika-specific database integration training
+
+---
+
+*Ready to leverage the power of PostgreSQL and PostGIS in your Nika workspace? [Get started with PostgreSQL integration](/quickstart) or [contact our team](/support) for personalized assistance.* 

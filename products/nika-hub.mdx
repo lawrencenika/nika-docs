@@ -1,13 +1,13 @@
 ---
-title: "NikaGallery"
+title: "NikaHub"
 description: "Showcase and discover published apps, solutions, maps, and notebooks from our community"
 ---
 
 ## Overview
 
-NikaGallery is a vibrant community platform where users can discover, share, and showcase their geospatial applications, data visualizations, maps, and analysis notebooks. It serves as a central hub for the Nika community to learn from each other and find inspiration for their own projects.
+NikaHub is a vibrant community platform where users can discover, share, and showcase their geospatial applications, data visualizations, maps, and analysis notebooks. It serves as a central hub for the Nika community to learn from each other and find inspiration for their own projects.
 
-![NikaGallery Interface](/products/nika-gallery.jpg)
+![NikaHub Interface](/products/nika-hub.jpg)
 
 ## Key Features
 
@@ -59,7 +59,7 @@ NikaGallery is a vibrant community platform where users can discover, share, and
 
 ### Browsing Content
 
-Visit the [NikaGallery](https://planet.nika.eco/gallery) to explore community content:
+Visit the [NikaHub](https://planet.nika.eco/hub) to explore community content:
 
 1. **Use the search bar** to find specific content
 2. **Filter by category** to narrow down results
@@ -102,7 +102,7 @@ const app = await studio.publishToGallery({
 });
 ```
 
-## Gallery Categories
+## Hub Categories
 
 ### Applications
 - **Urban Planning**: City planning and development tools
@@ -155,7 +155,7 @@ Interactive maps for tracking disease outbreaks and public health metrics.
 
 ## Integration
 
-NikaGallery integrates with other Nika products:
+NikaHub integrates with other Nika products:
 
 - **NikaWorkspace**: Publish analysis results and notebooks
 - **NikaStudio**: Share applications and dashboards
@@ -163,27 +163,27 @@ NikaGallery integrates with other Nika products:
 
 ## API Access
 
-Access gallery content programmatically:
+Access hub content programmatically:
 
 ```javascript
-import { NikaGallery } from '@nika/gallery';
+import { NikaHub } from '@nika/hub';
 
-const gallery = new NikaGallery();
+const hub = new NikaHub();
 
 // Search for content
-const results = await gallery.search({
+const results = await hub.search({
   query: 'traffic analysis',
   category: 'application',
   tags: ['urban-planning']
 });
 
 // Get project details
-const project = await gallery.getProject('project-id');
+const project = await hub.getProject('project-id');
 
 // Download project
-const files = await gallery.downloadProject('project-id');
+const files = await hub.downloadProject('project-id');
 ```
 
 ## Support
 
-Need help with NikaGallery? Check out our [support page](/support) or join our [community forum](/forum). 
+Need help with NikaHub? Check out our [support page](/support) or join our [community forum](/forum). 

@@ -5,7 +5,7 @@ description: "Complete API documentation for Nika services"
 
 ## Overview
 
-The Nika API provides programmatic access to all Nika services including NikaWorkspace, NikaGallery, and NikaStudio. This reference documents all available endpoints, parameters, and responses.
+The Nika API provides programmatic access to all Nika services including NikaWorkspace, NikaHub, and NikaStudio. This reference documents all available endpoints, parameters, and responses.
 
 ## Authentication
 
@@ -320,11 +320,11 @@ PUT /workspaces/{workspace_id}/visualizations/{visualization_id}
 DELETE /workspaces/{workspace_id}/visualizations/{visualization_id}
 ```
 
-## Gallery API
+## Hub API
 
 ### List Projects
 ```http
-GET /gallery/projects
+GET /hub/projects
 ```
 
 #### Parameters
@@ -368,12 +368,12 @@ GET /gallery/projects
 
 ### Get Project
 ```http
-GET /gallery/projects/{project_id}
+GET /hub/projects/{project_id}
 ```
 
 ### Create Project
 ```http
-POST /gallery/projects
+POST /hub/projects
 ```
 
 #### Request Body
@@ -392,12 +392,12 @@ POST /gallery/projects
 
 ### Update Project
 ```http
-PUT /gallery/projects/{project_id}
+PUT /hub/projects/{project_id}
 ```
 
 ### Delete Project
 ```http
-DELETE /gallery/projects/{project_id}
+DELETE /hub/projects/{project_id}
 ```
 
 ## Studio API

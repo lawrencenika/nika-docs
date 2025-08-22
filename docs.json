@@ -34,7 +34,7 @@
             "group": "Products",
             "pages": [
               "products/nika-workspace",
-              "products/nika-gallery",
+              "products/nika-hub",
               "products/nika-studio",
               "products/nika-map",
               "products/nika-labeller",

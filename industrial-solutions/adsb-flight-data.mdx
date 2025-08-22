@@ -1,0 +1,83 @@
+---
+title: 'ADSB Flight Data'
+description: 'Comprehensive data pipeline for downloading, processing, and visualizing ADS-B flight tracking data with regional GeoJSON generation'
+icon: 'plane'
+---
+
+# ADSB Flight Data
+
+![ADSB Flight Data](/industrial-solutions/adsb-flight-data.jpeg)
+
+## ADSB Flight Data Processing and GeoJSON Visualisation Pipeline
+
+A comprehensive data pipeline that downloads, processes, and visualizes ADS-B (Automatic Dependent Surveillance-Broadcast) flight tracking data from June 2024. The system extracts flight traces from GitHub releases, processes them into a DuckDB database, and generates regional GeoJSON files for flight path visualisation.
+
+## Libraries Needed
+
+### Core Libraries
+- **os** - File system operations
+- **requests** - HTTP requests for downloading data
+- **tarfile** - Archive extraction
+- **gzip** - Compressed file handling
+- **json** - JSON data parsing
+
+### Database & Data Processing
+- **duckdb** - High-performance analytical database
+- **pandas** - Data manipulation and analysis
+- **numpy** - Numerical computing
+
+### Utilities
+- **datetime / time** - Date/time operations
+- **pathlib.Path** - Modern path handling
+- **collections.defaultdict** - Data structures
+- **multiprocessing.Pool** - Parallel processing
+- **concurrent.futures** - Asynchronous execution
+- **tempfile** - Temporary file management
+- **shutil** - High-level file operations
+- **urllib3.util.retry** - HTTP retry strategies
+- **requests.adapters.HTTPAdapter** - HTTP session configuration
+
+## Input Files
+
+### GitHub Release Archives
+- v2024.06.01-planes-readsb-staging-0 through v2024.06.30-planes-readsb-staging-0
+
+### Compressed JSON Files
+- .json.gz, .json files containing flight trace data
+
+### Split TAR Archives
+- .tar.aa, .tar.ab, .tar.gz files
+
+### Flight Trace JSON Structure
+- **icao** - Aircraft identifier
+- **registration** - Aircraft registration
+- **trace** - Array of [timestamp, latitude, longitude, altitude, heading, speed, vertical_rate]
+- **aircraft_type** - Aircraft model
+- **description** - Aircraft description
+
+## Output Files
+
+### DuckDB Database
+- **adsb_june.duckdb, adsb_dat_main.duckdb** - Structured flight data storage
+
+### Temporary Parquet Files
+Intermediate data storage for parallel processing
+
+### Regional GeoJSON Files
+- **north_america_flights.geojson**
+- **europe_flights.geojson**
+- **asia_flights.geojson**
+- **africa_flights.geojson**
+- **australia_flights.geojson**
+- **oceania_flights.geojson**
+- And other regional flight path visualizations
+
+### Flight Traces Table Schema
+- Aircraft metadata (ICAO, registration, type)
+- Positional data (latitude, longitude, altitude)
+- Movement data (speed, heading, vertical rate)
+- Temporal data (timestamps, sequences)
+
+---
+
+**View the full solution:** [ADSB Flight Data](https://planet.nika.eco/en/hub/solutions/3a4b70be-a02d-44f6-a10e-30f3bb10efb1){target="_blank"}

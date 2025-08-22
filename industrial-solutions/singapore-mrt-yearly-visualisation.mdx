@@ -1,0 +1,89 @@
+---
+title: 'Singapore MRT Yearly Visualisation'
+description: 'Process Singapore MRT rail network GeoJSON and split into separate files organized by year and rail line for historical development analysis'
+icon: 'train'
+---
+
+# Singapore MRT Yearly Visualisation
+
+![Singapore MRT Yearly Visualisation](/industrial-solutions/singapore-mrt-yearly-visualisation.jpeg)
+
+## Singapore MRT Rail Network GeoJSON Year-wise Line Splitter
+
+### Description
+This Python script processes a comprehensive Singapore MRT (Mass Rapid Transit) rail network GeoJSON file and splits it into separate files organized by year and rail line. It normalizes line names, assigns feature numbers, and creates individual GeoJSON files for each line's opening year, making it easier to analyze the historical development of Singapore's rail transit system.
+
+## Data Sources
+
+### Primary Input
+**sg-rail_with_years_patched.geojson** - A comprehensive GeoJSON file containing Singapore's entire rail network with temporal data
+
+### Input Directory
+`/data/singapore_mrt/main_source_folder/`
+
+## Input Data Structure
+
+### Geometry Types Processed
+- **LineString/MultiLineString** (rail lines)
+- **Point** (stations/stops)
+- **Polygon/MultiPolygon** (areas/zones)
+
+### Required Properties
+- **year**: Opening year of the rail segment
+- **name**: Name/identifier of the rail line
+
+## Rail Lines Covered
+
+- **North South Line (NSL)**
+- **East West Line (EWL)**
+- **North East Line (NEL)**
+- **Circle Line (CCL)**
+- **Downtown Line (DTL)**
+- **Thomson-East Coast Line (TEL)**
+- **Bukit Panjang LRT (BPLRT)**
+- **Sengkang LRT with East/West loops (SKLRT)**
+- **Punggol LRT with East/West loops (PGLRT)**
+
+## Output
+
+### Generated Files
+**Year-Line Specific Files**: Numbered GeoJSON files for each line-year combination
+
+**Format**: `XX_singapore_[LINE_CODE]_[YEAR].geojson`
+
+**Example**: `01_singapore_NSL_1987.geojson`
+
+### Aggregated Files
+- **singapore_all_points.geojson** - All station/point features
+- **singapore_all_polygons.geojson** - All polygon/area features
+
+### Output Directory
+`/data/singapore_mrt/year_wise_geojsons_new/`
+
+## Output Enhancements
+
+### Feature Numbering
+Each feature gets a sequential number property
+
+### Normalized Codes
+Standardized line codes (NSL, EWL, etc.)
+
+### Chronological Organization
+Files sorted by opening years (1987-2020)
+
+## Libraries Used
+
+### Core Python Libraries
+- **os**: File system operations and directory management
+- **json**: JSON file reading, writing, and manipulation
+- **collections.defaultdict**: Efficient nested dictionary creation for grouping features
+
+### Geospatial Libraries
+- **shapely.geometry**:
+  - **shape**: Converting GeoJSON geometry to Shapely objects
+  - **mapping**: Converting Shapely objects back to GeoJSON format
+  - Used for potential geometric operations (imported but not actively used in current implementation)
+
+---
+
+**View the full solution:** [Singapore MRT Yearly Visualisation](https://planet.nika.eco/en/hub/solutions/08279572-a80e-4cca-a8d2-79c54817d35c){target="_blank"}

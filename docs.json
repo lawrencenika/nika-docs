@@ -41,8 +41,8 @@
             "pages": [
               "products/nika-workspace",
               "products/nika-hub",
-              "products/nika-studio",
               "products/nika-map",
+              "products/nika-studio",
               "products/nika-labeller",
               "products/nika-etl"
             ]
@@ -121,6 +121,46 @@
               "guides/best-practices/best-practices",
               "guides/best-practices/performance",
               "guides/best-practices/security"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Industrial Solutions",
+        "groups": [
+          {
+            "group": "Water Resources & Hydrology",
+            "pages": [
+              "industrial-solutions/river-ecology-stress-hotspot",
+              "industrial-solutions/watershed-urban-impact-analysis",
+              "industrial-solutions/urban-construction-riparian-areas",
+              "industrial-solutions/river-corridor-urbanisation"
+            ]
+          },
+          {
+            "group": "Coastal & Marine",
+            "pages": [
+              "industrial-solutions/mean-sea-level-coastal-regions"
+            ]
+          },
+          {
+            "group": "Transportation & Infrastructure",
+            "pages": [
+              "industrial-solutions/adsb-flight-data",
+              "industrial-solutions/singapore-mrt-yearly-visualisation"
+            ]
+          },
+          {
+            "group": "Urban Planning & Development",
+            "pages": [
+              "industrial-solutions/flood-risk-data-lulc-urban-areas",
+              "industrial-solutions/river-urbanisation-major-cities-comparisons"
+            ]
+          },
+          {
+            "group": "Mining & Natural Resources",
+            "pages": [
+              "industrial-solutions/mineral-vegetation-index-sentinel2"
             ]
           }
         ]

@@ -1,0 +1,72 @@
+---
+title: 'Flood Risk Data LULC In Urban Areas'
+description: 'Prepare core geospatial layers for analyzing flood-prone areas in Bangkok using elevation, land cover, and rainfall data'
+icon: 'water'
+---
+
+# Flood Risk Data LULC In Urban Areas
+
+![Flood Risk Data LULC In Urban Areas](/industrial-solutions/flood-risk-data-lulc-urban-areas-1.jpeg)
+
+This script prepares core geospatial layers for analyzing flood-prone areas in Bangkok. It exports elevation, land cover (water and built-up areas), and October 2023 rainfall data to local GeoTIFF files using Google Earth Engine and geemap. The outputs are used for flood vulnerability analysis, especially in low-lying, urbanized zones.
+
+## Output File
+`/data/bangkok_flood_native`
+
+## Requirements
+
+| Requirement | Details |
+|-------------|---------|
+| **Software** | Python 3.x, Earth Engine Python API, geemap |
+| **Earth Engine** | Enabled Google Earth Engine account (https://signup.earthengine.google.com) |
+| **Python Packages** | geemap, earthengine-api, os, ee |
+| **Internet** | Required for Earth Engine data download |
+
+## Files Created
+
+| Filename | Description | Resolution |
+|----------|-------------|------------|
+| **dem_srtm.tif** | Elevation data from SRTM (clipped to AOI) | 30 m |
+| **dw_water_built_mask.tif** | Masked Dynamic World image (1=Water, 2=Built) | 10 m |
+| **rainfall_oct2023_chirps.tif** | CHIRPS total rainfall for Oct 2023 | ~5.5 km |
+
+## High-Level Workflow Steps
+
+### 1. Setup and Define AOI
+Define Bangkok's location and buffer by 10 km to create an Area of Interest (AOI).
+
+### 2. Export SRTM Elevation
+- Use the **USGS/SRTMGL1_003** dataset
+- Export as `dem_srtm.tif` at 30 m resolution
+
+### 3. Export Landcover (Water & Built)
+- Use the **Google Dynamic World** dataset for 2023
+- Use `.mode()` to get the most frequent class
+- Remap values: 0 → Water (1), 6 → Built (2), others → 0
+- Export as `dw_water_built_mask.tif` at 10 m resolution
+
+### 4. Export Rainfall
+- Use **CHIRPS Daily** rainfall dataset
+- Sum rainfall for October 2023
+- Export as `rainfall_oct2023_chirps.tif` at ~5.5 km resolution
+
+## Flood Risk Classification
+
+This script generates a flood risk classification map of Bangkok using:
+
+- **SRTM DEM (Elevation at 30m)** to identify low-lying areas (&lt; 5 meters elevation)
+- **Dynamic World Landcover (10m)** to locate built-up and water regions
+
+### Output: Flood-Prone Map
+You get a matplotlib map showing flood-prone areas based on both elevation and landcover:
+
+#### Legend Explained
+
+| Color | Label | Meaning |
+|-------|-------|---------|
+| 🔵 **Blue** | Low-lying Water | Areas classified as water in DW and below 5 meters elevation |
+| 🔴 **Red** | Low-lying Built-up | Areas classified as built-up and below 5 meters elevation |
+
+---
+
+**View the full solution:** [Flood Risk Data LULC In Urban Areas](https://planet.nika.eco/en/hub/solutions/805c0468-273d-402c-8b0e-774835236df2){target="_blank"}

@@ -1,0 +1,567 @@
+---
+title: "Combined Changelog"
+description: "Product updates and announcements for Nika products"
+rss: true
+---
+
+<Update label="June 3, 2025" description="v0.4.5">
+  ## Nika GAIA (Alpha) v4 and Enhanced AI Capabilities
+  
+  ### Feature Improvements
+  - Nika GAIA (Alpha) v4 introduces `Analyst` mode that will automatically apply your changes, even execute your code in the VM to get work done
+  - Now remembers your `last used LLM type`, and if your analyst mode is on
+  - Will now work on files in both the Nika File Storage as well as files dragged from your desktop. The UI now shows you the `upload progress` of files dragged in
+  - Now can `list/read` your notebooks or files if prompted (if file privacy from LLM providers is a concern to you, let's discuss how we can support your use case further)
+  - Now can read your raster `GeoTIFF` directly
+  - Now has better apply and revert mechanism by keeping the snapshot of your notebook/file before changes applied
+
+  ![Nika GAIA v4 Analyst Mode](/images/changelog/2025-06-03-1.gif)
+  ![Nika GAIA v4 Interface](/images/changelog/2025-06-03-2.png)
+</Update>
+
+<Update label="May 28, 2025" description="v0.4.4">
+  ## Enhanced AI Models and In-Block Coding
+  
+  ### Feature Improvements
+  - Nika GAIA (Alpha) now supports Claude 4, Gemini 2.5, and Grok 3 too
+  - Can stop running at any stages of response generation via the stop button
+  - Will automatically track modified item states
+  - In-block Coding AI receives huge UI and functional updates:
+    - AI model selection
+    - Smaller but more intuitive buttons for send, stop, accept change, reject change
+    - Input for improving on code change suggestion with follow-up message
+
+  ![AI Model Selection](/images/changelog/2025-05-28-1.png)
+  ![In-Block Coding UI](/images/changelog/2025-05-28-2.png)
+  ![AI Model Selection Interface](/images/changelog/2025-05-28-3.png)
+</Update>
+
+<Update label="May 26, 2025" description="v0.4.3">
+  ## Nika GAIA Stability and Notebook Enhancements
+  
+  ### Feature Improvements
+  - Nika GAIA more stable on notebook edit/create, file edit/create:
+    - Add python linter to GAIA output so that it checks its own code before marking the task complete
+    - Allow long notebook with long execution output to be added to context for GAIA
+    - Attachments UI looks nicer
+    - File preview and notebook preview uses new UI with diff mode
+    - After apply, there is a revert button
+  - Notebook blocks can now be:
+    - Dragged and dropped onto the white line marker
+    - Left hand side handle now has SHIFT UP or SHIFT DOWN
+    - Notebook remembers your latest cursor position when you opens it again
+  - Better integration between Notebook and GAIA:
+    - New GAIA button on codeblock to add it to GAIA directly for query
+    - New Resolve in GAIA button on code execution error to add it to GAIA directly for fix query
+  
+  ### Bug Fixes
+  - Support .geoparquet extension add to map
+  - Support most shapefile extension add to map: .shp, .shx, .dbf, .prj, .cpg, .fix, .sbn, .sbx, .fbn, .fbx, .ain, .aih, .atx, .qix, .qmd
+
+  ![Notebook Block Management](/images/changelog/2025-05-26-1.gif)
+  ![File Preview Interface](/images/changelog/2025-05-26-2.gif)
+  ![GAIA Integration](/images/changelog/2025-05-26-3.gif)
+</Update>
+
+<Update label="May 8, 2025" description="v0.4.2">
+  ## File Organization Improvements
+  
+  ### Feature Improvements
+  - Make files and folders with numbers human-friendly or naturally ordered: `"1", "2", "10", "11", "100"` instead of lexicographically ordered:`"1", "10", "100", "11", "2"`
+
+  ![File Organization](/images/changelog/2025-05-08.png)
+</Update>
+
+<Update label="April 26, 2025" description="v0.4.1">
+  ## Enhanced Map Visualization and Vector Handling
+  
+  ### New Features
+  - Drag and drop from Nika file storage or desktop can both add vector or raster layer to map now
+  
+  ### Feature Improvements
+  - Nika map now can handle visualization of large vector with size up to 15 Million data (points or polygon vertices) without losing details nor chunking
+  - Left click a geometry will now select it, while double click it will enter edit mode
+
+  ![Large Vector Visualization](/images/changelog/2025-04-26-1.gif)
+  ![Vector Handling](/images/changelog/2025-04-26-2.gif)
+</Update>
+
+<Update label="April 24, 2025" description="v0.4.0">
+  ## Nika GAIA Alpha and Usage Dashboard
+  
+  ### New Features
+  - Nika GAIA (Geospatial AI Agent) Alpha is introduced with notebook and file generating/modification capabilities
+  - Add a usage dashboard under settings page for user to keep track of their account/team's compute and storage usage (click `Settings` at top right --> click `Usage` on the left panel to access it)
+  
+  ### Bug Fixes
+  - Fix a bug causing notebook code output to freeze the app when output is too long (e.g. print(geojson))
+
+  ![Nika GAIA Alpha](/images/changelog/2025-04-24-1.gif)
+  ![Usage Dashboard](/images/changelog/2025-04-24-2.gif)
+</Update>
+
+<Update label="March 27, 2025" description="v0.3.23">
+  ## Bug Fixes and Stability Improvements
+  
+  ### Bug Fixes
+  - Fixed the notebook's code block insertion bug that auto scrolls down unnecessarily when it is inserted before another non-text block
+  - Fixed the tab switch bug that the last closed tab of notebook or file editor is still opened again after close
+  - Fixed the cursor sharing position deviation issue
+
+  ![Bug Fixes Demo](/images/changelog/2025-03-27.gif)
+</Update>
+
+<Update label="March 25, 2025" description="v0.3.22">
+  ## Cursor Sharing and Comment Capabilities
+  
+  ### New Features
+  - Cursor sharing when other users are working in the same project and their cursors hover on locations over map
+  - Comment capability is available in notebooks now
+  
+  ### Feature Improvements
+  - File editor also has a suspense loading state to prevent mistake in overriding the content while loading (similar to notebook's release in v0.3.18)
+  
+  ### Bug Fixes
+  - Fixed 2 notebook bugs:
+    - Hyperlink will not contain a wrong https:// prefix
+    - Drag and drop image will be at the correct position of the flat line now
+    - Unsupported image types such as .tif will throw a warning when user tries to insert it to notebook
+
+  ![Cursor Sharing](/images/changelog/2025-03-25-1.gif)
+  ![Comment Capabilities](/images/changelog/2025-03-25-2.gif)
+</Update>
+
+<Update label="March 21, 2025" description="v0.3.21">
+  ## Chart Creation and Vector CRS Improvements
+  
+  ### New Features
+  - Chart creation on attribute table (pie/line/bar charts available now) via manual selection of columns or AI automation
+  
+  ### Feature Improvements
+  - Operations tracker list is reversed in order to show the most recent action tracker on top such as file upload
+  
+  ### Bug Fixes
+  - Fixed some vector files added to map becoming a line issue due to incompatible CRS. Now every vector layer added to map is auto converted to 4326 for visualization
+  - Fixed the issue when renaming/moving a folder with many subfolders/files in it
+  - Fixed file search flashing the results bug and made search faster now
+
+  ![Chart Creation](/images/changelog/2025-03-21.gif)
+</Update>
+
+<Update label="March 20, 2025" description="v0.3.20">
+  ## Auto COG Conversion and Raster Server Fixes
+  
+  ### New Features
+  - Auto COG conversion when adding raster file to map so that it will be loaded much faster. This happens if GeoTIFF is > 20MB, and it will create a new COG version of the same GeoTIFF in the same folder without changing the source GeoTIFF
+  
+  ### Bug Fixes
+  - Fixed raster server's existing internal server error that caused adding GeoTIFF to map to fail sometimes
+
+  ![Auto COG Conversion](/images/changelog/2025-03-20.gif)
+</Update>
+
+<Update label="March 16, 2025" description="v0.3.19">
+  ## Layer Tree Format and User Visibility
+  
+  ### Feature Improvements
+  - Layers are now represented in tree format instead of a list, so that KML or GeoPackage files with more sub groups will be able to shown properly in our UI
+  - List of users in the current project will be shown at the top right
+  
+  ### Bug Fixes
+  - Fixed the issue that KML or GeoPackage were only loading the first sub geometry instead of all of its sub groups of geometries
+
+  ![Layer Tree Format](/images/changelog/2025-03-16.png)
+</Update>
+
+<Update label="March 14, 2025" description="v0.3.18">
+  ## Notebook and File Storage Enhancements
+  
+  ### Feature Improvements
+  - Notebook improvements:
+    - Hyperlink is shown properly in blue
+    - New code block button to stop the running code (the same place as the run code button)
+    - New button to clear all outputs at top right of notebook
+    - Drop image or past image into notebook is fixed for all
+    - Opening notebook will have a loading state to avoid mistakes overriding old content that is not loaded properly yet
+  - File storage improvements:
+    - Multiple file actions (refresh, change folder, move files, rename files etc) can happen simultaneously now
+  - Data catalog improvement:
+    - Download dataset will auto refresh progress now every 10 seconds, instead of user having to click to refresh manually
+  
+  ### New Features
+  - Added more powerful CPU instances with bigger vCPU and Memory size to overcome large compute needs
+  
+  ### Bug Fixes
+  - Large notebooks that cause crash won't have issue crashing anymore
+  - Fixed the proj.db not found when user uses GDAL command or libraries like rasterio that relies on the georeference function of GDAL. Now all georeferencing should work properly when you use pre-installed GDAL in NikaColab notebooks
+
+  ![CPU Instance Selection](/images/changelog/2025-03-14-1.png)
+  ![CPU Instance Details](/images/changelog/2025-03-14-2.png)
+</Update>
+
+<Update label="March 9, 2025" description="v0.3.17">
+  ## Notebook and File Management Improvements
+  
+  ### Feature Improvements
+  - Notebook improvements:
+    - Right click duplication in the same project
+    - Right click create sharing token across projects with expiry time config
+    - Add multi-select checkboxes for notebook list
+  - File storage improvements:
+    - Add multi-select checkboxes for file list that works for moving/renaming/deletion/dragging of file items
+  
+  ### Bug Fixes
+  - Downloading data from Data Catalog no longer results in large files caused by wrong resolution previously
+
+  ![Notebook Management](/images/changelog/2025-03-09-1.png)
+  ![File Management](/images/changelog/2025-03-09-2.gif)
+  ![Multi-select Interface](/images/changelog/2025-03-09-3.gif)
+</Update>
+
+
+
+<Update label="February 18, 2025" description="v0.3.15">
+  ## Vector Geometry Drawing Fix
+  
+  ### Bug Fixes
+  - Fix one bug that disallowed users to draw vector geometries on map
+
+  ![Vector Geometry Drawing](/images/changelog/2025-02-18.gif)
+</Update>
+
+<Update label="February 25, 2025" description="v0.3.16">
+  ## Vector Layer Performance and UI Enhancements
+  
+  ### Feature Improvements
+  - Changed vector layer's attribute table into a table that works with million rows of data (see demo below)
+  - Added user name on hover over to user avatar at top right
+  - Redesigned the files path UI with more spaced breadcrumb and a "back to previous layer" button (see screenshot below)
+  - Added search and scrollable region for notebooks
+  - Now download a file will auto start downloading process
+  
+  ### Bug Fixes
+  - Downloading complex folder no longer results in incomplete ZIP file to local
+  - Machine startup no longer spins forever until force refresh the window
+  - Notebook tab will sync after notebook rename now
+  - Default machine type is no longer blank for new project created but now the CPU type
+  - Not every file has a right click add to map option and then some may fail, now only those supported file extensions have that option
+
+  ![Vector Layer Performance](/images/changelog/2025-02-25-1.gif)
+  ![UI Enhancements](/images/changelog/2025-02-25-2.png)
+</Update>
+
+<Update label="February 17, 2025" description="v0.3.14">
+  ## Shareable Links and AI Dataset Integration
+  
+  ### New Features
+  - Add create shareable link to allow copying notebooks
+  - Add dataset to map via AI
+  
+  ### Bug Fixes
+  - Fix one bug on unable to load GPKG
+
+  ![Shareable Links](/images/changelog/2025-02-17-1.gif)
+  ![AI Dataset Integration](/images/changelog/2025-02-17-2.png)
+</Update>
+
+<Update label="January 28, 2025" description="v0.3.13">
+  ## CPU Machine Upgrade and Data Catalog UI
+  
+  ### Feature Improvements
+  - Default CPU machine size is increased from 11 GB to 24GB, while maintaining the same speed of 15s to have one running successfully
+  - Data Catalog now has support for bound visualization on hover over
+  
+  ### Features Removal
+  - Data Catalog has a new UI as a columnar list on the right instead of the dialog covering the entire center of the page before this
+  
+  ### Bug Fixes
+  - Fix one bug that causes KML files to not be addable to map to visualize
+
+  ![Data Catalog UI](/images/changelog/2025-01-28.gif)
+</Update>
+
+<Update label="January 23, 2025" description="v0.3.12">
+  ## Extended Dataset Support and AI Search Improvements
+  
+  ### New Features
+  - Added another 54 datasets to be supported in Data Catalog, Including SRTM DEM, Copernicus CORINE, Global ALOS, WAPOR, MODIS etc
+  
+  ### Feature Improvements
+  - Most of the datasets in Data Catalog have a more accurate data catalog to begin with
+  - The AI search is now producing better results than before
+  
+  ### Feature Removal
+  - Remove the need for some datasets in Data Catalog to require an Area of Interest to visualize with, so now every dataset with AOI is optional
+  
+  ### Bug Fixes
+  - Fix one where date range slider allows end-date to be earlier than start-date
+  - Fix local raster added to map with one band can use multibands mode error
+  - Fix new dataset from Data Catalog added to map with global bound has some displaced until user zooming in
+
+  ![Extended Dataset Support](/images/changelog/2025-01-23.gif)
+</Update>
+
+<Update label="January 20, 2025" description="v0.3.11">
+  ## Role-Based Access Control Implementation
+  
+  ### New Features
+  - Project-level role access control: Editor, Commentator, Viewer (e.g. viewer cannot create/edit notebook but can only list/read notebooks)
+  - Team-level role access control: Admin, Member (e.g. member cannot delete project, modify team name or description, while admin can)
+  
+  ### Feature Improvements
+  - In the list of projects to switch to, they are sectioned by team and team name cannot be clicked
+  
+  ### Bug Fixes
+  - Sharing a project as project editor while not yet verified team invitation had led to app crash, now fixed
+  - Shared project's team avatar is correct now
+
+  ![Role-Based Access Control](/images/changelog/2025-01-20.png)
+</Update>
+
+<Update label="January 14, 2025" description="v0.3.9">
+  ## Code/Notebook Integration and File Editor Enhancements
+  
+  ### Feature Improvements
+  - Code/Notebook section merged into the same area with tabs so that user can switch between opened ones
+  - Added close all tabs
+  - Support more file types for edit in NikaPlanet: *sh|bash|xml|yaml|yml|vue|dockerfile|toml|r|lua|perl|pl|kt|maven|pom|scala|dart|svelte*
+  - Dark theme for file editor is more visible now
+  - New notebook created comes with an initial content that guides user on how to use it
+  - Make all files in edit autosaving by default
+  
+  ### Bug Fixes
+  - Indentation with TAB key is fixed for file editor
+
+  ![Code/Notebook Integration](/images/changelog/2025-01-14.gif)
+</Update>
+
+<Update label="December 28, 2024" description="v0.3.8">
+  ## Enhanced Data Catalog Layer Customization
+  
+  ### Feature Improvements
+  - Added layer customization of data from Data Catalog:
+    - Select display modes: Single-channel, RGB, or spectral indices
+    - Switch between dataset bands seamlessly
+    - View histogram statistics with rescaling options
+    - Customize color maps for improved visualization
+    - Clip datasets to your desired Area of Interest (AOI) or remove clip (which defaults back to max bound of dataset)
+  
+  ### Bug Fixes
+  - Resolved issues with visualizing global datasets (e.g., Copernicus LC100). The new clipping feature now supports visualization of both global and non global datasets
+
+  ![Data Catalog Layer Customization](/images/changelog/2024-12-28.gif)
+</Update>
+
+<Update label="December 19, 2024" description="v0.3.7">
+  ## Team Management and Data Download Enhancements
+  
+  ### New Features
+  - Teams page is added for user to manage team members (invite/remove/resend invitation) which is accessible from top right of the project main page
+  - During new project creation, user can specify which team to create the project under. Projects created under a team will by default shared with the team
+  
+  ### Feature Improvements
+  - Added min, max, mode, mean, mosaic compositing options for downloading raw data
+  
+  ### Bug Fixes
+  - Fixed geodesic projections for clipped visualizations for dataset from Data Catalog used with AOI. Before this, some result image on map is clipped with curved line, which is now resolved
+
+  ![Team Management](/images/changelog/2024-12-19-1.gif)
+  ![Team Management Interface](/images/changelog/2024-12-19-2.png)
+</Update>
+
+<Update label="December 16, 2024" description="v0.3.6">
+  ## AOI Selection and SkySat Dataset Support
+  
+  ### New Features
+  - Select AOI from a map geometry layer to clip one-click visualized datasets, or for downloading datasets
+  
+  ### Feature Improvements
+  - Supported new high-res SkySat Datasets
+  - Added scale field for download, to enable high-res
+  - Removed choice of raw/processed download, automatically selected based on dataset type
+  
+  ### Features Removal
+  - Upload geojson to clip area for downloading data from Data Catalog is removed. But user can simply upload to Files on the left and add the geojson to map as a layer to clip
+
+  ![AOI Selection](/images/changelog/2024-12-16.gif)
+</Update>
+
+<Update label="December 13, 2024" description="v0.3.5">
+  ## Point Labeling and GeoSAM Integration
+  
+  ### New Features
+  - Label points as positive or negative directly
+  - Run GeoSAM version 1 with labelled points on GeoTIFF images directly
+  
+  ### Feature Improvements
+  - Add feature name which uses attribute field name to show on UI
+  
+  ### Bug Fixes
+  - Fixed status name at top right after running certain actions to not show weird characters
+
+  ![Point Labeling and GeoSAM](/images/changelog/2024-12-13.gif)
+</Update>
+
+<Update label="December 9, 2024" description="v0.3.4">
+  ## Vector Operations and Layer Management
+  
+  ### New Features
+  - User could run dissolve and clip on polygon geojson on map layer to created dissolved or clipped geojson layer
+  
+  ### Feature Improvements
+  - User could reorder the list of layers to make one layer show on top of another
+  - User could reorder the features within geojson layer
+  - User could move features between geojson layers by drag and drop
+
+  ![Vector Operations](/images/changelog/2024-12-09-1.gif)
+  ![Layer Management](/images/changelog/2024-12-09-2.gif)
+</Update>
+
+<Update label="December 6, 2024" description="v0.3.3">
+  ## Project Sharing and Collaboration
+  
+  ### New Features
+  - Project sharing by email to invite specific user to work on the same project
+  - Project sharing to allow anyone in the public to access by link to work on the same project
+
+  ![Project Sharing](/images/changelog/2024-12-06.gif)
+</Update>
+
+<Update label="December 3, 2024" description="v0.3.2">
+  ## File Editing and Performance Improvements
+  
+  ### New Features
+  - Ability to double click or right click to edit files directly in NikaWorkspace (supports .py, .js, .jsx, .ts, .tsx, .txt, .java, .cpp, .c, .h, .css, .geojson, .html, .json, .md, .sql, .php, .rb, .go, .rs, .swift)
+  
+  ### Feature Improvements
+  - Machine creation time shortened from 4-5 mins to 2.25 mins on average with key architectural improvements
+
+  ![File Editing](/images/changelog/2024-12-03.gif)
+</Update>
+
+<Update label="November 27, 2024" description="v0.3.1">
+  ## Python Version Update and Bug Fixes
+  
+  ### Feature Improvements
+  - Downgraded nika VM to use Python 3.10 as default to support more libraries such as Numba
+  
+  ### Bug Fixes
+  - Fixed error when raster image is selected, user cannot draw vectors on it
+  - Fixed bug causing download public dataset in data catalog to not work
+</Update>
+
+<Update label="November 25, 2024" description="v0.3.0">
+  ## Major Vector Features Release
+  
+  ### New Features
+  - Add vector to map by right click a GeoJSON/KML/SHP/GPKG/GeoParquet file
+  - Vector select and edit
+  - Vector feature attribute view and edit
+  - Vector functions and measurements
+  - Change the AI function in the floating panel to a Search + AI
+  - Vector layer export as a geojson to nika file storage or local desktop
+  - Vector style changes: fill color, fill opacity, line color, line opacity
+  
+  > **Note**: Raster/vector layers do not persist across sessions (feature in progress)
+
+  ![Vector Features 1](/images/changelog/2024-11-25-1.gif)
+  ![Vector Features 2](/images/changelog/2024-11-25-2.gif)
+</Update>
+
+<Update label="November 19, 2024" description="v0.2.12">
+  ## Enhanced File Management and Data Catalog
+  
+  ### New Features
+  - Drag and drop multiple files folders directly from local devices for seamless uploads
+  - Move files and folders anywhere within the platform
+  - Added option to select a composite band to process and visualize raw data in the data catalog
+  
+  ### Bug Fixes
+  - Improved upload time estimation for better reliability
+  - Fixed drag-and-drop within NikaWorkspace; no more cell shifting issues
+  - Resolved flickering when dragging files from the local OS
+  - Fixed bug when downloading datasets in data catalog by removing QA bands from band selection
+
+  ![File Management 1](/images/changelog/2024-11-19-1.gif)
+  ![File Management 2](/images/changelog/2024-11-19-2.gif)
+</Update>
+
+<Update label="October 30, 2024" description="v0.2.11">
+  ## Enhanced File Search
+  
+  ### New Features
+  - Search Files now works for everything in all subfolders in current folder
+  - When user scrolls down, it will search everything until all files fully exhausted
+  
+  ### Bug Fixes
+  - Fixed bug that caused file to be moved to outside of the project root folder
+  - Fixed flickering issue with the drop file to upload from Windows OS
+
+  ![Enhanced File Search](/images/changelog/2024-10-30.gif)
+</Update>
+
+<Update label="October 29, 2024" description="v0.2.10">
+  ## Data Catalog Improvements
+  
+  ### Bug Fixes
+  - Fixed many issues in Data Catalog:
+    - Added form validations for maxCloudCover, maxImages, bands
+    - Added button for select all / clear all bands
+    - Added bound for each data visualized on map (RIGHT CLICK to zoom to fit to layer)
+    - Download dataset can show error message at bottom right if download failed
+</Update>
+
+<Update label="October 28, 2024" description="v0.2.9">
+  ## Notebook Resizing and Multi-Language Support
+  
+  ### New Features
+  - Allow user to resize the NikaColab notebook by dragging the edge between opened notebook and map
+  - Added most popular language support for UI: English, Español, Français, Deutsch, Italiano, Português, Nederlands, Polski, Русский, 日本語, 한국어, 中文, العربية, עברית, Türkçe, Bahasa Indonesia, தமிழ், ไทย, Filipino, Tiếng Việt, Bahasa Melayu
+  - Added copy output for html table (e.g., print table from duckdb in output)
+  
+  ### Bug Fixes
+  - Fixed wrong UpdatedAt for notebooks in its menu on right click
+  - Fixed root dir of NikaColab notebook that now uses /data (PLEASE UPDATE YOUR CODE ACCORDINGLY)
+  - Fixed display data for dataframe table (e.g., print table from duckdb in output)
+  - Added ... to the lists so that iPad users can click too
+
+  ![Notebook Resizing](/images/changelog/2024-10-28.gif)
+</Update>
+
+<Update label="October 22, 2024" description="v0.2.8">
+  ## Data Catalog Introduction
+  
+  ### New Features
+  - Added Data Catalog to allow users to visualize public datasets from GEE data catalog to map or download them to project file storage
+  - Expect some bugs as we are continuously upgrading this feature in future releases
+  
+  ### Bug Fixes
+  - Fixed issue that caused the file list to fail
+  - Updated the task manager at bottom right to accommodate more task types
+</Update>
+
+<Update label="October 14, 2024" description="v0.2.7">
+  ## Enhanced Machine Types and File Management
+  
+  ### New Features
+  - Added Downloader class of machine type with bigger CPU and network throughput
+  - Updated files UI to follow the new UI library while retaining all past capabilities
+  - Added .TIF and .TIFF as allowed extensions for GeoTIFF files for add to map
+  
+  ### Bug Fixes
+  - Fixed behavior that some TIF files cannot be added to map due to server issue
+</Update>
+
+<Update label="October 6, 2024" description="v0.2.6">
+  ## AI Enhancement and UI Improvements
+  
+  ### New Features
+  - Made the nika AI buttons in notebooks more obvious with `Modify` and `Query` text
+  - Upgraded generative AI for coding to a more intelligent version
+  - Added demo videos to tutorial steps and each target section: `project`, `machine`, `file`, `notebook`, `layer`
+  - Added button for Fix Code with AI
+  
+  ### Bug Fixes
+  - Fixed behavior that clicking range input box in layer control close menu
+  - Fixed hvplot not showing up
+</Update>

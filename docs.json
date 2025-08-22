@@ -31,6 +31,12 @@
             ]
           },
           {
+            "group": "Changelog",
+            "pages": [
+              "changelog"
+            ]
+          },
+          {
             "group": "Products",
             "pages": [
               "products/nika-workspace",

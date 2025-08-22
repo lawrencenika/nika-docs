@@ -1,8 +1,121 @@
 ---
-title: "Combined Changelog"
+title: "Nika Changelog"
 description: "Product updates and announcements for Nika products"
 rss: true
 ---
+
+<Update label="August 21, 2025" description="v0.5.6">
+  ## Enhanced Nika Hub and Mobile Experience
+  
+  ### Feature Improvements
+  - Nika Hub now shows description and thumbnail for better content discovery
+  - Added direct share on social media button for easy content sharing
+  - Nika Hub is now properly optimized for mobile phone browser viewing
+  - Nika Hub for maps now supports basemap switching functionality
+  
+  ### Bug Fixes
+  - Fixed JPEG image orientation issue when added to map with roll close to 180 degrees - now correctly displays orientation on map
+
+  ![Nika Hub on mobile](/images/changelog/2025-08-21-1.png)
+  ![Nika Hub on mobile 2](/images/changelog/2025-08-21-2.png)
+  ![Nika Hub social media share](/images/changelog/2025-08-21-3.jpg)
+</Update>
+
+<Update label="August 12, 2025" description="v0.5.5">
+  ## Drone Image Support
+  
+  ### New Features
+  - Added support for drone JPEG images in Nika Map, specifically designed for images taken in shooting down angle
+
+  ![Nika Map JPEG](/images/changelog/2025-08-12.jpg)
+</Update>
+
+<Update label="August 3, 2025" description="v0.5.4">
+  ## Enhanced Raster Layer Controls
+  
+  ### New Features
+  - Raster layer now supports adaptive min/max to window view across all bands for highlighting features
+  - Uses one button instead of many steps required in QGIS for the same functionality
+  
+  ### Feature Improvements
+  - Nika Map now shows invalid layers as greyed out (e.g., due to invalid source) for better user experience
+
+  ![Nika Map Raster Window Min/Max](/images/changelog/2025-08-03.gif)
+</Update>
+
+<Update label="July 31, 2025" description="v0.5.3">
+  ## Nika Hub Launch and Team Collaboration
+  
+  ### New Features
+  - Launched Nika Hub for users to view and publish industry solutions, maps and notebooks in its first version
+  - Launched Team Hub for teams to publish and view internal assets
+  - Added thumbnail AI generation tool for publishing content to Nika Hub
+  
+  ### Bug Fixes
+  - Fixed geopackage export action stalling Nika Maps
+  - Fixed team invitation bug
+  - Fixed export layer group as geopackage functionality
+
+  ![Nika Hub](/images/changelog/2025-07-31-1.jpg)
+  ![Team Hub](/images/changelog/2025-07-31-2.jpg)
+  ![Nika Hub Publish Dialog](/images/changelog/2025-07-31-3.jpg)
+</Update>
+
+<Update label="July 20, 2025" description="v0.5.2">
+  ## Enhanced Notebook and Vector Toolbox
+  
+  ### Feature Improvements
+  - Notebook add block is now switched to using horizontal list instead of vertical list of options for better UX
+  - Vector toolbox now includes search function for improved tool discovery
+
+  ![Notebook horizontal add](/images/changelog/2025-07-20-1.jpg)
+  ![Vector toolbox search](/images/changelog/2025-07-20-2.jpg)
+</Update>
+
+<Update label="July 15, 2025" description="v0.5.2">
+  ## Persistent Maps and Collaborative Editing
+  
+  ### New Features
+  - Persistent Nika Map that auto-saves on user changes
+
+  ### Feature Improvements
+  - Map layers are blocked if another user is editing to prevent change conflicts
+  - Layer list now shows as a tree that allows drag and drop to reorder layers
+  - Multiple maps can now be opened simultaneously to sync their view together
+  - Initial map bounds can now be set for better map initialization
+  - Vector layer edits in Nika Map now support keyboard shortcuts for quicker switching between edit modes
+
+  ![Multiple Persistent Maps](/images/changelog/2025-07-15-1.jpg)
+  ![Layer Tree](/images/changelog/2025-07-15-2.jpg)
+  ![Map Shortcuts](/images/changelog/2025-07-15-3.jpg)
+</Update>
+
+<Update label="July 6, 2025" description="v0.5.1">
+  ## Enhanced Notebook Experience
+  
+  ### Feature Improvements
+  - Nika Notebook now has automatic Python linter upon code changes
+  - Nika Notebook now features a line-by-line accept and reject mechanism instead of the previous accept-all/reject-all approach
+
+  ![Notebook python linter](/images/changelog/2025-07-06-1.jpg)
+  ![Notebook accept/reject line by line](/images/changelog/2025-07-06-2.jpg)
+</Update>
+
+<Update label="June 22, 2025" description="v0.5.0">
+  ## Flexible Workspace Layout and Enhanced Format Support
+  
+  ### New Features
+  - Better workspace layout that allows flexible drag and drop of any assets to the centre for viewing or editing
+  - Support for more formats to view in the centre: CSV, IMG, PDF
+  
+  ### Feature Improvements
+  - Better Data search tool for Nika GAIA that now completes search 3 times faster with improved accuracy of 91% (up from 49% previously)
+  
+  ### Bug Fixes
+  - Fixed scroll down in notebook list causing overflow outside of UI boundaries
+
+  ![New Workspace UI](/images/changelog/2025-06-22.jpg)
+</Update>
 
 <Update label="June 3, 2025" description="v0.4.5">
   ## Nika GAIA (Alpha) v4 and Enhanced AI Capabilities

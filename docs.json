@@ -103,6 +103,13 @@
             ]
           },
           {
+            "group": "Access Control",
+            "pages": [
+              "guides/access-control/invite-to-team",
+              "guides/access-control/invite-to-workspace"
+            ]
+          },
+          {
             "group": "Best Practices",
             "pages": [
               "guides/best-practices/best-practices",

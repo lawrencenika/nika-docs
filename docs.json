@@ -76,6 +76,7 @@
         "groups": [
           {
             "group": "Tutorials",
+            "icon": "rocket",
             "pages": [
               "guides/tutorials/getting-started-with-nikaworkspace",
               "guides/tutorials/building-first-app",
@@ -85,6 +86,7 @@
           },
           {
             "group": "Map Visualization",
+            "icon": "map",
             "pages": [
               "guides/become-map-expert/create-your-first-map",
               "guides/become-map-expert/add-layers-to-map",
@@ -99,6 +101,7 @@
           },
           {
             "group": "Data Analysis",
+            "icon": "code",
             "pages": [
               "guides/data-analysis/create-your-first-notebook",
               "guides/data-analysis/start-machine",
@@ -110,7 +113,18 @@
             ]
           },
           {
+            "group": "Database Management",
+            "icon": "database",
+            "pages": [
+              "guides/database-management/create-managed-duckdb",
+              "guides/database-management/connect-postgres",
+              "guides/database-management/connect-motherduck",
+              "guides/database-management/query-managed-duckdb"
+            ]
+          },
+          {
             "group": "Access Control",
+            "icon": "shield",
             "pages": [
               "guides/access-control/invite-to-team",
               "guides/access-control/invite-to-workspace"
@@ -118,6 +132,7 @@
           },
           {
             "group": "Best Practices",
+            "icon": "check",
             "pages": [
               "guides/best-practices/best-practices",
               "guides/best-practices/performance",

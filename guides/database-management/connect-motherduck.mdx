@@ -1,0 +1,40 @@
+---
+title: "Connect to MotherDuck"
+description: "Connect to MotherDuck cloud database service"
+---
+
+# Connect to MotherDuck
+
+Connect to MotherDuck for cloud-native DuckDB with serverless architecture.
+
+## Step 1: Add MotherDuck Connection
+
+1. Navigate to **Database Management**
+2. Click **"Add External Database"**
+3. Select **"MotherDuck"** from the database types
+
+## Step 2: Create MotherDuck Access Token
+
+1. Go to https://app.motherduck.com/settings/tokens after login, to create a new access token
+2. Copy the value of the new token
+
+![Connect MotherDuck Step 1](/guides/database-management/create-motherduck-connection-1.jpg)
+
+## Step 3: Configure MotherDuck
+
+1. **Service Token**: Your MotherDuck service token
+2. **Database Name**: Target database (optional)
+3. **Region**: Select your preferred region
+4. Click **"Test Connection"**
+
+![Connect MotherDuck Step 2](/guides/database-management/create-motherduck-connection-2.jpg)
+
+## Step 3: Save Connection
+
+1. Verify connection status shows **"Connected"**
+2. Click **"Save Connection"**
+3. Your MotherDuck database is now available for queries
+
+<Note>
+MotherDuck provides serverless DuckDB with automatic scaling and built-in spatial support.
+</Note>

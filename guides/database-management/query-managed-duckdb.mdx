@@ -1,0 +1,51 @@
+---
+title: "Query Managed DuckDB"
+description: "Execute SQL queries using built-in editor or AI generation"
+---
+
+# Query Managed DuckDB
+
+Execute spatial SQL queries on your managed DuckDB instance using the built-in query editor or AI assistance.
+
+## Step 1: Open Query Editor
+
+1. Click `Databases` in the left bar of a NikaWorkspace
+2. Select a **managed DuckDB** from the database list
+3. Double click or right click to select **"Open SQL Query Editor"**
+4. The query interface opens with your database context
+
+## Step 2: Open Query Editor
+
+1. Click `Files` in the left bar
+2. Right click on a spatial file of your interest to `Copy Path`
+
+![Query Managed DuckDB Step 1](/guides/database-management/query-managed-duckdb-1.jpg)
+
+## Step 3: Write SQL Query
+
+### Manual SQL Writing
+1. Type your spatial SQL query in the editor of a NikaWorkspace
+2. Use spatial functions from DuckDB SQL like `ST_READ()`, `ST_AsText()`, `ST_DWithin()`
+3. Click **"Execute"** to run the query
+
+![Query Managed DuckDB Step 2](/guides/database-management/query-managed-duckdb-2.jpg)
+
+### AI-Powered SQL Generation
+1. [Optional] Select AI model (GPT-4, Claude, etc.)
+2. Describe your query in natural language
+3. Click **"Generate SQL"** button
+4. AI generates SQL based on your table schema
+
+![Query Managed DuckDB Step 3](/guides/database-management/query-managed-duckdb-3.jpg)
+
+## Step 4: View Results
+
+1. Query results display in the results table
+2. **Download CSV** for data export
+3. **Add to Map** to visualize spatial results (WIP)
+
+<Note>
+AI SQL generation understands your table schema if you mention it with '/' trigger and suggests optimal spatial queries for your data.
+</Note>
+
+![Query Managed DuckDB Step 4](/guides/database-management/query-managed-duckdb-4.jpg)

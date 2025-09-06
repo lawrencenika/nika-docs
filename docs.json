@@ -27,7 +27,8 @@
             "pages": [
               "index",
               "quickstart",
-              "concepts"
+              "concepts",
+              "terms-and-conditions"
             ]
           },
           {
@@ -228,7 +229,22 @@
       "x": "https://x.com/nikaplanet",
       "github": "https://github.com/nikaplanet",
       "linkedin": "https://linkedin.com/company/nikaplanet"
-    }
+    },
+    "links": [
+      {
+        "header": "Company",
+        "items": [
+          {
+            "label": "Blog",
+            "href": "https://www.nikaplanet.com/resources"
+          },
+          {
+            "label": "Terms and Conditions",
+            "href": "https://www.nikaplanet.com/terms-conditions"
+          }
+        ]
+      }
+    ]
   }
 }
 

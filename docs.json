@@ -42,10 +42,11 @@
               "products/nika-workspace",
               "products/nika-hub",
               "products/nika-map",
+              "products/nika-dbms",
               "products/nika-studio",
               "products/nika-labeller",
               "products/nika-etl"
-            ]
+             ]
           },
           {
             "group": "Integrations",

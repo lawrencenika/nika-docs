@@ -1,0 +1,207 @@
+---
+title: "NikaDBMS (Beta)"
+description: "Advanced geospatial database management system for data science with AI-powered SQL generation and seamless workspace integration"
+icon: "database"
+---
+
+# NikaDBMS
+
+![NikaDBMS Interface](/images/changelog/2025-09-06.jpg)
+
+## Powerful Geospatial Database Management
+
+NikaDBMS is a comprehensive database management system designed specifically for geospatial data science workflows. Connect to multiple database types, leverage AI-powered SQL generation, and seamlessly integrate with your NikaWorkspace data lake.
+
+## Key Features
+
+### AI-Powered SQL Generation
+
+- **Intelligent Query Builder** - Natural language to SQL conversion
+- **Geospatial Function Support** - ST_READ, ST_AsText, spatial joins, and more
+- **Context-Aware Suggestions** - AI understands your schema and suggests optimal queries
+- **Multiple AI Models** - Choose from GPT-4, Claude, and other leading models
+
+### Workspace Integration
+
+- **Direct Data Lake Access** - Query files directly from your NikaWorkspace
+- **File Format Support** - KML, GeoJSON, Shapefile, Parquet, and more
+- **Map Integration** - Use query results as map layers instantly
+- **Collaborative Features** - Share queries and results with your team
+
+### Multi-Database Support
+
+NikaDBMS supports a wide range of geospatial databases, from lightweight local solutions to enterprise-grade cloud platforms.
+
+### Core Databases
+
+<Columns cols={2}>
+  <Card
+    title="PostgreSQL"
+    icon="🐘"
+  >
+    Full spatial extensions support with PostGIS for advanced geospatial operations and analysis.
+  </Card>
+  <Card
+    title="DuckDB (Managed)"
+    icon="🦆"
+  >
+    High-performance analytical database with built-in spatial functions for fast geospatial queries.
+  </Card>
+  <Card
+    title="MotherDuck"
+    icon="☁️"
+  >
+    Cloud-native DuckDB service with serverless architecture and seamless scalability.
+  </Card>
+  <Card
+    title="SpatiaLite"
+    icon="🗃️"
+  >
+    Lightweight spatial database perfect for mobile and embedded geospatial applications.
+  </Card>
+</Columns>
+
+### Enterprise Solutions (Premium)
+
+<Columns cols={2}>
+  <Card
+    title="Oracle DB"
+    icon="🏢"
+  >
+    Enterprise spatial database with advanced analytics and high-performance geospatial processing.
+  </Card>
+  <Card
+    title="Snowflake"
+    icon="❄️"
+  >
+    Cloud data warehouse with native geospatial support and massive scalability.
+  </Card>
+  <Card
+    title="BigQuery"
+    icon="🔍"
+  >
+    Google's serverless data warehouse with built-in geospatial functions and ML capabilities.
+  </Card>
+  <Card
+    title="Amazon Redshift"
+    icon="🔴"
+  >
+    AWS data warehouse with spatial extensions for large-scale geospatial analytics.
+  </Card>
+  <Card
+    title="Esri GeoDatabase"
+    icon="🗺️"
+  >
+    Geographic information system with comprehensive spatial analysis and mapping capabilities.
+  </Card>
+</Columns>
+
+## Core Capabilities
+
+### Geospatial Query Processing
+
+- **Spatial Functions** - Full support for PostGIS and DuckDB spatial functions
+- **File Direct Access** - Query KML, GeoJSON, and other formats directly
+- **Coordinate System Support** - Automatic CRS detection and transformation
+- **Performance Optimization** - Spatial indexing and query optimization
+
+### Data Science Workflows
+
+- **Statistical Analysis** - Built-in functions for spatial statistics
+- **Machine Learning Integration** - Export data for ML pipelines
+- **Visualization Ready** - Results formatted for immediate mapping
+- **Reproducible Research** - Save and version control your queries
+
+### Enterprise Features
+
+- **Multi-User Support** - Role-based access control
+- **Query History** - Track and replay previous queries
+- **Performance Monitoring** - Query execution analytics
+- **Data Security** - Encrypted connections and secure data handling
+
+## Getting Started
+
+### 1. Connect Your Database
+
+Choose from supported database types and configure your connection:
+
+- **PostgreSQL**: Standard connection with spatial extensions
+- **DuckDB Managed**: Instant setup with Nika's managed service
+- **MotherDuck**: Cloud-native with enterprise features
+
+### 2. AI-Powered Querying
+
+Use natural language to generate complex geospatial queries:
+
+```
+"Find all cities within 50km of the coastline"
+→ SELECT * FROM cities WHERE ST_DWithin(geom, coastline, 50000)
+```
+
+### 3. Visualize Results
+
+- **Instant Mapping** - Query results appear as map layers
+- **Interactive Tables** - Explore data with built-in table viewer
+- **Export Options** - Download as CSV, GeoJSON, or other formats
+
+## Use Cases
+
+### Environmental Monitoring
+
+- **Satellite Data Analysis** - Process large raster datasets
+- **Change Detection** - Compare temporal geospatial data
+- **Habitat Mapping** - Analyze species distribution patterns
+
+### Urban Planning
+
+- **Population Analysis** - Demographic data with spatial context
+- **Infrastructure Planning** - Network analysis and optimization
+- **Zoning Analysis** - Land use pattern recognition
+
+### Research & Academia
+
+- **Spatial Statistics** - Advanced analytical functions
+- **Data Integration** - Combine multiple data sources
+- **Publication Ready** - Export results for research papers
+
+## Integration Benefits
+
+### With NikaWorkspace
+
+- **Seamless Data Access** - Query files directly from your workspace
+- **No Data Duplication** - Work with original data sources
+- **Version Control** - Track changes to your datasets
+
+### With NikaMap
+
+- **Live Data Layers** - Query results as interactive map layers
+- **Real-time Updates** - Refresh data without re-querying
+- **Spatial Analysis** - Perform complex spatial operations
+
+### With NikaNotebook
+
+- **Code Generation** - Export queries as Python/SQL code
+- **Reproducible Workflows** - Document your analysis process
+- **Collaborative Analysis** - Share notebooks with your team
+
+## Performance & Scalability
+
+- **High-Performance Queries** - Optimized for large geospatial datasets
+- **Parallel Processing** - Multi-threaded query execution
+- **Memory Management** - Efficient handling of large result sets
+- **Caching** - Intelligent query result caching
+
+## Security & Compliance
+
+- **Encrypted Connections** - All database connections are encrypted
+- **Access Control** - Role-based permissions and user management
+- **Data Privacy** - Client data remains under your control
+- **Audit Logging** - Complete query and access logging
+
+## Getting Started
+
+Ready to supercharge your geospatial data science workflows? Start with NikaDBMS today and experience the power of AI-assisted geospatial database management.
+
+<Note>
+NikaDBMS is currently in Public Beta. Some advanced features may still have glitches, which you can report at mailto:support@nikaplanet.com.
+</Note>

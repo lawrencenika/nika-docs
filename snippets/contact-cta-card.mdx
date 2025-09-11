@@ -1,0 +1,22 @@
+export const ContactCTACard = () => (
+  <div>
+    <Card
+      title="Talk to a Geospatial Expert"
+      icon="headset"
+      href="https://cal.com/lawrence-nika/contact-nika"
+      arrow={true}
+      cta="Schedule a Meeting"
+    >
+      Need help with your geospatial projects? Our team of experts is here to assist you with implementation, best practices, and technical support.
+    </Card>
+    
+    <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+      <p style={{ margin: '0 0 0.5rem 0' }}>Other ways to get help:</p>
+      <ul style={{ margin: '0', paddingLeft: '1.2rem' }}>
+        <li><strong>Guides:</strong> Use the <a href="/guides" style={{ color: 'var(--color-primary)' }}>/guides</a> tab for detailed tutorials</li>
+        <li><strong>Community:</strong> Ask questions in our <a href="https://github.com/orgs/NikaEco/discussions" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary)' }}>community forum</a></li>
+        <li><strong>Support:</strong> Send us a <a href="mailto:support@nikaplanet.com" style={{ color: 'var(--color-primary)' }}>support request</a></li>
+      </ul>
+    </div>
+  </div>
+);

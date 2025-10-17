@@ -54,81 +54,126 @@ NikaWorkspace is our flagship geospatial data analysis platform designed for han
 
 ## Getting Started
 
-### Installation
-
-Install NikaWorkspace using npm or yarn package managers for easy integration into your projects.
-
 ### Basic Usage
 
-Initialize NikaWorkspace with your API credentials and project ID. Load geospatial data, perform spatial analysis operations, and create visualizations with custom styling and layer configurations.
+Create a new NikaWorkspace is as easy as click the + Create button and choose the team to create under. Each workspace is then a logical separation of project storage, compute and workloads.
 
 ## Data Sources
 
 NikaWorkspace supports a wide variety of data sources:
 
 - **File Formats**: GeoJSON, Shapefile, KML, CSV, Excel
-- **Databases**: PostgreSQL/PostGIS, MongoDB, SQLite
-- **APIs**: REST APIs, GraphQL, OGC services
+- **Databases**: PostgreSQL/PostGIS, DuckDB, and many other enterprise DBs to come
 - **Cloud Storage**: AWS S3, Google Cloud Storage, Azure Blob
 
-## Analysis Tools
+## Python Notebook Examples in NikaWorkspace
 
-### Spatial Analysis
-- Buffer analysis
-- Intersection operations
-- Distance calculations
-- Spatial joins
-- Voronoi diagrams
-
-### Statistical Analysis
-- Descriptive statistics
-- Spatial autocorrelation
-- Hot spot analysis
-- Regression analysis
-- Clustering algorithms
-
-### Machine Learning
-- Spatial clustering
-- Classification
-- Regression
-- Time series analysis
-- Anomaly detection
+![NikaWorkspace Notebook Interface](/products/nika-workspace-2.jpg)
 
 ## Visualization Options
 
-### Map Types
-- **Choropleth Maps**: Color-coded regions based on data values
-- **Point Maps**: Scatter plots with customizable markers
-- **Heat Maps**: Density visualization for point data
-- **Flow Maps**: Movement and connection visualization
-- **3D Maps**: Elevation and terrain visualization
-
-### Chart Types
-- Bar charts
-- Line charts
-- Scatter plots
-- Histograms
-- Box plots
-- Correlation matrices
-
-## Integration
-
 NikaWorkspace integrates seamlessly with other Nika products:
 
-- **NikaHub**: Share and publish your analyses
-- **NikaStudio**: Use workspace data in custom applications
-- **AI Agent**: Get intelligent suggestions for your analysis
+- **NikaMap**: Create a powerful map that supports both vector, raster and jpeg layers natively
+- **NikaDashboard**: Drag and drop to create Tableau-looking operation dashboards with filters on Charts, Maps in NikaWorkspace directly
+- **NikaHub**: Share and publish the results of your work to your team and others
+- **NikaStudio**: Use current workspace data to quickly build custom map prototypes
+- **Nika GAIA**: Get intelligent suggestions for your analysis
 
 
-## Examples
+## Spatial Analysis Examples in NikaWorkspace Notebooks
 
-### Basic Spatial Analysis
 
-Load multiple datasets and perform spatial join operations with configurable attributes. Create visualizations with custom styling and layer combinations for comprehensive analysis results.
+### Spatial Analysis
 
-### Advanced Analysis
+```python
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import Point, Polygon
+from shapely.ops import voronoi_diagram
+import folium
 
-Perform sophisticated analysis including hot spot analysis with configurable fields and significance levels, and time series analysis with custom date fields and intervals.
+# Buffer analysis - Create 1km buffers around points
+points_gdf = gpd.read_file('points.geojson')
+buffers = points_gdf.geometry.buffer(1000)  # 1000 meters
+
+# Intersection operations - Find overlapping areas
+layer1 = gpd.read_file('layer1.geojson')
+layer2 = gpd.read_file('layer2.geojson')
+overlaps = gpd.overlay(layer1, layer2, how='intersection')
+
+# Distance calculations - Calculate distances between features
+points = gpd.read_file('points.geojson')
+polygons = gpd.read_file('polygons.geojson')
+distances = points.geometry.apply(lambda x: polygons.geometry.distance(x).min())
+
+# Spatial joins - Join attributes based on location
+joined = gpd.sjoin(points, polygons, how='left', predicate='within')
+
+# Voronoi diagrams - Create service areas
+from scipy.spatial import Voronoi
+import numpy as np
+coords = np.array([[p.x, p.y] for p in points.geometry])
+voronoi = Voronoi(coords)
+```
+
+### Statistical Analysis
+
+```python
+import numpy as np
+from scipy import stats
+import pandas as pd
+from libpysal.weights import Queen
+from esda.moran import Moran
+
+# Descriptive statistics for spatial data
+stats = spatial_data[['population', 'area']].describe()
+
+# Spatial autocorrelation - Moran's I test
+w = Queen.from_dataframe(spatial_data)
+morans_i = Moran(spatial_data['value'], w)
+
+# Hot spot analysis - Getis-Ord Gi* statistic
+from esda.getisord import G_Local
+g_local = G_Local(spatial_data['crime_rate'], w)
+hotspots = spatial_data[g_local.p_sim < 0.05]
+
+# Regression analysis with spatial variables
+from sklearn.linear_model import LinearRegression
+X = spatial_data[['distance_to_center', 'area']]
+y = spatial_data['price']
+model = LinearRegression().fit(X, y)
+```
+
+### Machine Learning
+
+```python
+from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+import pandas as pd
+
+# Spatial clustering - Group similar locations
+coords = spatial_data[['longitude', 'latitude']].values
+kmeans = KMeans(n_clusters=5, random_state=42)
+clusters = kmeans.fit_predict(coords)
+
+# Classification - Predict land use from satellite imagery
+X = raster_data.reshape(-1, raster_data.shape[-1])
+y = training_points['land_use']
+rf = RandomForestClassifier(n_estimators=100, random_state=42)
+rf.fit(X, y)
+land_use_pred = rf.predict(X)
+
+# Time series analysis - Analyze temporal patterns
+data['date'] = pd.to_datetime(data['date'])
+monthly_trends = data.groupby(data['date'].dt.to_period('M'))['temperature'].mean()
+
+# Anomaly detection - Find unusual spatial patterns
+from sklearn.ensemble import IsolationForest
+iso_forest = IsolationForest(contamination=0.1, random_state=42)
+anomalies = iso_forest.fit_predict(spatial_data[['value1', 'value2']])
+```
 
 ## Best Practices
 

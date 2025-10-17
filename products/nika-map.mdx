@@ -23,20 +23,13 @@ NikaMap is the world's first collaborative auto-saving map platform designed to 
 ### Collaborative Mapping
 - **Auto-Save**: Never lose your work with automatic saving
 - **Real-time Collaboration**: Multiple users can edit maps simultaneously
-- **Version Control**: Track changes and maintain map history
+- **Version Control**: Track changes and maintain map edit history
 - **Conflict Resolution**: Intelligent conflict detection and resolution
 
 ### Advanced Visualization
 - **Multiple Layer Types**: Vector, raster, point cloud, and 3D layers
 - **Custom Styling**: Advanced styling options for all data types
 - **Interactive Features**: Popups, tooltips, and dynamic interactions
-- **3D Visualization**: Immersive 3D mapping capabilities
-
-### Performance Optimization
-- **Spatial Indexing**: Advanced spatial indexing for fast queries
-- **Level-of-Detail**: Automatic detail management based on zoom level
-- **Caching**: Intelligent caching for improved performance
-- **Compression**: Advanced data compression for faster loading
 
 ## Getting Started
 
@@ -47,24 +40,22 @@ Initialize NikaMap with your container element and configure center, zoom, auto-
 ## Data Sources
 
 ### Vector Data
-- **PostgreSQL/PostGIS**: Direct database connections
+- **GeoParquet**: High-performance columnar format for large datasets
+- **GeoPackage**: Modern SQLite-based geospatial format
+- **FlatGeobuf**: Fast binary format for streaming large datasets
 - **GeoJSON**: Large GeoJSON files with streaming
 - **Shapefiles**: Traditional GIS format support
 - **KML/KMZ**: Google Earth format support
-- **TopoJSON**: Topology-based vector format
 
 ### Raster Data
 - **GeoTIFF**: High-resolution raster support
 - **Cloud Optimized GeoTIFF (COG)**: Optimized for web delivery
 - **JPEG2000**: Compressed raster format
-- **NetCDF**: Scientific raster format
-- **HDF5**: Hierarchical data format
+- **ECW**: Enhanced Compression Wavelet format
+- **HFA**: Hierarchical File Format (Erdas Imagine)
 
 ### Drone Data
-- **DJI**: Native DJI drone format support
-- **Pix4D**: Pix4D processing results
-- **Agisoft**: Metashape processing results
-- **Custom Formats**: Support for custom drone data formats
+- **JPEG**: JPEG with EXIF metadata are supported out of box
 
 ## Collaboration Features
 
@@ -76,26 +67,6 @@ Enable real-time collaboration with configurable permissions for editing, adding
 
 Save map versions with custom names, descriptions, and tags. List available versions and restore previous versions as needed for version control and rollback capabilities.
 
-## Performance Features
-
-### Spatial Indexing
-
-Create spatial indexes for large datasets using various methods like R-tree. Query data efficiently using spatial bounds with index optimization for improved performance.
-
-### Level of Detail
-
-Configure level of detail for different zoom levels to optimize performance and rendering quality based on the current view scale.
-
-## Advanced Features
-
-### 3D Visualization
-
-Enable 3D mode with terrain, buildings, and atmospheric effects. Add 3D layers including point clouds and other volumetric data for immersive visualization.
-
-### Custom Styling
-
-Apply advanced styling to vector layers with interpolated colors based on zoom level, custom stroke properties, and opacity settings for sophisticated visual effects.
-
 ## Integration
 
 NikaMap integrates seamlessly with other Nika products:
@@ -103,28 +74,7 @@ NikaMap integrates seamlessly with other Nika products:
 - **NikaWorkspace**: Use workspace data directly in maps
 - **NikaStudio**: Embed maps in custom applications
 - **NikaHub**: Share and publish maps
-- **AI Agent**: Get intelligent suggestions for map styling and analysis
-
-
-## Best Practices
-
-### Performance
-1. **Use Spatial Indexing**: Always create spatial indexes for large datasets
-2. **Optimize Data Formats**: Use compressed formats like COG for rasters
-3. **Level of Detail**: Configure appropriate detail levels for different zoom levels
-4. **Caching**: Enable caching for frequently accessed data
-
-### Collaboration
-1. **Clear Naming**: Use descriptive names for layers and versions
-2. **Permissions**: Set appropriate permissions for team members
-3. **Communication**: Use comments and descriptions for changes
-4. **Backup**: Regularly save versions of important maps
-
-### Data Management
-1. **Data Validation**: Validate data before adding to map
-2. **Metadata**: Include comprehensive metadata for all layers
-3. **Documentation**: Document data sources and processing steps
-4. **Versioning**: Maintain version history for all datasets
+- **NikaGAIA**: Get intelligent suggestions for map styling and analysis
 
 ## Get Expert Help
 

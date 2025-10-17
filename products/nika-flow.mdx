@@ -1,6 +1,6 @@
 ---
 title: "NikaFlow (Beta)"
-description: "One click deploy python script as serverless function, and use AI agent to create a flow diagram using these functions for data processing engineering"
+description: "Visual ETL conversion engine for geospatial and 3D formats - like FME Flow but built for modern cloud workflows"
 icon: "water"
 ---
 
@@ -10,67 +10,65 @@ NikaFlow is currently in Public Beta. Some advanced features may still have glit
 
 import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
-> **� BETA**  
-> This product is currently in beta. Features and functionality may change.
-
 ## Overview
 
-NikaFlow is a powerful data processing engineering platform that enables you to deploy Python scripts as serverless functions with one click, and leverage AI agents to create intelligent flow diagrams for complex data processing pipelines. Built for data engineers and analysts who need scalable, automated ETL workflows.
+NikaFlow is a visual ETL (Extract, Transform, Load) conversion engine designed specifically for geospatial and 3D data formats. Built like FME Flow but optimized for modern cloud workflows, NikaFlow provides an intuitive drag-and-drop interface for creating data transformation pipelines without coding.
 
 ![NikaFlow Interface](/products/nika-flow.jpg)
 
 ## Key Features
 
-### One-Click Serverless Deployment
-- **Instant Deployment**: Deploy Python scripts as serverless functions with a single click
-- **Auto-Scaling**: Automatic scaling based on workload demands
-- **Pay-Per-Use**: Only pay for actual function execution time
-- **Zero Infrastructure**: No server management or configuration required
+### Visual Workflow Designer
+- **Drag Interface**: Build ETL workflows visually with no coding required
+- **Pre-built Transformers**: Extensive library of geospatial and 3D transformation tools
+- **Real-time Preview**: See data transformations as you build
+- **Multi-user Edit**: Built and modify together with your team members, nothing missed!
 
-### AI-Powered Flow Design
-- **Intelligent Flow Creation**: AI agent automatically creates optimal flow diagrams
-- **Smart Function Chaining**: AI suggests the best way to connect functions
-- **Performance Optimization**: AI recommends optimizations for data processing
-- **Error Handling**: AI-generated error handling and recovery mechanisms
+### Geospatial Format Support
+- **Vector Formats**: Shapefile, GeoJSON, GeoPackage, KML, KMZ, FlatGeobuf, GeoParquet
+- **Raster Formats**: GeoTIFF, COG, ECW, HFA, JPEG, JPEG2000, CADRG
+- **3D Point Cloud**: LAS, LAZ, XYZ, PLY, PNTS
+- **3D Mesh/Scene**: STL, OBJ, DAE, GLB, GLTF, B3DM (to be built)
+- **3D Tiled**: 3D Tiles, I3S
+- **Style Formats**: LYRX, SLD, QML
 
-### Data Processing Engineering
-- **ETL Workflows**: Extract, Transform, Load data processing pipelines
-- **Data Validation**: Built-in data quality checks and validation
-- **Transformation Tools**: Rich library of data transformation functions
-- **Monitoring**: Real-time monitoring and alerting for data pipelines
+### Advanced Transformations
+- **Coordinate System Conversion**: CRS detection and transformation options available
+- **Data Validation**: Data visualization directly in Nika Web UI
 
-### Integration Capabilities
-- **Multiple Data Sources**: Connect to databases, cloud storage, and more
-- **Format Support**: Handle CSV, JSON, Parquet, Avro, and other formats
-- **Geospatial Data**: Specialized support for spatial data processing
-- **Real-time Processing**: Stream processing capabilities for live data
+### Data Integration
+- **NikaWorkspace Data Lake**: Direct integration with data already uploaded to NikaWorkspace
 
-## Getting Started
+## Common Use Cases
 
-### Deploying Your First Function
+### Data Migration
+- **Legacy System Migration**: Convert old GIS data to modern formats
+- **Database Migration**: Move data between different spatial databases
+- **Cloud Migration**: Transfer on-premises data to cloud storage
 
-Deploy Python scripts as a Nika Function with a single click. Simply write your data processing function and use the one-click deployment feature to make it available as a serverless function.
+### Data Processing
+- **Coordinate System Conversion**: Transform data between different CRS
+- **Geometry Operations**: Perform spatial analysis and transformations
+- **Attribute Processing**: Clean, validate, and transform attribute data
+- **Data Quality**: Validate and fix common data issues
 
-![NikaFlow Interface](/products/nika-flow-2.jpg)
+### 3D Data Processing
+- **Point Cloud Processing**: Convert and process LiDAR data
+- **3D Model Conversion**: Transform between different 3D formats
+- **3D Tiles Generation**: Create optimized 3D tiles for web visualization
 
 ## Best Practices
 
-### Function Design
-1. **Single Responsibility**: Each function should do one thing well
-2. **Error Handling**: Implement comprehensive error handling
-3. **Logging**: Add detailed logging for debugging
-4. **Testing**: Test functions thoroughly before deployment
-
-### Flow Design
-1. **Modularity**: Break complex workflows into smaller functions
-2. **Error Recovery**: Implement retry and recovery mechanisms
-3. **Monitoring**: Add comprehensive monitoring and alerting
-4. **Documentation**: Document flow logic and dependencies
+### Workflow Design
+1. **Start Simple**: Begin with basic transformations and add complexity gradually
+2. **Test Early**: Validate data at each step to catch issues early
+3. **Use Templates**: Leverage pre-built templates for common tasks
+4. **Document Workflows**: Add descriptions and comments to your workflows
 
 ### Performance
-1. **Optimization**: Use AI suggestions for performance optimization
-2. **Caching**: Implement caching for frequently accessed data
-3. **Parallelization**: Use parallel processing where possible
+1. **Flexible Compute**: Ability to use large RAM or CPU for data of different sizes
+2. **Parallel Processing**: Enable parallel processing for large datasets
+3. **Caching**: Use caching for frequently accessed data
 4. **Resource Management**: Monitor and optimize resource usage
 
 ## Get Expert Help 

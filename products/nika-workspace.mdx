@@ -56,41 +56,11 @@ NikaWorkspace is our flagship geospatial data analysis platform designed for han
 
 ### Installation
 
-```bash
-# Install NikaWorkspace
-npm install @nika/workspace
-
-# Or using yarn
-yarn add @nika/workspace
-```
+Install NikaWorkspace using npm or yarn package managers for easy integration into your projects.
 
 ### Basic Usage
 
-```javascript
-import { NikaWorkspace } from '@nika/workspace';
-
-// Initialize workspace
-const workspace = new NikaWorkspace({
-  apiKey: 'your-api-key',
-  projectId: 'your-project-id'
-});
-
-// Load geospatial data
-const data = await workspace.loadData('path/to/data.geojson');
-
-// Perform spatial analysis
-const analysis = await workspace.analyze(data, {
-  operation: 'buffer',
-  distance: 1000
-});
-
-// Create visualization
-const map = await workspace.createMap({
-  data: analysis,
-  style: 'dark',
-  layers: ['points', 'polygons']
-});
-```
+Initialize NikaWorkspace with your API credentials and project ID. Load geospatial data, perform spatial analysis operations, and create visualizations with custom styling and layer configurations.
 
 ## Data Sources
 
@@ -157,42 +127,11 @@ For detailed API documentation, see our [API Reference](/tools/api-reference).
 
 ### Basic Spatial Analysis
 
-```javascript
-// Load data
-const cities = await workspace.loadData('cities.geojson');
-const regions = await workspace.loadData('regions.geojson');
-
-// Perform spatial join
-const result = await workspace.spatialJoin(cities, regions, {
-  operation: 'within',
-  attributes: ['population', 'area']
-});
-
-// Create visualization
-const map = await workspace.createMap({
-  data: result,
-  style: 'light',
-  layers: ['regions', 'cities']
-});
-```
+Load multiple datasets and perform spatial join operations with configurable attributes. Create visualizations with custom styling and layer combinations for comprehensive analysis results.
 
 ### Advanced Analysis
 
-```javascript
-// Perform hot spot analysis
-const hotSpots = await workspace.hotSpotAnalysis(data, {
-  field: 'crime_rate',
-  distance: 5000,
-  significance: 0.05
-});
-
-// Create time series analysis
-const timeSeries = await workspace.timeSeriesAnalysis(data, {
-  dateField: 'date',
-  valueField: 'temperature',
-  interval: 'daily'
-});
-```
+Perform sophisticated analysis including hot spot analysis with configurable fields and significance levels, and time series analysis with custom date fields and intervals.
 
 ## Best Practices
 

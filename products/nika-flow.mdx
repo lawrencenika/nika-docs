@@ -45,36 +45,7 @@ NikaFlow is a powerful data processing engineering platform that enables you to 
 
 ### Deploying Your First Function
 
-```python
-# example_etl_function.py
-import pandas as pd
-import geopandas as gpd
-from nika_flow import ETLFunction
-
-@ETLFunction
-def process_geospatial_data(input_data):
-    """
-    Process geospatial data with automatic serverless deployment
-    """
-    # Load data
-    df = pd.read_csv(input_data['csv_url'])
-    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.longitude, df.latitude))
-    
-    # Transform data
-    gdf = gdf.to_crs(epsg=4326)
-    gdf['processed'] = gdf['value'] * 2
-    
-    # Return processed data
-    return {
-        'processed_data': gdf.to_json(),
-        'summary': {
-            'total_records': len(gdf),
-            'bounds': gdf.total_bounds.tolist()
-        }
-    }
-
-# Deploy with one click on the file
-```
+Deploy Python scripts as a Nika Function with a single click. Simply write your data processing function and use the one-click deployment feature to make it available as a serverless function.
 
 ![NikaFlow Interface](/products/nika-flow-2.jpg)
 

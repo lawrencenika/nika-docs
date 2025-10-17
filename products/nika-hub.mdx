@@ -73,37 +73,11 @@ Visit the [NikaHub](https://planet.nika.eco/hub) to explore community content:
 
 #### From NikaWorkspace
 
-```javascript
-import { NikaWorkspace } from '@nika/workspace';
-
-const workspace = new NikaWorkspace();
-
-// After completing your analysis
-const project = await workspace.publishToGallery({
-  title: 'Urban Heat Island Analysis',
-  description: 'Analysis of temperature variations across city districts',
-  category: 'analysis',
-  tags: ['urban-planning', 'climate', 'heat-island'],
-  visibility: 'public'
-});
-```
+After completing your analysis in NikaWorkspace, easily publish your work to the gallery with custom titles, descriptions, categories, and tags.
 
 #### From NikaStudio
 
-```javascript
-import { NikaStudio } from '@nika/studio';
-
-const studio = new NikaStudio();
-
-// After building your application
-const app = await studio.publishToGallery({
-  title: 'Real-time Traffic Dashboard',
-  description: 'Live traffic monitoring dashboard for city planners',
-  category: 'application',
-  tags: ['traffic', 'real-time', 'dashboard'],
-  visibility: 'public'
-});
-```
+After building your application in NikaStudio, publish it to the gallery with detailed descriptions and appropriate categorization for community discovery.
 
 ## Hub Categories
 
@@ -166,26 +140,7 @@ NikaHub integrates with other Nika products:
 
 ## API Access
 
-Access hub content programmatically:
-
-```javascript
-import { NikaHub } from '@nika/hub';
-
-const hub = new NikaHub();
-
-// Search for content
-const results = await hub.search({
-  query: 'traffic analysis',
-  category: 'application',
-  tags: ['urban-planning']
-});
-
-// Get project details
-const project = await hub.getProject('project-id');
-
-// Download project
-const files = await hub.downloadProject('project-id');
-```
+Access hub content programmatically through the NikaHub API, enabling search, project retrieval, and download functionality for integration with your own applications.
 
 ## Get Expert Help
 

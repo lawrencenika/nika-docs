@@ -65,51 +65,11 @@ NikaStudio is our AI-powered application development platform that enables you t
 
 ### Installation
 
-```bash
-# Install NikaStudio CLI
-npm install -g @nika/studio-cli
-
-# Create a new project
-nika studio create my-app
-
-# Navigate to project
-cd my-app
-
-# Start development server
-nika studio dev
-```
+Install NikaStudio CLI and create your first project using the command line tools. The CLI provides easy project creation and development server management.
 
 ### Basic Usage
 
-```javascript
-import { NikaStudio } from '@nika/studio';
-
-// Initialize studio
-const studio = new NikaStudio({
-  apiKey: 'your-api-key',
-  projectId: 'your-project-id'
-});
-
-// Create a new application
-const app = await studio.createApp({
-  name: 'Traffic Dashboard',
-  description: 'Real-time traffic monitoring dashboard',
-  template: 'dashboard'
-});
-
-// Add components using AI
-await studio.addComponent(app.id, {
-  type: 'map',
-  description: 'Interactive map showing traffic flow with color-coded congestion levels',
-  data: 'traffic-data-source'
-});
-
-await studio.addComponent(app.id, {
-  type: 'chart',
-  description: 'Line chart showing traffic volume over time',
-  data: 'traffic-metrics'
-});
-```
+Initialize NikaStudio with your API credentials and create applications using the intuitive interface. Add components using AI assistance to build sophisticated geospatial applications with minimal coding.
 
 ## Application Types
 
@@ -194,28 +154,12 @@ await studio.addComponent(app.id, {
 ## Deployment
 
 ### Cloud Deployment
-```bash
-# Deploy to Nika Cloud
-nika studio deploy
 
-# Deploy to custom domain
-nika studio deploy --domain myapp.com
-
-# Deploy with environment variables
-nika studio deploy --env production
-```
+Deploy your applications to Nika Cloud with a click of deploy button. There is support for custom domains and environment-specific configurations with enterprise plan.
 
 ### Self-Hosting
-```bash
-# Build for production
-nika studio build
 
-# Export static files
-nika studio export
-
-# Deploy to your server
-scp -r dist/ user@server:/var/www/myapp/
-```
+Build and export your applications for self-hosting on your own infrastructure with full control over deployment and configuration.
 
 ## Templates
 

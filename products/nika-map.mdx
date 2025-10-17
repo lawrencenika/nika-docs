@@ -42,47 +42,7 @@ NikaMap is the world's first collaborative auto-saving map platform designed to 
 
 ### Creating Your First Map
 
-```javascript
-import { NikaMap } from '@nika/map';
-
-// Initialize map
-const map = new NikaMap({
-  container: 'map-container',
-  center: [40.7128, -74.0060],
-  zoom: 10,
-  autoSave: true,
-  collaborative: true
-});
-
-// Add vector layer with millions of polygons
-await map.addLayer({
-  type: 'vector',
-  source: 'postgresql://user:pass@host/db',
-  table: 'large_polygon_dataset',
-  style: {
-    fillColor: '#ff0000',
-    fillOpacity: 0.7,
-    strokeColor: '#000000',
-    strokeWidth: 1
-  }
-});
-
-// Add raster layer with GBs of data
-await map.addLayer({
-  type: 'raster',
-  source: 's3://bucket/large-raster.tif',
-  tiling: 'auto',
-  compression: 'webp'
-});
-
-// Add drone imagery
-await map.addLayer({
-  type: 'drone',
-  source: 'drone-images/',
-  metadata: 'drone-metadata.json',
-  georeference: 'auto'
-});
-```
+Initialize NikaMap with your container element and configure center, zoom, auto-save, and collaborative features. Add various layer types including vector layers with millions of polygons, raster layers with gigabytes of data, and drone imagery with automatic georeferencing.
 
 ## Data Sources
 
@@ -109,112 +69,32 @@ await map.addLayer({
 ## Collaboration Features
 
 ### Real-time Editing
-```javascript
-// Enable real-time collaboration
-map.enableCollaboration({
-  roomId: 'project-123',
-  userId: 'user-456',
-  permissions: {
-    canEdit: true,
-    canAddLayers: true,
-    canDeleteLayers: false
-  }
-});
 
-// Listen for changes from other users
-map.on('collaboration:change', (change) => {
-  console.log('Change from user:', change.userId);
-  console.log('Change type:', change.type);
-  console.log('Change data:', change.data);
-});
-```
+Enable real-time collaboration with configurable permissions for editing, adding, and deleting layers. Listen for changes from other users and implement custom change handlers.
 
 ### Version Control
-```javascript
-// Save a version
-await map.saveVersion({
-  name: 'Initial Setup',
-  description: 'First version of the map',
-  tags: ['initial', 'setup']
-});
 
-// List versions
-const versions = await map.getVersions();
-console.log('Available versions:', versions);
-
-// Restore a version
-await map.restoreVersion('version-id-123');
-```
+Save map versions with custom names, descriptions, and tags. List available versions and restore previous versions as needed for version control and rollback capabilities.
 
 ## Performance Features
 
 ### Spatial Indexing
-```javascript
-// Create spatial index for large dataset
-await map.createSpatialIndex({
-  layerId: 'large-polygon-layer',
-  method: 'rtree',
-  fields: ['geometry', 'properties']
-});
 
-// Query with spatial index
-const results = await map.query({
-  layerId: 'large-polygon-layer',
-  bounds: [minLng, minLat, maxLng, maxLat],
-  useIndex: true
-});
-```
+Create spatial indexes for large datasets using various methods like R-tree. Query data efficiently using spatial bounds with index optimization for improved performance.
 
 ### Level of Detail
-```javascript
-// Configure level of detail
-map.setLevelOfDetail({
-  layerId: 'large-polygon-layer',
-  levels: [
-    { zoom: 0, detail: 0.1 },
-    { zoom: 5, detail: 0.5 },
-    { zoom: 10, detail: 1.0 }
-  ]
-});
-```
+
+Configure level of detail for different zoom levels to optimize performance and rendering quality based on the current view scale.
 
 ## Advanced Features
 
 ### 3D Visualization
-```javascript
-// Enable 3D mode
-map.enable3D({
-  terrain: 'srtm',
-  buildings: 'osm',
-  atmosphere: true
-});
 
-// Add 3D layer
-await map.add3DLayer({
-  type: 'pointcloud',
-  source: 'laser-scan.las',
-  color: 'intensity'
-});
-```
+Enable 3D mode with terrain, buildings, and atmospheric effects. Add 3D layers including point clouds and other volumetric data for immersive visualization.
 
 ### Custom Styling
-```javascript
-// Advanced styling for vector layers
-map.setStyle({
-  layerId: 'polygon-layer',
-  style: {
-    fill: {
-      color: ['interpolate', ['linear'], ['zoom'], 0, '#ff0000', 10, '#00ff00'],
-      opacity: 0.8
-    },
-    stroke: {
-      color: '#000000',
-      width: 2,
-      dasharray: [5, 5]
-    }
-  }
-});
-```
+
+Apply advanced styling to vector layers with interpolated colors based on zoom level, custom stroke properties, and opacity settings for sophisticated visual effects.
 
 ## Integration
 

@@ -47,7 +47,8 @@
               "products/nika-flow",
               "products/nika-studio",
               "products/nika-labeller",
-              "products/nika-function"
+              "products/nika-function",
+              "products/nika-dashboard"
              ]
           },
           {

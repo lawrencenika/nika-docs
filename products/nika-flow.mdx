@@ -41,35 +41,21 @@ NikaFlow is a visual ETL (Extract, Transform, Load) conversion engine designed s
 
 ## Common Use Cases
 
-### Data Migration
-- **Legacy System Migration**: Convert old GIS data to modern formats
-- **Database Migration**: Move data between different spatial databases
-- **Cloud Migration**: Transfer on-premises data to cloud storage
+### Data Transformation
+- **Legacy System Migration**: Convert old GIS data formats such as CADRG to modern formats
 
 ### Data Processing
 - **Coordinate System Conversion**: Transform data between different CRS
-- **Geometry Operations**: Perform spatial analysis and transformations
-- **Attribute Processing**: Clean, validate, and transform attribute data
-- **Data Quality**: Validate and fix common data issues
+- **Compression**: Choose different supported compression algorithm during conversion (lossy or lossless)
+- **Split/Merge Operations**: Use wildcard filename to merge multiple sources into one or use split flag to separate each object from the source
 
 ### 3D Data Processing
 - **Point Cloud Processing**: Convert and process LiDAR data
-- **3D Model Conversion**: Transform between different 3D formats
-- **3D Tiles Generation**: Create optimized 3D tiles for web visualization
+- **3D Mesh/Scene Conversion**: Transform between different 3D model formats
+- **3D Tiles Generation**: Create optimized 3D tile formats for web visualization
 
-## Best Practices
-
-### Workflow Design
-1. **Start Simple**: Begin with basic transformations and add complexity gradually
-2. **Test Early**: Validate data at each step to catch issues early
-3. **Use Templates**: Leverage pre-built templates for common tasks
-4. **Document Workflows**: Add descriptions and comments to your workflows
-
-### Performance
-1. **Flexible Compute**: Ability to use large RAM or CPU for data of different sizes
-2. **Parallel Processing**: Enable parallel processing for large datasets
-3. **Caching**: Use caching for frequently accessed data
-4. **Resource Management**: Monitor and optimize resource usage
+### Source Trigger Pipeline
+- **Upload Trigger**: Set the source to be a folder, so that every new batch of uploaded files there will be auto converted based on prior configuration (to be built)
 
 ## Get Expert Help 
 

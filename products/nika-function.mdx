@@ -1,72 +1,37 @@
 ---
-title: "NikaFunction (Beta)"
-description: "One-click deploy Python scripts as serverless functions with AI agent to create flow diagrams for data processing engineering"
+title: "NikaFunction (Preview)"
+description: "One-click deploy Python scripts as geospatial serverless functions for multiple purposes"
 icon: "code"
 ---
 
 <Note>
-NikaFunction is currently in Public Beta. Some advanced features may still have glitches, which you can report at mailto:support@nikaplanet.com.
+This product is currently in limited preview. Features and functionality may change drastically. If you are interested in this feature, you may talk to us at mailto:sales@nikaplanet.com.
 </Note>
 
 import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
 ## Overview
 
-NikaFunction is a powerful serverless function platform that enables you to deploy Python scripts as serverless functions with one click, and leverage AI agents to create intelligent flow diagrams for complex data processing pipelines. Built for data engineers and analysts who need scalable, automated serverless workflows.
+NikaFunction is a powerful serverless function platform that enables you to deploy Python scripts as geosptial serverless functions with one click, and you can leverage AI agents to modify the code.
 
-![NikaFunction Interface](/products/nika-flow-2.jpg)
+![NikaFunction Interface](/products/nika-function.jpg)
 
 ## Key Features
 
-### One-Click Serverless Deployment
-- **Instant Deployment**: Deploy Python scripts as serverless functions with a single click
-- **Auto-Scaling**: Automatic scaling based on workload demands
-- **Pay-Per-Use**: Only pay for actual function execution time
-- **Zero Infrastructure**: No server management or configuration required
+### Simple Geospatial Library Configuration 
+- **GDAL support**: simply add gdal==="*" to choose the latest version of GDAL for your script to depend on
+- **Confa-forge/Pypi support**: simply add any other python library with version id to be installed directly
+- **CUDA support**: GPU VM options will already come with compatible CUDA pre-installed for your PyTorch script to use
 
-### AI-Powered Flow Design
-- **Intelligent Flow Creation**: AI agent automatically creates optimal flow diagrams
-- **Smart Function Chaining**: AI suggests the best way to connect functions
-- **Performance Optimization**: AI recommends optimizations for data processing
-- **Error Handling**: AI-generated error handling and recovery mechanisms
-
-### Data Processing Engineering
-- **ETL Workflows**: Extract, Transform, Load data processing pipelines
-- **Data Validation**: Built-in data quality checks and validation
-- **Transformation Tools**: Rich library of data transformation functions
-- **Monitoring**: Real-time monitoring and alerting for data pipelines
+### Flexible Compute Options
+- **High RAM CPUs**: choose the high RAM CPU options for RAM-heavy geospatial processing needs
+- **Various GPUs**: now comes with NVIDIA T4 with multiple options at your choice, or you can request for more intensive ones such as H100 from Nika
+- **Pay-Per-Use**: only pay for actual function execution hours
 
 ### Integration Capabilities
-- **Multiple Data Sources**: Connect to databases, cloud storage, and more
-- **Format Support**: Handle CSV, JSON, Parquet, Avro, and other formats
-- **Geospatial Data**: Specialized support for spatial data processing
-- **Real-time Processing**: Stream processing capabilities for live data
-
-## Getting Started
-
-### Deploying Your First Function
-
-Deploy Python scripts as a Nika Function with a single click. Simply write your data processing function and use the one-click deployment feature to make it available as a serverless function.
-
-## Best Practices
-
-### Function Design
-1. **Single Responsibility**: Each function should do one thing well
-2. **Error Handling**: Implement comprehensive error handling
-3. **Logging**: Add detailed logging for debugging
-4. **Testing**: Test functions thoroughly before deployment
-
-### Flow Design
-1. **Modularity**: Break complex workflows into smaller functions
-2. **Error Recovery**: Implement retry and recovery mechanisms
-3. **Monitoring**: Add comprehensive monitoring and alerting
-4. **Documentation**: Document flow logic and dependencies
-
-### Performance
-1. **Optimization**: Use AI suggestions for performance optimization
-2. **Caching**: Implement caching for frequently accessed data
-3. **Parallelization**: Use parallel processing where possible
-4. **Resource Management**: Monitor and optimize resource usage
+- **NikaWorkspace**: once deployed successfully, it appears as button click option in your list of function that only your team can use 
+- **NikaFlow**: used as a node option inside NikaFlow, the ETL prodcut of Nika (to be integrated)
+- **NikaAPI**: deployed as an API for your other features or product to make direct API call to (to be built)
 
 ## Get Expert Help 
 

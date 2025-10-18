@@ -40,12 +40,14 @@
             "group": "Products",
             "pages": [
               "products/nika-workspace",
+              "products/nika-notebook",
               "products/nika-hub",
               "products/nika-map",
               "products/nika-dbms",
               "products/nika-flow",
               "products/nika-studio",
-              "products/nika-labeller"
+              "products/nika-labeller",
+              "products/nika-function"
              ]
           },
           {

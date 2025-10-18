@@ -1,0 +1,70 @@
+---
+title: "Edit Conversion Flow"
+description: "Configure input, conversion, and output nodes for your data pipeline"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+## Configuring Input Nodes
+
+### Setting Input Sources
+
+1. Click on an **Input Data** node to open its configuration panel
+2. In the **Include Paths** section, add your data source paths:
+   - All paths **must start with `/data/`** prefix
+   - Use wildcards (e.g., `/data/*.tif`) to include multiple files
+   - Add paths one at a time
+   - Double click an existing path to modify the text
+
+![Input Node Configuration](/guides/data-conversion-pipeline/edit-conversion-flow.jpg)
+
+### Using Exclude Paths
+
+To refine your input scope:
+
+1. In the **Exclude Paths (Optional)** section, specify files to exclude
+2. This is useful when using wildcards - you can include a broad pattern and then exclude specific unwanted files
+3. Example: Include `/data/cwdz02/*.wd2` but exclude `/data/cwdz02/000casdas.wd2`
+
+![Wildcard Include with Exclude Paths](/guides/data-conversion-pipeline/edit-conversion-flow-2.jpg)
+
+### [Advanced] Drag and Drop from Files Panel
+
+For faster path entry:
+
+1. Open the **Files** panel on the left
+2. Select multiple files from the data lake filesystem
+3. Drag and drop them directly into the input node panel's dropzone
+4. This automatically adds all selected file paths that are valid for currently selected input data format
+
+![Drag and Drop Files](/guides/data-conversion-pipeline/edit-conversion-flow-3.gif)
+
+## Configuring Conversion Nodes
+
+### Setting Input and Output Formats
+
+1. Click on a **Format Conversion** node
+2. Configure the conversion parameters:
+   - **Input Type** - Select the data type (Vector, Raster, etc.)
+   - **Input Format** - Choose the source format (GeoJSON, KML, etc.)
+   - **Output Type** - Select the target data type
+   - **Output Format** - Choose the destination format (KMZ, Shapefile, etc.)
+3. Check out [NikaCoFlow page](/products/nika-flow#geospatial-format-support) for latest supported input and output data type/formats
+
+![Conversion Node Configuration](/guides/data-conversion-pipeline/edit-conversion-flow-4.jpg)
+
+## Configuring Output Nodes
+
+### Setting Output Destination
+
+1. Click on an **Output Data** node
+2. The **Data Type** and **Format** will automatically sync with the connected conversion node
+3. Optionally set an **Output Folder Path**:
+   - Must start with `/data/` and end with `/`
+   - If left empty, outputs will be saved in the same folder as each source file
+
+![Output Node Configuration](/guides/data-conversion-pipeline/edit-conversion-flow-5.jpg)
+
+## Get Expert Help
+
+<ContactCTACard />

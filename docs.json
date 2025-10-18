@@ -20,7 +20,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Product/Features",
         "groups": [
           {
             "group": "Get Started",
@@ -75,7 +75,7 @@
         ]
       },
       {
-        "tab": "Guides",
+        "tab": "Step-by-Step Guides",
         "groups": [
           {
             "group": "Tutorials",
@@ -123,6 +123,15 @@
               "guides/database-management/connect-postgres",
               "guides/database-management/connect-motherduck",
               "guides/database-management/query-managed-duckdb"
+            ]
+          },
+          {
+            "group": "Data Conversion Pipeline",
+            "icon": "water",
+            "pages": [
+              "guides/data-conversion-pipeline/create-new-flow",
+              "guides/data-conversion-pipeline/edit-conversion-flow",
+              "guides/data-conversion-pipeline/execute-and-verify-pipeline"
             ]
           },
           {

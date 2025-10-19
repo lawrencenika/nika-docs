@@ -1,6 +1,6 @@
 ---
 title: "NikaCoLabeller (Preview)"
-description: "Annotate, preprocess image based datasets with team labelling capability and direct support of GEOTIFF format on top of traditional images"
+description: "World's first geospatial-friendly labeller for annotating satellite and drone images with real-time collaboration, SAM 2.0 AI assistance, and seamless NikaWorkspace integration"
 icon: "pencil"
 ---
 
@@ -12,115 +12,64 @@ import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
 ## Overview
 
-NikaCoLabeller is a powerful image annotation and preprocessing platform designed specifically for geospatial datasets. With team labeling capabilities and native support for GeoTIFF format, NikaCoLabeller enables organizations to efficiently annotate and prepare image-based datasets for machine learning and analysis workflows.
+NikaCoLabeller is the world's first and only geospatial-friendly annotation platform designed specifically for top-down satellite and drone imagery. Built for efficiency and collaboration, it enables teams to annotate geospatial datasets with real-time synchronization, AI-powered assistance, and seamless integration with NikaWorkspace's data lake.
 
 ![NikaCoLabeller Interface](/products/nika-labeller.jpg)
 
 ## Key Features
 
-### Geospatial Image Support
-- **GeoTIFF Native Support**: Direct support for GeoTIFF format with metadata preservation
-- **Traditional Image Formats**: Support for JPEG, PNG, TIFF, and other common formats
-- **Satellite Imagery**: Optimized for satellite and aerial imagery annotation
-- **Drone Imagery**: Specialized tools for drone and UAV imagery processing
+### Real-time Co-annotation
+- **Live Collaboration**: Multiple users can annotate simultaneously with real-time sync
+- **Cursor Synchronization**: See team members' cursor positions in real-time
+- **Live State Updates**: Approve/reject states and comments sync instantly across all users
+- **Progress Tracking**: Real-time progress bar at the top showing annotation completion
 
-### Team Collaboration
-- **Multi-User Annotation**: Multiple team members can annotate simultaneously
-- **Role-Based Access**: Define different roles and permissions for team members
-- **Progress Tracking**: Monitor annotation progress across the team
-- **Quality Control**: Built-in review and validation workflows
+### COCO Support
+- **COCO 1.0 Import**: Load existing COCO 1.0 datasets as input
+- **COCO 1.0 Export**: Export annotations in standard COCO 1.0 format
+- **Format Compatibility**: Seamless integration with existing ML pipelines
 
-### Advanced Annotation Tools
-- **Polygon Annotation**: Precise polygon drawing for object boundaries
-- **Point Annotation**: Quick point marking for object centers
-- **Line Annotation**: Path and boundary line annotation
-- **Semantic Segmentation**: Pixel-level annotation for detailed analysis
+### Location-Aware Mini Map
+- **Geographic Context**: Load current image in a mini map for geo-referencing
+- **Spatial Navigation**: Navigate between images with geographic awareness
+- **Coordinate Reference**: Maintain spatial accuracy throughout annotation process
 
-### AI-Assisted Annotation
-- **Auto-Segmentation**: AI-powered automatic object detection and segmentation
-- **Smart Suggestions**: Intelligent suggestions for annotation based on image content
-- **Batch Processing**: Process multiple images with AI assistance
-- **Quality Validation**: AI-powered quality checks for annotation accuracy
+### SAM 2.0 AI Assistance
+- **Interactive Segmentation**: Left-click for positive prompts, right-click for negative prompts
+- **Intelligent Suggestions**: AI-powered object detection and segmentation
+- **Faster Annotation**: Speed up annotation workflow with smart AI assistance
+- **H100x1 GPU Support**: High-performance GPU option in VM dropdown for optimal AI processing
 
-## Getting Started
+### Team Management
+- **Role-Based System**: Approver and Labeller roles with distinct permissions
+- **Task Assignment**: Assign and re-assign annotation tasks to specific labellers
+- **Approval Workflow**: Built-in review process with approve/reject functionality
+- **Performance Tracking**: Labeller overview page showing percentage rejected/total for individual performance
 
-### Setting Up a Project
+## Data Integration
 
-Initialize NikaCoLabeller with your project and team credentials. Create annotation projects with custom classes and annotation types for your specific use case.
+### NikaWorkspace Integration
+- **Direct Data Lake Access**: Load JPEG and PNG images directly from NikaWorkspace's data lake filesystem
+- **Task Creation**: Create annotation tasks directly with folders in NikaWorkspace's data lake
+- **Seamless Workflow**: No need to download/upload files - work directly with TBs of images in Nika's cloud platform
 
-### Adding Images
+### Image Processing
+- **Auto Batch Conversion**: Automatically convert GeoTIFF (RGB channels) to JPEG for faster UI loading
+- **Format Support**: Native support for GeoTIFF, JPEG, PNG, and other common formats
+- **Optimized Performance**: Efficient image loading and rendering for large datasets
 
-Add GeoTIFF images with metadata preservation or traditional image formats. Support for satellite imagery, drone data, and standard image formats.
+## User Interface
 
-## Annotation Workflow
+### Annotation Tools
+- **Polygon Drawing**: Draw and edit precise polygon annotations
+- **Navigation Controls**: Pan and zoom functionality for detailed annotation work
+- **Keyboard Shortcuts**: Efficient annotation with customizable keyboard shortcuts
+- **Intuitive Design**: Clean, geospatial-focused interface optimized for satellite imagery
 
-### Creating Annotations
-
-Start annotation sessions and create various types of annotations including polygons, points, and lines with custom properties and confidence levels.
-
-### Team Collaboration
-
-Assign images to team members with different priority levels and implement review workflows for quality control and validation.
-
-## AI-Assisted Features
-
-### Auto-Segmentation
-
-Enable AI-assisted annotation with auto-segmentation and smart suggestions. Apply AI-generated annotations with configurable confidence thresholds.
-
-### Quality Validation
-
-Run comprehensive quality checks including annotation completeness, class distribution, and spatial consistency. Get detailed quality metrics and reports.
-
-## Data Export
-
-### Export Formats
-
-Export annotations in multiple formats including GeoJSON, COCO, and YOLO with options for metadata inclusion and georeference preservation.
-
-### Integration with ML Pipelines
-
-Export data for machine learning training with configurable train/validation/test splits and data augmentation options.
-
-## Advanced Features
-
-### Custom Annotation Tools
-
-Create custom annotation tools with validation rules and auto-completion features for specialized annotation workflows.
-
-### Batch Processing
-
-Process multiple images in batch operations with configurable workflows including auto-segmentation, quality checks, and export functions.
-
-
-## Best Practices
-
-### Project Setup
-1. **Clear Objectives**: Define clear annotation goals and requirements
-2. **Class Definition**: Create comprehensive and non-overlapping classes
-3. **Quality Guidelines**: Establish clear quality standards and guidelines
-4. **Team Training**: Provide training for team members on annotation tools
-
-### Annotation Quality
-1. **Consistency**: Maintain consistent annotation style across team
-2. **Validation**: Regular quality checks and validation
-3. **Documentation**: Document edge cases and special instructions
-4. **Iteration**: Continuously improve based on feedback
-
-### Performance
-1. **Batch Processing**: Use batch operations for large datasets
-2. **Caching**: Enable caching for frequently accessed data
-3. **Optimization**: Optimize image loading and rendering
-4. **Monitoring**: Monitor system performance and usage
-
-## Integration
-
-NikaCoLabeller integrates with other Nika products:
-
-- **NikaWorkspace**: Use annotated data for analysis
-- **NikaStudio**: Create applications with annotated datasets
-- **NikaCoMap**: Visualize annotation results on maps
-- **AI Agent**: Get intelligent suggestions for annotation
+### Job Management
+- **Job States**: Track progress with states (pending, in-progress, rejected, approved)
+- **Image Instructions**: Add instruction messages per image as caveats for specific annotation requirements
+- **Batch Operations**: Process multiple images efficiently with batch tools
 
 ## Get Expert Help 
 

@@ -11,7 +11,7 @@ Anthropic's Claude models provide exceptional reasoning capabilities and analyti
 
 ## Available Models
 
-### Claude Sonnet 4
+### Claude Sonnet 4.5
 **Best for**: Complex analysis, reasoning, and detailed geospatial workflows
 
 #### Key Capabilities
@@ -109,7 +109,7 @@ def create_interactive_map(gdf, column_name, title="Interactive Map"):
 - **Indexing**: Strategic index recommendations
 - **Error Handling**: Robust error management and recovery
 
-### Claude Haiku 3.5
+### Claude Haiku 4.0
 **Best for**: Fast processing, real-time applications, and cost-effective solutions
 
 #### Key Capabilities
@@ -166,7 +166,7 @@ def create_interactive_map(gdf, column_name, title="Interactive Map"):
 ```javascript
 const sonnetConfig = {
   provider: 'anthropic',
-  model: 'claude-sonnet-4',
+  model: 'claude-sonnet-4.5',
   temperature: 0.3,
   maxTokens: 4096,
   systemPrompt: `You are an expert geospatial analyst. Provide detailed, 
@@ -183,7 +183,7 @@ const sonnetConfig = {
 ```javascript
 const haikuConfig = {
   provider: 'anthropic',
-  model: 'claude-haiku-3.5',
+  model: 'claude-haiku-4.0',
   temperature: 0.1,
   maxTokens: 2048,
   systemPrompt: `You are a fast, efficient geospatial assistant. 
@@ -198,7 +198,7 @@ const haikuConfig = {
 
 ## Performance Metrics
 
-| Metric | Claude Sonnet 4 | Claude Haiku 3.5 |
+| Metric | Claude Sonnet 4.5 | Claude Haiku 4.0 |
 |--------|-----------------|-------------------|
 | **Response Time** | 2-5 seconds | 0.5-2 seconds |
 | **Code Quality** | 9.2/10 | 7.8/10 |
@@ -229,7 +229,7 @@ import nikaplanet.com as nai
 # Initialize with Anthropic
 client = nai.Client(
     llm_provider='anthropic',
-    model='claude-sonnet-4'
+    model='claude-sonnet-4.5'
 )
 
 # Complex analysis task
@@ -252,21 +252,21 @@ workflow = nai.Workflow()
 # Use Haiku for data preprocessing
 workflow.add_step(
     'preprocess',
-    model='claude-haiku-3.5',
+    model='claude-haiku-4.0',
     task='data_cleaning'
 )
 
 # Use Sonnet for complex analysis
 workflow.add_step(
     'analyze',
-    model='claude-sonnet-4',
+    model='claude-sonnet-4.5',
     task='spatial_analysis'
 )
 
 # Use Haiku for visualization
 workflow.add_step(
     'visualize',
-    model='claude-haiku-3.5',
+    model='claude-haiku-4.0',
     task='create_map'
 )
 

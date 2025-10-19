@@ -11,7 +11,7 @@ Google's Gemini models excel in multimodal understanding and processing, making 
 
 ## Available Models
 
-### Gemini 2.5 Pro
+### Gemini 3.0 Pro
 **Best for**: Multimodal analysis, complex spatial reasoning, and advanced visualization
 
 #### Key Capabilities
@@ -238,7 +238,7 @@ if __name__ == "__main__":
 - **Performance Tuning**: Sophisticated query optimization
 - **Data Integration**: Seamless integration of multiple data sources
 
-### Gemini 2.5 Flash
+### Gemini 3.0 Flash
 **Best for**: High-speed processing, real-time applications, and efficient workflows
 
 #### Key Capabilities
@@ -295,7 +295,7 @@ if __name__ == "__main__":
 ```javascript
 const geminiProConfig = {
   provider: 'gemini',
-  model: 'gemini-2.5-pro',
+  model: 'gemini-3.0-pro',
   temperature: 0.3,
   maxTokens: 4096,
   systemPrompt: `You are an expert geospatial analyst specializing in multimodal data analysis. 
@@ -313,7 +313,7 @@ const geminiProConfig = {
 ```javascript
 const geminiFlashConfig = {
   provider: 'gemini',
-  model: 'gemini-2.5-flash',
+  model: 'gemini-3.0-flash',
   temperature: 0.1,
   maxTokens: 2048,
   systemPrompt: `You are a fast, efficient geospatial assistant. 
@@ -328,7 +328,7 @@ const geminiFlashConfig = {
 
 ## Performance Metrics
 
-| Metric | Gemini 2.5 Pro | Gemini 2.5 Flash |
+| Metric | Gemini 3.0 Pro | Gemini 3.0 Flash |
 |--------|----------------|-------------------|
 | **Response Time** | 2-4 seconds | 0.5-1.5 seconds |
 | **Multimodal Quality** | 9.4/10 | 7.5/10 |
@@ -359,7 +359,7 @@ import nikaplanet.com as nai
 # Initialize with Gemini
 client = nai.Client(
     llm_provider='gemini',
-    model='gemini-2.5-pro'
+    model='gemini-3.0-pro'
 )
 
 # Multimodal spatial analysis
@@ -381,28 +381,28 @@ workflow = nai.Workflow()
 # Use Gemini Pro for data preprocessing
 workflow.add_step(
     'preprocess',
-    model='gemini-2.5-pro',
+    model='gemini-3.0-pro',
     task='multimodal_data_preprocessing'
 )
 
 # Use Gemini Flash for quick analysis
 workflow.add_step(
     'analyze',
-    model='gemini-2.5-flash',
+    model='gemini-3.0-flash',
     task='spatial_analysis'
 )
 
 # Use Gemini Pro for visualization
 workflow.add_step(
     'visualize',
-    model='gemini-2.5-pro',
+    model='gemini-3.0-pro',
     task='advanced_visualization'
 )
 
 # Use Gemini Flash for reporting
 workflow.add_step(
     'report',
-    model='gemini-2.5-flash',
+    model='gemini-3.0-flash',
     task='generate_report'
 )
 

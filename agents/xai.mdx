@@ -11,7 +11,7 @@ xAI's Grok models provide advanced reasoning capabilities and creative problem-s
 
 ## Available Models
 
-### Grok-3
+### Grok-4
 **Best for**: Advanced reasoning, creative solutions, and innovative approaches to complex problems
 
 #### Key Capabilities
@@ -417,7 +417,7 @@ if __name__ == "__main__":
 - **Performance Optimization**: Creative optimization strategies
 - **Data Integration**: Novel data combination methods
 
-### Grok-3 Mini
+### Grok-4 Mini
 **Best for**: Fast reasoning, efficient problem solving, and cost-effective solutions
 
 #### Key Capabilities
@@ -472,9 +472,9 @@ if __name__ == "__main__":
 
 ### Grok-3 Configuration
 ```javascript
-const grok3Config = {
+const grok4Config = {
   provider: 'xai',
-  model: 'grok-3',
+  model: 'grok-4',
   temperature: 0.4,
   maxTokens: 4096,
   systemPrompt: `You are an expert spatial analyst with creative problem-solving abilities. 
@@ -490,9 +490,9 @@ const grok3Config = {
 
 ### Grok-3 Mini Configuration
 ```javascript
-const grok3MiniConfig = {
+const grok4MiniConfig = {
   provider: 'xai',
-  model: 'grok-3-mini',
+  model: 'grok-4-mini',
   temperature: 0.2,
   maxTokens: 2048,
   systemPrompt: `You are a fast, efficient spatial analyst. 
@@ -507,7 +507,7 @@ const grok3MiniConfig = {
 
 ## Performance Metrics
 
-| Metric | Grok-3 | Grok-3 Mini |
+| Metric | Grok-4 | Grok-4 Mini |
 |--------|--------|-------------|
 | **Response Time** | 3-5 seconds | 1-2 seconds |
 | **Reasoning Quality** | 9.3/10 | 7.8/10 |
@@ -538,7 +538,7 @@ import nikaplanet.com as nai
 # Initialize with xAI
 client = nai.Client(
     llm_provider='xai',
-    model='grok-3'
+    model='grok-4'
 )
 
 # Creative spatial analysis
@@ -558,35 +558,35 @@ workflow = nai.Workflow()
 # Use Grok-3 for creative problem definition
 workflow.add_step(
     'problem_definition',
-    model='grok-3',
+    model='grok-4',
     task='creative_problem_analysis'
 )
 
 # Use Grok-3 Mini for data preprocessing
 workflow.add_step(
     'preprocess',
-    model='grok-3-mini',
+    model='grok-4-mini',
     task='data_preprocessing'
 )
 
 # Use Grok-3 for creative analysis
 workflow.add_step(
     'analyze',
-    model='grok-3',
+    model='grok-4',
     task='innovative_spatial_analysis'
 )
 
 # Use Grok-3 Mini for visualization
 workflow.add_step(
     'visualize',
-    model='grok-3-mini',
+    model='grok-4-mini',
     task='create_visualization'
 )
 
 # Use Grok-3 for insight generation
 workflow.add_step(
     'insights',
-    model='grok-3',
+    model='grok-4',
     task='generate_creative_insights'
 )
 

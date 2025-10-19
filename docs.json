@@ -57,9 +57,7 @@
               "integrations/arcgis",
               "integrations/qgis",
               "integrations/google-earth-engine",
-              "integrations/fme",
-              "integrations/postgresql",
-              "integrations/duckdb"
+              "integrations/fme"
             ]
           },
           {

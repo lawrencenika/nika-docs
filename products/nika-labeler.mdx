@@ -1,20 +1,16 @@
 ---
-title: "NikaLabeller (Preview)"
-description: "World's first geospatial-friendly labeller for annotating satellite and drone images with real-time collaboration, SAM 2.0 AI assistance, and seamless NikaWorkspace integration"
+title: "NikaLabeler"
+description: "World's first geospatial-friendly labeler for annotating satellite and drone images with real-time collaboration, SAM 2.0 AI assistance, and seamless NikaWorkspace integration"
 icon: "pencil"
 ---
-
-<Note>
-This product is currently in limited preview. Features and functionality may change drastically. If you are interested in this feature, you may talk to us at [sales@nikaplanet.com](mailto:sales@nikaplanet.com).
-</Note>
 
 import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
 ## Overview
 
-NikaLabeller is the world's first and only geospatial-friendly annotation platform designed specifically for top-down satellite and drone imagery. Built for efficiency and collaboration, it enables teams to annotate geospatial datasets with real-time synchronization, AI-powered assistance, and seamless integration with NikaWorkspace's data lake.
+NikaLabeler is the world's first and only geospatial-friendly image annotation platform designed specifically for top-down satellite and drone imagery. Built for efficiency and collaboration, it enables teams to annotate geospatial datasets with real-time synchronization, AI-powered assistance, and seamless integration with NikaWorkspace's data lake.
 
-![NikaLabeller Interface](/products/nika-labeller.jpg)
+![NikaLabeler Interface](/products/nika-labeler.jpg)
 
 ## Key Features
 
@@ -24,27 +20,31 @@ NikaLabeller is the world's first and only geospatial-friendly annotation platfo
 - **Live State Updates**: Approve/reject states and comments sync instantly across all users
 - **Progress Tracking**: Real-time progress bar at the top showing annotation completion
 
-### COCO Support
-- **COCO 1.0 Import**: Load existing COCO 1.0 datasets as input
-- **COCO 1.0 Export**: Export annotations in standard COCO 1.0 format
+### Annotation Format Support
+- **Import/Export**: Support for various annotation formats including COCO 1.0
+- **COCO 1.0 Compatible**: Full support for importing and exporting in standard COCO 1.0 format
 - **Format Compatibility**: Seamless integration with existing ML pipelines
 
-### Location-Aware Mini Map
-- **Geographic Context**: Load current image in a mini map for geo-referencing
+### Show Image Bound in NikaMap
+- **Geographic Context**: Load current image in a [NikaMap](/products/nika-map) for geo-referencing
 - **Spatial Navigation**: Navigate between images with geographic awareness
 - **Coordinate Reference**: Maintain spatial accuracy throughout annotation process
 
-### SAM 2.0 AI Assistance
+### SAM2 Smart Segmentation
 - **Interactive Segmentation**: Left-click for positive prompts, right-click for negative prompts
 - **Intelligent Suggestions**: AI-powered object detection and segmentation
 - **Faster Annotation**: Speed up annotation workflow with smart AI assistance
-- **H100x1 GPU Support**: High-performance GPU option in VM dropdown for optimal AI processing
+
+### SAM3 Text-Prompted Segmentation
+- **Text-Based Segmentation**: Leverage SAM3's cutting-edge text prompting to segment objects by simply describing them
+- **Boost Efficiency**: Dramatically accelerate annotation workflows by using natural language instead of manual clicks
+- **Smart Object Detection**: Automatically identify and segment complex objects using descriptive text prompts
 
 ### Team Management
-- **Role-Based System**: Approver and Labeller roles with distinct permissions
-- **Task Assignment**: Assign and re-assign annotation tasks to specific labellers
-- **Approval Workflow**: Built-in review process with approve/reject functionality
-- **Performance Tracking**: Labeller overview page showing percentage rejected/total for individual performance
+- **Role-Based System**: Reviewer and Labeler roles with distinct permissions
+- **Task Assignment**: Assign and re-assign annotation tasks to specific labelers
+- **Approval Workflow**: Built-in review process with approve/reject action
+- **Performance Tracking**: Labeler overview page showing percentage rejected/total for individual performance
 
 ## Data Integration
 
@@ -67,7 +67,7 @@ NikaLabeller is the world's first and only geospatial-friendly annotation platfo
 - **Intuitive Design**: Clean, geospatial-focused interface optimized for satellite imagery
 
 ### Job Management
-- **Job States**: Track progress with states (pending, in-progress, rejected, approved)
+- **Job States**: Track progress with states (pending, in-progress, submitted for review, rejected, approved)
 - **Image Instructions**: Add instruction messages per image as caveats for specific annotation requirements
 - **Batch Operations**: Process multiple images efficiently with batch tools
 

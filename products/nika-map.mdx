@@ -1,84 +1,77 @@
 ---
 title: "NikaMap"
-description: "World's first collaborative auto-saving map that can visualize millions of vector polygons, GBs of raster images, even drone images out of box"
+description: "High-performance WebGL-based map framework for large-scale geospatial data. NikaMap Sync adds real-time collaboration with auto-save like Google Docs for maps"
 icon: "globe"
 ---
-
-<Note>
-NikaMap is currently in Public Beta. Some advanced features may still have glitches, which you can report at [support@nikaplanet.com](mailto:support@nikaplanet.com)m.
-</Note>
 
 import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
 ## Overview
 
-NikaMap is the world's first collaborative auto-saving map platform designed to handle massive geospatial datasets with unprecedented performance. Built for teams and organizations that need to visualize and collaborate on large-scale spatial data, NikaMap can handle millions of vector polygons, gigabytes of raster images, and even drone imagery out of the box.
+NikaMap is a high-performance WebGL-based large-scale map framework designed to handle massive geospatial datasets with unprecedented efficiency. Leveraging advanced GPU-accelerated rendering techniques, NikaMap delivers desktop-class GIS performance directly in the browser.
 
 ![NikaMap Interface](/products/nika-map.jpg)
 
-## Key Features
+## Core Capabilities
 
-### Massive Data Visualization
-- **Millions of Polygons**: Render millions of vector polygons without performance degradation
-- **Gigabyte Raster Support**: Handle massive raster datasets with intelligent tiling
-- **Drone Image Integration**: Native support for drone imagery and aerial photography
-- **Real-time Rendering**: Smooth performance even with complex datasets
+### High-Performance Rendering
+- **Large-Scale Vector Data**: Efficiently render millions of vector features with GPU-accelerated processing
+- **Massive Raster Support**: Handle gigabytes of raster imagery with intelligent tiling and streaming
+- **Advanced Symbology**: Rich styling capabilities including data-driven visualizations, custom color ramps, and complex symbology rules
+- **3D Visualization**: Native 3D rendering support for terrain, buildings, and volumetric data
+- **Smooth Performance**: WebGL-powered rendering ensures fluid interactions even with complex datasets
 
-### Collaborative Mapping
-- **Auto-Save**: Never lose your work with automatic saving
-- **Real-time Collaboration**: Multiple users can edit maps simultaneously
-- **Version Control**: Track changes and maintain map edit history
-- **Conflict Resolution**: Intelligent conflict detection and resolution
+### Data Format Support
+- **Vector Formats**: GeoParquet, GeoPackage, FlatGeobuf, GeoJSON, Shapefiles, KML/KMZ
+- **Raster Formats**: GeoTIFF, Cloud Optimized GeoTIFF (COG), JPEG2000, ECW, HFA
+- **Drone Imagery**: Native support for JPEG with EXIF metadata and aerial photography
 
-### Advanced Visualization
+### Visualization Features
 - **Multiple Layer Types**: Vector, raster, point cloud, and 3D layers
 - **Custom Styling**: Advanced styling options for all data types
 - **Interactive Features**: Popups, tooltips, and dynamic interactions
+
+## NikaMap Sync
+
+![NikaMap Sync](/images/changelog/2025-11-12-1.jpg)
+
+NikaMap Sync is a collaborative variant of NikaMap that brings real-time collaboration and cloud-native capabilities to large-scale mapping. With NikaMap Sync, you get a desktop-native GIS experience in the cloud with seamless access to massive datasets.
+
+### Real-Time Collaboration
+- **Multi-User Editing**: Multiple users can edit maps simultaneously with live cursor tracking
+- **Auto-Save Like Google Docs**: Every change is automatically saved in real-time—never lose your work
+- **Instant Synchronization**: See changes from collaborators appear instantly on your map
+- **Conflict Resolution**: Intelligent conflict detection and automatic resolution for concurrent edits
+
+### Cloud-Native GIS Experience
+- **Desktop Performance in Browser**: Full-featured GIS capabilities without installing desktop software
+- **Seamless Data Access**: Tap into large-scale datasets stored in the cloud without local downloads
+- **Version History**: Track all changes with complete edit history and rollback capabilities
+- **Collaborative Permissions**: Granular control over who can view, edit, or manage map layers
+
+### Enterprise Features
+- **Team Workspaces**: Organize maps and data within shared team environments
+- **Change Tracking**: Audit trail of all edits with user attribution and timestamps
+- **Branching & Merging**: Create map variants and merge changes back to main version
+- **Real-Time Notifications**: Get notified when collaborators make changes to shared maps
 
 ## Getting Started
 
 ### Creating Your First Map
 
-Initialize NikaMap with your container element and configure center, zoom, auto-save, and collaborative features. Add various layer types including vector layers with millions of polygons, raster layers with gigabytes of data, and drone imagery with automatic georeferencing.
+Initialize NikaMap with your container element and configure center, zoom, and visualization options. Add various layer types including vector layers with millions of polygons, raster layers with gigabytes of data, and drone imagery with automatic georeferencing.
 
-## Data Sources
+For NikaMap Sync, simply enable the `sync` option to activate real-time collaboration and auto-save features.
 
-### Vector Data
-- **GeoParquet**: High-performance columnar format for large datasets
-- **GeoPackage**: Modern SQLite-based geospatial format
-- **FlatGeobuf**: Fast binary format for streaming large datasets
-- **GeoJSON**: Large GeoJSON files with streaming
-- **Shapefiles**: Traditional GIS format support
-- **KML/KMZ**: Google Earth format support
-
-### Raster Data
-- **GeoTIFF**: High-resolution raster support
-- **Cloud Optimized GeoTIFF (COG)**: Optimized for web delivery
-- **JPEG2000**: Compressed raster format
-- **ECW**: Enhanced Compression Wavelet format
-- **HFA**: Hierarchical File Format (Erdas Imagine)
-
-### Drone Data
-- **JPEG**: JPEG with EXIF metadata are supported out of box
-
-## Collaboration Features
-
-### Real-time Editing
-
-Enable real-time collaboration with configurable permissions for editing, adding, and deleting layers. Listen for changes from other users and implement custom change handlers.
-
-### Version Control
-
-Save map versions with custom names, descriptions, and tags. List available versions and restore previous versions as needed for version control and rollback capabilities.
 
 ## Integration
 
 NikaMap integrates seamlessly with other Nika products:
 
-- **NikaWorkspace**: Use workspace data directly in maps
-- **NikaStudio**: Embed maps in custom applications
-- **NikaHub**: Share and publish maps
-- **NikaGAIA**: Get intelligent suggestions for map styling and analysis
+- **[NikaWorkspace](/products/nika-workspace)**: Use workspace data directly in maps
+- **[NikaStudio](/products/nika-studio)**: Embed maps in custom applications
+- **[NikaHub](/products/nika-hub)**: Share and publish maps
+- **[NikaNotebook](/products/nika-notebook)**: Analyze map data with Python notebooks
 
 *There are more real-life examples published by Nika community at [https://planet.nika.eco/en/hub/maps](https://planet.nika.eco/en/hub/maps)*
 

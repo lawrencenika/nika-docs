@@ -4,6 +4,38 @@ description: "Product updates and announcements for Nika products"
 rss: true
 ---
 
+<Update label="January 19, 2026" description="v0.5.20">
+  ## NikaLabeler Advanced Workflow & Performance Tracking
+  
+  ### New Features
+  - **Launching NikaMap(Draft)**: Think of it like a temporary map in QGIS that is created but not saved at all until user chooses to make it a permenant one. It can be used for quick visualization of data on map for QA/QC.
+  - **Geo-Referenced Image Loading**: Load current image from NikaLabeler with geo-references in NikaMap with satellite basemap for spatial context awareness to guide annotation precision
+  - **Job Status Management**: Comprehensive job status tracking (Unassigned, In-Progress, Submitted, Rejected, Approved) for better workflow management
+  - **Labeler Performance Dashboard**: New overview page showing individual labeler performance metrics including rejection rate and completion statistics
+  - **Per-Image Instructions**: Added ability to attach instruction messages and caveats to specific images within jobs
+  
+  ### Feature Improvements
+  - **Keyboard Shortcuts**: Introduced keyboard shortcuts for faster annotation workflow
+  - **Real-Time Review Sync**: Approve/reject states and comments now sync in real-time across all collaborators
+  - **Folder Upload**: Added support for image upload by folder directly from the desktop
+  - **Batch Upload Fix**: Fixed the limit of 5 images per upload to the image labeler to allow for larger batch processing
+  
+  ![NikaLabeler Workflow](/guides/image-labeling/review-existing-annotations-2.jpg)
+</Update>
+
+<Update label="January 13, 2026" description="v0.5.19">
+  ## Real-Time Usage Dashboard & Advanced Analytics
+  
+  ### New Features
+  - **Real-Time Usage Tracking**: The usage dashboard is now updated to be more accurate with real-time queries against compute and storage usage, as compared to the previous 24-hour log aggregation method.
+  - **Extended Query Ranges**: Added support for various query ranges including last 1 week, last 1 month, last 3 months, last 1 year, and a custom date range selector.
+  - **Interactive Data Filtering**: Ability to filter the usage table by column, with the chart dynamically updating to show the filtered results.
+  - **Flexible Usage Aggregation**: Aggregate usage data in charts by month or by all resource types for granular analysis.
+  - **Data Export Options**: Download the usage table in CSV or JSON formats for external use.
+
+  ![Real-Time Usage Dashboard](/images/changelog/2026-01-13.jpg)
+</Update>
+
 <Update label="January 2, 2026" description="v0.5.18">
   ## NikaLabeler Collaboration & AI-Assisted Annotation
   

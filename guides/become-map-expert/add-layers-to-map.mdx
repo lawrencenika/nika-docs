@@ -94,13 +94,34 @@ Same as **Method 1**, just via dragging
 - **Vector Functions**: Right-click on a vector layer to access function options
 - **Delete Layer/Group**: Right-click on a layer or group node to delete them instantly from the map
 
-## Step 6: Customize Layer Appearance
+## Step 6: Copy Features to a New Layer
+
+You can copy features from one vector layer into a brand-new layer — either all features at once, or only a selected subset.
+
+### Copy All Features
+1. **Right-click** on a vector layer in the layers panel
+2. Select **"Copy all features to new layer"**
+3. A new layer named **"Copy of [original name]"** appears in the layer list with all features duplicated
+
+### Copy Selected Features
+1. **Select the vector layer** by clicking on it in the layers panel
+2. **Select features** on the map by clicking individual features, or multi-select from the attribute table
+3. **Right-click** on the layer in the layers panel
+4. The menu item now shows **"Copy N feature(s) to new layer"** where N is the number of selected features
+5. Click it to create a new layer containing only the selected features
+6. Your selection is automatically cleared after the copy completes
+
+<Tip>
+This is useful for splitting a large dataset into smaller layers based on specific features of interest, or for isolating a subset of features to style or export independently.
+</Tip>
+
+## Step 7: Customize Layer Appearance
 
 ### Access Layer Styling
-1. **Raster Layer**: Go to [Vector Layer Stylings](/guides/become-map-expert/vector-styling) to view all styles currently supported
-2. **Vector Layer**: Go to [Raster Layer Stylings](/guides/become-map-expert/raster-styling) to view all visualizations currently supported
+1. **Vector Layer**: Go to [Vector Layer Stylings](/guides/become-map-expert/vector-styling) to view all styles currently supported
+2. **Raster Layer**: Go to [Raster Layer Stylings](/guides/become-map-expert/raster-styling) to view all visualizations currently supported
 
-## Step 7: Export Layers from Map
+## Step 8: Export Layers from Map
 
 ### Different Export options
 1. **Single Vector Layer**: Right-click to export as GeoJson from map. Choose whether to desktop or to NikaWorkspace file storage
@@ -108,7 +129,7 @@ Same as **Method 1**, just via dragging
 
 ![Layer Properties](/guides/become-map-expert/add-layers-to-map-7.jpg)
 
-## Step 8: Troubleshooting Common Issues
+## Step 9: Troubleshooting Common Issues
 
 ### Layer Not Appearing
 - **Check Visibility**: Ensure the layer is visible (eye icon)

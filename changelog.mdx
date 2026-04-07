@@ -4,45 +4,183 @@ description: "Product updates and announcements for Nika products"
 rss: true
 ---
 
+<Update label="March 24, 2026" description="v0.5.30">
+  ## Persistent Draft Maps
+
+### New Features
+
+- **Save Draft Maps**: Draft maps can now be saved as permanent shared maps directly from the map editor, so temporary map work is no longer lost when leaving the page
+
+### Bug Fixes
+
+- Fixed map card height rendering in NikaHub
+- Fixed layer group buttons not updating properly when new children are added
+
+![Save Draft Map](/images/changelog/2026-03-24.jpg)
+
+</Update>
+
+<Update label="March 20, 2026" description="v0.5.29">
+  ## Free Plan Launch & Map Legends
+
+### New Features
+
+- **NikaPlanet Free Plan**: NikaPlanet is now accessible to everyone under a free tier with storage tracking, seat management, and usage limits per product
+- **Onboarding Survey**: New users are guided through a personalized onboarding flow to collect organization details and industry information
+- **Map Legends**: Layer lists now display legends for both vector and raster symbology with collapsible layout per layer, including support for solid, gradient, and unique value colour modes
+
+### Feature Improvements
+
+- **Plan Management**: Added plan deletion with confirmation dialog, no-expiry subscription option, and visual quota indicators for storage and seats
+- **Owner Column**: Added owner name to tenant and plan list views for better resource attribution
+- **Celebration Animation**: Added a celebratory animation when users complete the onboarding flow
+
+![Free Plan & Legends](/images/changelog/2026-03-20.jpg)
+
+</Update>
+
+<Update label="March 13, 2026" description="v0.5.28">
+  ## Vector Tile Rendering for Large Datasets
+
+### New Features
+
+- **Automatic Vector Tile Optimization**: Large vector datasets are now automatically converted into vector tiles for fast, scalable map rendering — no manual processing required
+
+### Feature Improvements
+
+- **Improved Email Delivery**: Migrated invitation emails to a more reliable provider for better deliverability
+- **Faster Load Times**: Updated the map rendering engine and removed unused components for improved application performance
+
+![Vector Tile Rendering](/images/changelog/2026-03-13.jpg)
+
+</Update>
+
+<Update label="March 5, 2026" description="v0.5.27">
+  ## Revamped Map Layer List
+
+### New Features
+
+- **Layer Drag & Reorder**: Layers in NikaMap can now be reordered by dragging, giving users full control over draw order
+- **Selected Features Row**: Selected features now display alongside each layer with a feature count and quick actions to open the attribute table, clear selection, or export
+- **Collapsible Layer Groups**: Revamped the layer list UI with expand/collapse functionality and a zoom-to-layer action for faster navigation
+
+![Layer List](/images/changelog/2026-03-05.jpg)
+
+</Update>
+
+<Update label="February 28, 2026" description="v0.5.26">
+  ## Notebook Import & Batch Segmentation
+
+### New Features
+
+- **Jupyter Notebook Import**: Import existing .ipynb notebook files directly into NikaNotebook to continue working on your analysis seamlessly
+- **Batch Segmentation with "Find All"**: Introduced "Find All" in NikaLabeler to automatically detect and annotate similar objects across an image using AI-powered similarity search, with progress tracking and "Accept All" for rapid annotation
+
+### Feature Improvements
+
+- **Labeler Performance**: Improved real-time collaboration performance in NikaLabeler for smoother annotation in larger sessions
+
+![Find All Segmentation](/images/changelog/2026-02-28.jpg)
+
+</Update>
+
+<Update label="February 16, 2026" description="v0.5.25">
+  ## Workflow Enhancements & Collaboration Fixes
+
+### New Features
+
+- **Vector Tile Output in NikaFlow**: Added Vector Tile as a supported output format in the workflow editor
+- **Machine Type Selection**: Users can now choose specific machine types when configuring workflows in NikaFlow for optimized resource allocation
+- **DJI Zenmuse P1 Support**: Added sensor metadata support for DJI Zenmuse P1 camera data
+
+### Bug Fixes
+
+- Fixed collaborator cursors remaining visible on the map after users left a session
+- Fixed custom icon naming conflicts that caused desynchronization between collaborators
+- Fixed a crash when loading layers with missing geometry data
+
+</Update>
+
+<Update label="February 5, 2026" description="v0.5.24">
+  ## NikaLabeler Upload & Viewer Fixes
+
+### Feature Improvements
+
+- **Improved Image Uploads**: Enhanced upload experience in NikaLabeler with desktop image upload support and upload timeout warnings
+- **Right-Click Drag Panning**: Right-click and drag to pan the canvas in NikaLabeler with a snap cursor for smoother navigation
+
+### Bug Fixes
+
+- Fixed an issue where invited map viewers could not load maps when custom icons were unavailable, which was blocking the entire map from rendering
+
+![Labeler Panning](/images/changelog/2026-02-05.jpg)
+
+</Update>
+
+<Update label="January 30, 2026" description="v0.5.23">
+  ## COCO Export & Table Fixes
+
+### New Features
+
+- **COCO Export Destination**: Export annotations in COCO format from labeling jobs with a file dialog to choose the export destination folder
+
+### Bug Fixes
+
+- Fixed table rendering issues across the application
+
+</Update>
+
 <Update label="January 29, 2026" description="v0.5.22">
-  ## Professional Vector Symbology & Custom Icons
+  ## Professional Vector Symbology & Custom Icons 
   
   ### New Features
-  - **Enhanced Vector Symbology**: Vector styling is now on par with ArcGIS Pro, supporting multiple modes—solid, gradient, and unique values—across all points, lines, and polygons.
-  - **Advanced Styling Options**: Added support for dashed lines for linear features.
+  
+  
+  - **Enhanced Vector Symbology**: Vector styling is now on par with ArcGIS Pro, supporting multiple modes—solid, gradient, and unique values—across all points, lines, and polygons. 
+  - **Advanced Styling Options**: Added support for dashed lines for linear features. 
   - **Flexible Point Symbols**: Introduced preset icons and custom SVG upload options for points, giving users full control over spatial representation.
   
   ![Vector Symbology](/images/changelog/2026-01-29.jpg)
+  
   ![Custom Point Icons](/images/changelog/2026-01-29-1.webp)
+
 </Update>
 
 <Update label="January 28, 2026" description="v0.5.21">
-  ## Workspace Role Refinement
+  ## Workspace Role Refinement 
   
   ### Feature Improvements
-  - **Contributor Role**: Added the "Contributor" role to workspace permissions that can create/update but cant delete.
+  
+  
+  - **Contributor Role**: Added the "Contributor" role to workspace permissions that can create/update but cant delete. 
   - **Manager Role**: Renamed the "Editor" role to "Manager" while maintaining its delete permission.
   
   ![Workspace Roles](/images/changelog/2026-01-28.jpg)
+
 </Update>
 
 <Update label="January 19, 2026" description="v0.5.20">
-  ## NikaLabeler Advanced Workflow & Performance Tracking
+  ## NikaLabeler Advanced Workflow & Performance Tracking 
   
   ### New Features
-  - **Launching NikaMap(Draft)**: Think of it like a temporary map in QGIS that is created but not saved at all until user chooses to make it a permenant one. It can be used for quick visualization of data on map for QA/QC.
-  - **Geo-Referenced Image Loading**: Load current image from NikaLabeler with geo-references in NikaMap with satellite basemap for spatial context awareness to guide annotation precision
-  - **Job Status Management**: Comprehensive job status tracking (Unassigned, In-Progress, Submitted, Rejected, Approved) for better workflow management
-  - **Labeler Performance Dashboard**: New overview page showing individual labeler performance metrics including rejection rate and completion statistics
-  - **Per-Image Instructions**: Added ability to attach instruction messages and caveats to specific images within jobs
+  
+  
+  - **Launching NikaMap(Draft)**: Think of it like a temporary map in QGIS that is created but not saved at all until user chooses to make it a permenant one. It can be used for quick visualization of data on map for QA/QC. 
+  - **Geo-Referenced Image Loading**: Load current image from NikaLabeler with geo-references in NikaMap with satellite basemap for spatial context awareness to guide annotation precision 
+  - **Job Status Management**: Comprehensive job status tracking (Unassigned, In-Progress, Submitted, Rejected, Approved) for better workflow management 
+  - **Labeler Performance Dashboard**: New overview page showing individual labeler performance metrics including rejection rate and completion statistics 
+  - **Per-Image Instructions**: Added ability to attach instruction messages and caveats to specific images within jobs 
   
   ### Feature Improvements
-  - **Keyboard Shortcuts**: Introduced keyboard shortcuts for faster annotation workflow
-  - **Real-Time Review Sync**: Approve/reject states and comments now sync in real-time across all collaborators
-  - **Folder Upload**: Added support for image upload by folder directly from the desktop
+  
+  
+  - **Keyboard Shortcuts**: Introduced keyboard shortcuts for faster annotation workflow 
+  - **Real-Time Review Sync**: Approve/reject states and comments now sync in real-time across all collaborators 
+  - **Folder Upload**: Added support for image upload by folder directly from the desktop 
   - **Batch Upload Fix**: Fixed the limit of 5 images per upload to the image labeler to allow for larger batch processing
   
   ![NikaLabeler Workflow](/guides/image-labeling/review-existing-annotations-2.jpg)
+
 </Update>
 
 <Update label="January 13, 2026" description="v0.5.19">
@@ -55,43 +193,57 @@ rss: true
   - **Flexible Usage Aggregation**: Aggregate usage data in charts by month or by all resource types for granular analysis.
   - **Data Export Options**: Download the usage table in CSV or JSON formats for external use.
 
-  ![Real-Time Usage Dashboard](/images/changelog/2026-01-13.jpg)
+![Real-Time Usage Dashboard](/images/changelog/2026-01-13.jpg)
+
 </Update>
 
 <Update label="January 2, 2026" description="v0.5.18">
-  ## NikaLabeler Collaboration & AI-Assisted Annotation
+  ## NikaLabeler Collaboration & AI-Assisted Annotation 
   
   ### New Features
-  - **SAM 2.0 Interactor Tool**: Integrated AI-powered annotation tool with point prompts (left-click for positive, right-click for negative) for faster polygon creation
-  - **Role-Based Assignment**: Assign and re-assign annotation tasks to specific Labeller roles for better task management
-  - **Reviewer/Labeller Roles**: Introduced new role system with dedicated Reviewer and Labeller permissions for labeling jobs
-  - **COCO 1.0 Export**: Export annotations in COCO 1.0 format for seamless integration with ML pipelines
-  - **Real-Time Collaboration**: Synchronize annotations and cursor positions between users in real-time
+  
+  
+  - **SAM 2.0 Interactor Tool**: Integrated AI-powered annotation tool with point prompts (left-click for positive, right-click for negative) for faster polygon creation 
+  - **Role-Based Assignment**: Assign and re-assign annotation tasks to specific Labeller roles for better task management 
+  - **Reviewer/Labeller Roles**: Introduced new role system with dedicated Reviewer and Labeller permissions for labeling jobs 
+  - **COCO 1.0 Export**: Export annotations in COCO 1.0 format for seamless integration with ML pipelines 
+  - **Real-Time Collaboration**: Synchronize annotations and cursor positions between users in real-time 
   
   ### Feature Improvements
+  
+  
   - **Auto GeoTIFF Conversion**: Automatically batch convert GeoTIFF files (RGB channels) to JPEG for faster loading in annotation UI
   
   ![NikaLabeler AI Tools](/guides/image-labeling/label-on-images-4.jpg)
+
 </Update>
 
 <Update label="December 30, 2025" description="v0.5.17">
-  ## Workspace Enhancements & Stability Upgrades
+  ## Workspace Enhancements & Stability Upgrades 
   
   ### New Features
-  - **Resumable Uploads**: Enabled resumable and parallel file uploads to boost stability and throughput
-  - **Advanced VM Options**: Added H100 machine type for VM (available for subscribed customers)
-  - **Workspace Search**: Introduced name search functionality and improved layout margins in workspace list
+  
+  
+  - **Resumable Uploads**: Enabled resumable and parallel file uploads to boost stability and throughput 
+  - **Advanced VM Options**: Added H100 machine type for VM (available for subscribed customers) 
+  - **Workspace Search**: Introduced name search functionality and improved layout margins in workspace list 
   
   ### Feature Improvements
-  - **Hub Navigation**: Added redirect from Nika Hub's app pages to studio.nika.eco
-  - **VM Stability**: Improved Nika VM availability
-  - **Security**: Applied CVE patches for enhanced security
+  
+  
+  - **Hub Navigation**: Added redirect from Nika Hub's app pages to studio.nika.eco 
+  - **VM Stability**: Improved Nika VM availability 
+  - **Security**: Applied CVE patches for enhanced security 
   
   ### Bug Fixes
+  
+  
   - Fixed an error occurring when clicking the list of workspaces in workspace page
   
   ![Workspace Search](/images/changelog/2025-12-30-2.jpg)
+  
   ![Resumable Uploads](/images/changelog/2025-12-30-1.jpg)
+
 </Update>
 
 <Update label="December 17, 2025" description="v0.5.16">
@@ -103,22 +255,26 @@ rss: true
   - **Layer URL Support** - It can take in layer URLs such as XYZ tile url from existing server to use in the application directly
   - **Version Switching** - It can switch between different versions of the same map interface upon prompted edits so that user can switch between Ai edited versions to regain control
 
-  ![NikaStudio Interface](/products/nika-studio-home.jpg)
-  ![NikaStudio Chat](/products/nika-studio-chat.jpg)
+![NikaStudio Interface](/products/nika-studio-home.jpg)
+![NikaStudio Chat](/products/nika-studio-chat.jpg)
+
 </Update>
 
-
 <Update label="December 5, 2025" description="v0.5.15">
-  ## Launching NikaLabeler - Geospatial Image Annotation Platform
+  ## Launching NikaLabeler
+  - Geospatial Image Annotation Platform 
   
-  ### New Features in [NikaLabeler](/products/nika-labeler)
-  - **Annotation Job Creation**: Create annotation tasks directly from folders in Nika Files for streamlined workflow setup
-  - **Polygon Drawing & Editing**: Draw and edit polygon annotations with intuitive tools
-  - **COCO 1.0 Import**: Load existing annotations in COCO 1.0 format as input for continued work
-  - **Multi-Format Image Support**: Direct support for JPEG and PNG images from Nika Files
+  ### New Features
+  
+  in [NikaLabeler](/products/nika-labeler) 
+  - **Annotation Job Creation**: Create annotation tasks directly from folders in Nika Files for streamlined workflow setup 
+  - **Polygon Drawing & Editing**: Draw and edit polygon annotations with intuitive tools 
+  - **COCO 1.0 Import**: Load existing annotations in COCO 1.0 format as input for continued work 
+  - **Multi-Format Image Support**: Direct support for JPEG and PNG images from Nika Files 
   - **Interactive Annotation UI**: Full-featured annotation interface with pan and zoom navigation controls
   
   ![NikaLabeler Interface](/guides/image-labeling/create-labeling-job-2.jpg)
+
 </Update>
 
 <Update label="November 12, 2025" description="v0.5.14">
@@ -129,29 +285,36 @@ rss: true
   
   ![NikaMap Sync](/images/changelog/2025-11-12-1.jpg)
 
-  ### Feature Improvements
-  - **Left-Hand Keyboard Shortcuts**: Redesigned keyboard shortcuts to be easily reachable by the left hand for improved workflow efficiency
-  - **Zoom Scale UI**: Added a new bottom bar in the map panel featuring intuitive zoom scale controls for better map navigation
-  
-  ![Zoom Scale UI](/images/changelog/2025-11-12-2.jpg)
+### Feature Improvements
+
+- **Left-Hand Keyboard Shortcuts**: Redesigned keyboard shortcuts to be easily reachable by the left hand for improved workflow efficiency
+- **Zoom Scale UI**: Added a new bottom bar in the map panel featuring intuitive zoom scale controls for better map navigation
+
+![Zoom Scale UI](/images/changelog/2025-11-12-2.jpg)
+
 </Update>
 
 <Update label="October 14, 2025" description="v0.5.13">
-  ## Enhanced ETL Conversion Formats Support in NikaFlow
+  ## Enhanced ETL Conversion Formats Support in NikaFlow 
   
   ### New Features
-  - **Expanded Vector Format Support**: Added support for additional vector formats including FlatGeobuf, GeoParquet, and enhanced KML/KMZ handling
-  - **Advanced Raster Format Support**: Extended raster format support to include HFA, JPEG2000, and CADRG formats
-  - **3D Point Cloud Processing**: Added comprehensive support for LAS, LAZ, XYZ, PLY, and PNTS point cloud formats
-  - **3D Tiled Data Support**: Added support for 3D Tiles and I3S formats for advanced 3D visualization workflows
-  - **Style Format Integration**: Added support for LYRX, SLD, and QML style formats for enhanced cartographic workflows
+  
+  
+  - **Expanded Vector Format Support**: Added support for additional vector formats including FlatGeobuf, GeoParquet, and enhanced KML/KMZ handling 
+  - **Advanced Raster Format Support**: Extended raster format support to include HFA, JPEG2000, and CADRG formats 
+  - **3D Point Cloud Processing**: Added comprehensive support for LAS, LAZ, XYZ, PLY, and PNTS point cloud formats 
+  - **3D Tiled Data Support**: Added support for 3D Tiles and I3S formats for advanced 3D visualization workflows 
+  - **Style Format Integration**: Added support for LYRX, SLD, and QML style formats for enhanced cartographic workflows 
   
   ### Feature Improvements
-  - **Enhanced Coordinate System Conversion**: Improved CRS detection and transformation capabilities with more projection systems supported
-  - **Better Data Validation**: Enhanced data validation tools with direct visualization in Nika Web UI
+  
+  
+  - **Enhanced Coordinate System Conversion**: Improved CRS detection and transformation capabilities with more projection systems supported 
+  - **Better Data Validation**: Enhanced data validation tools with direct visualization in Nika Web UI 
   - **Improved Format Detection**: More accurate automatic format detection and conversion path optimization
   
   ![Enhanced ETL Flow](/products/nika-flow.jpg)
+
 </Update>
 
 <Update label="September 22, 2025" description="v0.5.12">
@@ -163,21 +326,24 @@ rss: true
   - **Notebook Export**: Added export functionality for each notebook
   - **300GB RAM Compute Option**: Introduced high-memory compute option for large-scale data processing for some enterprise users
 
-  ### Feature Improvements
-  - **Enhanced File Management**: Added item count display in left panel lists for better navigation
-  - **Improved File Upload**: Fixed upload limitations to handle >100 files in folders properly
-  - **Better File Handling**: Enhanced raster file support during drag-and-drop operations
+### Feature Improvements
 
-  ### Bug Fixes
-  - Fixed layer name display issue when names are too long (now shows proper titles)
-  - Resolved JPEG missing data layer issue that was causing application crashes
-  - Fixed rename folder bug that was creating unwanted subfolders
-  - Resolved machine stop status update issue that showed incorrect running status
-  - Improved file upload reliability for large folder operations
+- **Enhanced File Management**: Added item count display in left panel lists for better navigation
+- **Improved File Upload**: Fixed upload limitations to handle >100 files in folders properly
+- **Better File Handling**: Enhanced raster file support during drag-and-drop operations
 
-  ![Nika App Hub](/images/changelog/2025-09-22-1.jpg)
-  ![300GB RAM Compute Option](/images/changelog/2025-09-22-2.jpg)
-  ![Notebook Export](/images/changelog/2025-09-22-3.jpg)
+### Bug Fixes
+
+- Fixed layer name display issue when names are too long (now shows proper titles)
+- Resolved JPEG missing data layer issue that was causing application crashes
+- Fixed rename folder bug that was creating unwanted subfolders
+- Resolved machine stop status update issue that showed incorrect running status
+- Improved file upload reliability for large folder operations
+
+![Nika App Hub](/images/changelog/2025-09-22-1.jpg)
+![300GB RAM Compute Option](/images/changelog/2025-09-22-2.jpg)
+![Notebook Export](/images/changelog/2025-09-22-3.jpg)
+
 </Update>
 
 <Update label="September 17, 2025" description="v0.5.11">
@@ -186,18 +352,21 @@ rss: true
   ### New Features
   - **Realtime File System Sync**: Introduced real-time file system synchronization that auto refreshes your files quickly when upstream changes
 
-  ### Feature Improvements
-  - **Enhanced File Operations**: All file operations (create, delete, rename, duplicate, move) now provide instant feedback
-  - **Improved Folder Management**: Faster folder deletion and better handling of folder creation dialogs
-  - **Better User Experience**: Create folder dialog now auto-focuses on open and no longer freezes the UI after closure
+### Feature Improvements
 
-  ### Bug Fixes
-  - Fixed bug where create folder dialog would freeze the UI after closure
-  - Replace the "Open file" option from folder context menus with "Open folder" option
-  - Fixed bug where uploading folders would land in the wrong directory if user navigated to other folders
-  - Resolved issue with file operations not reflecting immediately in the UI
+- **Enhanced File Operations**: All file operations (create, delete, rename, duplicate, move) now provide instant feedback
+- **Improved Folder Management**: Faster folder deletion and better handling of folder creation dialogs
+- **Better User Experience**: Create folder dialog now auto-focuses on open and no longer freezes the UI after closure
 
-  ![Realtime File System Sync](/images/changelog/2025-09-17.jpg)
+### Bug Fixes
+
+- Fixed bug where create folder dialog would freeze the UI after closure
+- Replace the "Open file" option from folder context menus with "Open folder" option
+- Fixed bug where uploading folders would land in the wrong directory if user navigated to other folders
+- Resolved issue with file operations not reflecting immediately in the UI
+
+![Realtime File System Sync](/images/changelog/2025-09-17.jpg)
+
 </Update>
 
 <Update label="September 10, 2025" description="v0.5.10">
@@ -208,7 +377,8 @@ rss: true
   - **6S Atmospheric Correction**: Added 6S atmospheric correction tool for both Sentinel-2 and Jilin satellite images
   - **Pansharpening Tool**: Introduced pansharpening functionality for any GeoTIFF images using the Graeme Schmidt algorithm
 
-  ![Enterprise GIS Processing Tools](/images/changelog/2025-09-10.jpg)
+![Enterprise GIS Processing Tools](/images/changelog/2025-09-10.jpg)
+
 </Update>
 
 <Update label="September 6, 2025" description="v0.5.9">
@@ -221,17 +391,23 @@ rss: true
   - Added SQL generator with LLM capability
   - Added direct schema and preview on databases in the list
 
-  ![Nika DBMS Public Beta](/images/changelog/2025-09-06.jpg)
+![Nika DBMS Public Beta](/images/changelog/2025-09-06.jpg)
+
 </Update>
 
 <Update label="August 31, 2025" description="v0.5.8">
-  ## Nika Map Server Performance Improvements
+  ## Nika Map Server Performance Improvements 
   
   ### Bug Fixes
-  - Resolved the JPEG in NikaMap that has missing gimbal yaw or pitch error
+  
+  
+  - Resolved the JPEG in NikaMap that has missing gimbal yaw or pitch error 
   
   ### Feature Improvements
+  
+  
   - Increased speed and load for Nika Map server handling larger files and concurrent requests
+
 </Update>
 
 <Update label="August 25, 2025" description="v0.5.7">
@@ -247,7 +423,8 @@ rss: true
   - Fixed Nika Hub content page opening with sub header hidden under main header
   - Fixed thumbnail update bug for publish dialog
 
-  ![Password Protected Publish](/images/changelog/2025-08-25.jpg)
+![Password Protected Publish](/images/changelog/2025-08-25.jpg)
+
 </Update>
 
 <Update label="August 21, 2025" description="v0.5.6">
@@ -262,9 +439,10 @@ rss: true
   ### Bug Fixes
   - Fixed JPEG image orientation issue when added to map with roll close to 180 degrees - now correctly displays orientation on map
 
-  ![Nika Hub on mobile](/images/changelog/2025-08-21-1.png)
-  ![Nika Hub on mobile 2](/images/changelog/2025-08-21-2.png)
-  ![Nika Hub social media share](/images/changelog/2025-08-21-3.jpg)
+![Nika Hub on mobile](/images/changelog/2025-08-21-1.png)
+![Nika Hub on mobile 2](/images/changelog/2025-08-21-2.png)
+![Nika Hub social media share](/images/changelog/2025-08-21-3.jpg)
+
 </Update>
 
 <Update label="August 12, 2025" description="v0.5.5">
@@ -273,7 +451,8 @@ rss: true
   ### New Features
   - Added support for drone JPEG images in Nika Map, specifically designed for images taken in shooting down angle
 
-  ![Nika Map JPEG](/images/changelog/2025-08-12.jpg)
+![Nika Map JPEG](/images/changelog/2025-08-12.jpg)
+
 </Update>
 
 <Update label="August 3, 2025" description="v0.5.4">
@@ -286,7 +465,8 @@ rss: true
   ### Feature Improvements
   - Nika Map now shows invalid layers as greyed out (e.g., due to invalid source) for better user experience
 
-  ![Nika Map Raster Window Min/Max](/images/changelog/2025-08-03.gif)
+![Nika Map Raster Window Min/Max](/images/changelog/2025-08-03.gif)
+
 </Update>
 
 <Update label="July 31, 2025" description="v0.5.3">
@@ -302,9 +482,10 @@ rss: true
   - Fixed team invitation bug
   - Fixed export layer group as geopackage functionality
 
-  ![Nika Hub](/images/changelog/2025-07-31-1.jpg)
-  ![Team Hub](/images/changelog/2025-07-31-2.jpg)
-  ![Nika Hub Publish Dialog](/images/changelog/2025-07-31-3.jpg)
+![Nika Hub](/images/changelog/2025-07-31-1.jpg)
+![Team Hub](/images/changelog/2025-07-31-2.jpg)
+![Nika Hub Publish Dialog](/images/changelog/2025-07-31-3.jpg)
+
 </Update>
 
 <Update label="July 20, 2025" description="v0.5.2">
@@ -314,8 +495,9 @@ rss: true
   - Notebook add block is now switched to using horizontal list instead of vertical list of options for better UX
   - Vector toolbox now includes search function for improved tool discovery
 
-  ![Notebook horizontal add](/images/changelog/2025-07-20-1.jpg)
-  ![Vector toolbox search](/images/changelog/2025-07-20-2.jpg)
+![Notebook horizontal add](/images/changelog/2025-07-20-1.jpg)
+![Vector toolbox search](/images/changelog/2025-07-20-2.jpg)
+
 </Update>
 
 <Update label="July 15, 2025" description="v0.5.2">
@@ -324,16 +506,18 @@ rss: true
   ### New Features
   - Persistent Nika Map that auto-saves on user changes
 
-  ### Feature Improvements
-  - Map layers are blocked if another user is editing to prevent change conflicts
-  - Layer list now shows as a tree that allows drag and drop to reorder layers
-  - Multiple maps can now be opened simultaneously to sync their view together
-  - Initial map bounds can now be set for better map initialization
-  - Vector layer edits in Nika Map now support keyboard shortcuts for quicker switching between edit modes
+### Feature Improvements
 
-  ![Multiple Persistent Maps](/images/changelog/2025-07-15-1.jpg)
-  ![Layer Tree](/images/changelog/2025-07-15-2.jpg)
-  ![Map Shortcuts](/images/changelog/2025-07-15-3.jpg)
+- Map layers are blocked if another user is editing to prevent change conflicts
+- Layer list now shows as a tree that allows drag and drop to reorder layers
+- Multiple maps can now be opened simultaneously to sync their view together
+- Initial map bounds can now be set for better map initialization
+- Vector layer edits in Nika Map now support keyboard shortcuts for quicker switching between edit modes
+
+![Multiple Persistent Maps](/images/changelog/2025-07-15-1.jpg)
+![Layer Tree](/images/changelog/2025-07-15-2.jpg)
+![Map Shortcuts](/images/changelog/2025-07-15-3.jpg)
+
 </Update>
 
 <Update label="July 6, 2025" description="v0.5.1">
@@ -343,8 +527,9 @@ rss: true
   - Nika Notebook now has automatic Python linter upon code changes
   - Nika Notebook now features a line-by-line accept and reject mechanism instead of the previous accept-all/reject-all approach
 
-  ![Notebook python linter](/images/changelog/2025-07-06-1.jpg)
-  ![Notebook accept/reject line by line](/images/changelog/2025-07-06-2.jpg)
+![Notebook python linter](/images/changelog/2025-07-06-1.jpg)
+![Notebook accept/reject line by line](/images/changelog/2025-07-06-2.jpg)
+
 </Update>
 
 <Update label="June 22, 2025" description="v0.5.0">
@@ -360,7 +545,8 @@ rss: true
   ### Bug Fixes
   - Fixed scroll down in notebook list causing overflow outside of UI boundaries
 
-  ![New Workspace UI](/images/changelog/2025-06-22.jpg)
+![New Workspace UI](/images/changelog/2025-06-22.jpg)
+
 </Update>
 
 <Update label="June 3, 2025" description="v0.4.5">
@@ -374,8 +560,9 @@ rss: true
   - Now can read your raster `GeoTIFF` directly
   - Now has better apply and revert mechanism by keeping the snapshot of your notebook/file before changes applied
 
-  ![Nika GAIA v4 Analyst Mode](/images/changelog/2025-06-03-1.gif)
-  ![Nika GAIA v4 Interface](/images/changelog/2025-06-03-2.png)
+![Nika GAIA v4 Analyst Mode](/images/changelog/2025-06-03-1.gif)
+![Nika GAIA v4 Interface](/images/changelog/2025-06-03-2.png)
+
 </Update>
 
 <Update label="May 28, 2025" description="v0.4.4">
@@ -390,9 +577,10 @@ rss: true
     - Smaller but more intuitive buttons for send, stop, accept change, reject change
     - Input for improving on code change suggestion with follow-up message
 
-  ![AI Model Selection](/images/changelog/2025-05-28-1.png)
-  ![In-Block Coding UI](/images/changelog/2025-05-28-2.png)
-  ![AI Model Selection Interface](/images/changelog/2025-05-28-3.png)
+![AI Model Selection](/images/changelog/2025-05-28-1.png)
+![In-Block Coding UI](/images/changelog/2025-05-28-2.png)
+![AI Model Selection Interface](/images/changelog/2025-05-28-3.png)
+
 </Update>
 
 <Update label="May 26, 2025" description="v0.4.3">
@@ -417,9 +605,10 @@ rss: true
   - Support .geoparquet extension add to map
   - Support most shapefile extension add to map: .shp, .shx, .dbf, .prj, .cpg, .fix, .sbn, .sbx, .fbn, .fbx, .ain, .aih, .atx, .qix, .qmd
 
-  ![Notebook Block Management](/images/changelog/2025-05-26-1.gif)
-  ![File Preview Interface](/images/changelog/2025-05-26-2.gif)
-  ![GAIA Integration](/images/changelog/2025-05-26-3.gif)
+![Notebook Block Management](/images/changelog/2025-05-26-1.gif)
+![File Preview Interface](/images/changelog/2025-05-26-2.gif)
+![GAIA Integration](/images/changelog/2025-05-26-3.gif)
+
 </Update>
 
 <Update label="May 8, 2025" description="v0.4.2">
@@ -428,7 +617,8 @@ rss: true
   ### Feature Improvements
   - Make files and folders with numbers human-friendly or naturally ordered: `"1", "2", "10", "11", "100"` instead of lexicographically ordered:`"1", "10", "100", "11", "2"`
 
-  ![File Organization](/images/changelog/2025-05-08.png)
+![File Organization](/images/changelog/2025-05-08.png)
+
 </Update>
 
 <Update label="April 26, 2025" description="v0.4.1">
@@ -441,8 +631,9 @@ rss: true
   - Nika map now can handle visualization of large vector with size up to 15 Million data (points or polygon vertices) without losing details nor chunking
   - Left click a geometry will now select it, while double click it will enter edit mode
 
-  ![Large Vector Visualization](/images/changelog/2025-04-26-1.gif)
-  ![Vector Handling](/images/changelog/2025-04-26-2.gif)
+![Large Vector Visualization](/images/changelog/2025-04-26-1.gif)
+![Vector Handling](/images/changelog/2025-04-26-2.gif)
+
 </Update>
 
 <Update label="April 24, 2025" description="v0.4.0">
@@ -455,8 +646,9 @@ rss: true
   ### Bug Fixes
   - Fix a bug causing notebook code output to freeze the app when output is too long (e.g. print(geojson))
 
-  ![Nika GAIA Alpha](/images/changelog/2025-04-24-1.gif)
-  ![Usage Dashboard](/images/changelog/2025-04-24-2.gif)
+![Nika GAIA Alpha](/images/changelog/2025-04-24-1.gif)
+![Usage Dashboard](/images/changelog/2025-04-24-2.gif)
+
 </Update>
 
 <Update label="March 27, 2025" description="v0.3.23">
@@ -467,7 +659,8 @@ rss: true
   - Fixed the tab switch bug that the last closed tab of notebook or file editor is still opened again after close
   - Fixed the cursor sharing position deviation issue
 
-  ![Bug Fixes Demo](/images/changelog/2025-03-27.gif)
+![Bug Fixes Demo](/images/changelog/2025-03-27.gif)
+
 </Update>
 
 <Update label="March 25, 2025" description="v0.3.22">
@@ -486,8 +679,9 @@ rss: true
     - Drag and drop image will be at the correct position of the flat line now
     - Unsupported image types such as .tif will throw a warning when user tries to insert it to notebook
 
-  ![Cursor Sharing](/images/changelog/2025-03-25-1.gif)
-  ![Comment Capabilities](/images/changelog/2025-03-25-2.gif)
+![Cursor Sharing](/images/changelog/2025-03-25-1.gif)
+![Comment Capabilities](/images/changelog/2025-03-25-2.gif)
+
 </Update>
 
 <Update label="March 21, 2025" description="v0.3.21">
@@ -504,7 +698,8 @@ rss: true
   - Fixed the issue when renaming/moving a folder with many subfolders/files in it
   - Fixed file search flashing the results bug and made search faster now
 
-  ![Chart Creation](/images/changelog/2025-03-21.gif)
+![Chart Creation](/images/changelog/2025-03-21.gif)
+
 </Update>
 
 <Update label="March 20, 2025" description="v0.3.20">
@@ -516,7 +711,8 @@ rss: true
   ### Bug Fixes
   - Fixed raster server's existing internal server error that caused adding GeoTIFF to map to fail sometimes
 
-  ![Auto COG Conversion](/images/changelog/2025-03-20.gif)
+![Auto COG Conversion](/images/changelog/2025-03-20.gif)
+
 </Update>
 
 <Update label="March 16, 2025" description="v0.3.19">
@@ -529,7 +725,8 @@ rss: true
   ### Bug Fixes
   - Fixed the issue that KML or GeoPackage were only loading the first sub geometry instead of all of its sub groups of geometries
 
-  ![Layer Tree Format](/images/changelog/2025-03-16.png)
+![Layer Tree Format](/images/changelog/2025-03-16.png)
+
 </Update>
 
 <Update label="March 14, 2025" description="v0.3.18">
@@ -554,8 +751,9 @@ rss: true
   - Large notebooks that cause crash won't have issue crashing anymore
   - Fixed the proj.db not found when user uses GDAL command or libraries like rasterio that relies on the georeference function of GDAL. Now all georeferencing should work properly when you use pre-installed GDAL in NikaColab notebooks
 
-  ![CPU Instance Selection](/images/changelog/2025-03-14-1.png)
-  ![CPU Instance Details](/images/changelog/2025-03-14-2.png)
+![CPU Instance Selection](/images/changelog/2025-03-14-1.png)
+![CPU Instance Details](/images/changelog/2025-03-14-2.png)
+
 </Update>
 
 <Update label="March 9, 2025" description="v0.3.17">
@@ -572,12 +770,11 @@ rss: true
   ### Bug Fixes
   - Downloading data from Data Catalog no longer results in large files caused by wrong resolution previously
 
-  ![Notebook Management](/images/changelog/2025-03-09-1.png)
-  ![File Management](/images/changelog/2025-03-09-2.gif)
-  ![Multi-select Interface](/images/changelog/2025-03-09-3.gif)
+![Notebook Management](/images/changelog/2025-03-09-1.png)
+![File Management](/images/changelog/2025-03-09-2.gif)
+![Multi-select Interface](/images/changelog/2025-03-09-3.gif)
+
 </Update>
-
-
 
 <Update label="February 17, 2025" description="v0.3.15">
   ## Vector Geometry Drawing Fix
@@ -585,8 +782,9 @@ rss: true
   ### Bug Fixes
   - Fix one bug that disallowed users to draw vector geometries on map
 
-  ![Vector Geometry Drawing](/images/changelog/2025-02-17-1.gif)
-  ![Share Notebok via Link](/images/changelog/2025-02-17-2.png)
+![Vector Geometry Drawing](/images/changelog/2025-02-17-1.gif)
+![Share Notebok via Link](/images/changelog/2025-02-17-2.png)
+
 </Update>
 
 <Update label="February 25, 2025" description="v0.3.16">
@@ -606,8 +804,9 @@ rss: true
   - Default machine type is no longer blank for new project created but now the CPU type
   - Not every file has a right click add to map option and then some may fail, now only those supported file extensions have that option
 
-  ![Vector Layer Performance](/images/changelog/2025-02-25-1.gif)
-  ![UI Enhancements](/images/changelog/2025-02-25-2.png)
+![Vector Layer Performance](/images/changelog/2025-02-25-1.gif)
+![UI Enhancements](/images/changelog/2025-02-25-2.png)
+
 </Update>
 
 <Update label="February 17, 2025" description="v0.3.14">
@@ -620,8 +819,9 @@ rss: true
   ### Bug Fixes
   - Fix one bug on unable to load GPKG
 
-  ![Shareable Links](/images/changelog/2025-02-17-1.gif)
-  ![AI Dataset Integration](/images/changelog/2025-02-17-2.png)
+![Shareable Links](/images/changelog/2025-02-17-1.gif)
+![AI Dataset Integration](/images/changelog/2025-02-17-2.png)
+
 </Update>
 
 <Update label="January 28, 2025" description="v0.3.13">
@@ -637,7 +837,8 @@ rss: true
   ### Bug Fixes
   - Fix one bug that causes KML files to not be addable to map to visualize
 
-  ![Data Catalog UI](/images/changelog/2025-01-28.gif)
+![Data Catalog UI](/images/changelog/2025-01-28.gif)
+
 </Update>
 
 <Update label="January 23, 2025" description="v0.3.12">
@@ -658,7 +859,8 @@ rss: true
   - Fix local raster added to map with one band can use multibands mode error
   - Fix new dataset from Data Catalog added to map with global bound has some displaced until user zooming in
 
-  ![Extended Dataset Support](/images/changelog/2025-01-23.gif)
+![Extended Dataset Support](/images/changelog/2025-01-23.gif)
+
 </Update>
 
 <Update label="January 20, 2025" description="v0.3.11">
@@ -675,7 +877,8 @@ rss: true
   - Sharing a project as project editor while not yet verified team invitation had led to app crash, now fixed
   - Shared project's team avatar is correct now
 
-  ![Role-Based Access Control](/images/changelog/2025-01-20.png)
+![Role-Based Access Control](/images/changelog/2025-01-20.png)
+
 </Update>
 
 <Update label="January 14, 2025" description="v0.3.9">
@@ -692,7 +895,8 @@ rss: true
   ### Bug Fixes
   - Indentation with TAB key is fixed for file editor
 
-  ![Code/Notebook Integration](/images/changelog/2025-01-14.gif)
+![Code/Notebook Integration](/images/changelog/2025-01-14.gif)
+
 </Update>
 
 <Update label="December 28, 2024" description="v0.3.8">
@@ -709,7 +913,8 @@ rss: true
   ### Bug Fixes
   - Resolved issues with visualizing global datasets (e.g., Copernicus LC100). The new clipping feature now supports visualization of both global and non global datasets
 
-  ![Data Catalog Layer Customization](/images/changelog/2024-12-28.gif)
+![Data Catalog Layer Customization](/images/changelog/2024-12-28.gif)
+
 </Update>
 
 <Update label="December 19, 2024" description="v0.3.7">
@@ -725,23 +930,31 @@ rss: true
   ### Bug Fixes
   - Fixed geodesic projections for clipped visualizations for dataset from Data Catalog used with AOI. Before this, some result image on map is clipped with curved line, which is now resolved
 
-  ![Team Management](/images/changelog/2024-12-19-1.gif)
-  ![Team Management Interface](/images/changelog/2024-12-19-2.png)
+![Team Management](/images/changelog/2024-12-19-1.gif)
+![Team Management Interface](/images/changelog/2024-12-19-2.png)
+
 </Update>
 
 <Update label="December 16, 2024" description="v0.3.6">
-  ## AOI Selection and SkySat Dataset Support
+  ## AOI Selection and SkySat Dataset Support 
   
   ### New Features
-  - Select AOI from a map geometry layer to clip one-click visualized datasets, or for downloading datasets
+  
+  
+  - Select AOI from a map geometry layer to clip one-click visualized datasets, or for downloading datasets 
   
   ### Feature Improvements
+  
+  
   - Supported new high-res SkySat Datasets
   - Added scale field for download, to enable high-res
-  - Removed choice of raw/processed download, automatically selected based on dataset type
+  - Removed choice of raw/processed download, automatically selected based on dataset type 
   
   ### Features Removal
+  
+  
   - Upload geojson to clip area for downloading data from Data Catalog is removed. But user can simply upload to Files on the left and add the geojson to map as a layer to clip
+
 </Update>
 
 <Update label="December 13, 2024" description="v0.3.5">
@@ -757,7 +970,8 @@ rss: true
   ### Bug Fixes
   - Fixed status name at top right after running certain actions to not show weird characters
 
-  ![Point Labeling and GeoSAM](/images/changelog/2024-12-13.gif)
+![Point Labeling and GeoSAM](/images/changelog/2024-12-13.gif)
+
 </Update>
 
 <Update label="December 9, 2024" description="v0.3.4">
@@ -771,8 +985,9 @@ rss: true
   - User could reorder the features within geojson layer
   - User could move features between geojson layers by drag and drop
 
-  ![Vector Operations](/images/changelog/2024-12-09-1.gif)
-  ![Layer Management](/images/changelog/2024-12-09-2.gif)
+![Vector Operations](/images/changelog/2024-12-09-1.gif)
+![Layer Management](/images/changelog/2024-12-09-2.gif)
+
 </Update>
 
 <Update label="December 6, 2024" description="v0.3.3">
@@ -782,7 +997,8 @@ rss: true
   - Project sharing by email to invite specific user to work on the same project
   - Project sharing to allow anyone in the public to access by link to work on the same project
 
-  ![Project Sharing](/images/changelog/2024-12-06.gif)
+![Project Sharing](/images/changelog/2024-12-06.gif)
+
 </Update>
 
 <Update label="December 3, 2024" description="v0.3.2">
@@ -794,18 +1010,24 @@ rss: true
   ### Feature Improvements
   - Machine creation time shortened from 4-5 mins to 2.25 mins on average with key architectural improvements
 
-  ![File Editing](/images/changelog/2024-12-03.gif)
+![File Editing](/images/changelog/2024-12-03.gif)
+
 </Update>
 
 <Update label="November 27, 2024" description="v0.3.1">
-  ## Python Version Update and Bug Fixes
+  ## Python Version Update and Bug Fixes 
   
   ### Feature Improvements
-  - Downgraded nika VM to use Python 3.10 as default to support more libraries such as Numba
+  
+  
+  - Downgraded nika VM to use Python 3.10 as default to support more libraries such as Numba 
   
   ### Bug Fixes
+  
+  
   - Fixed error when raster image is selected, user cannot draw vectors on it
   - Fixed bug causing download public dataset in data catalog to not work
+
 </Update>
 
 <Update label="November 25, 2024" description="v0.3.0">
@@ -822,8 +1044,9 @@ rss: true
   
   > **Note**: Raster/vector layers do not persist across sessions (feature in progress)
 
-  ![Vector Features 1](/images/changelog/2024-11-25-1.gif)
-  ![Vector Features 2](/images/changelog/2024-11-25-2.gif)
+![Vector Features 1](/images/changelog/2024-11-25-1.gif)
+![Vector Features 2](/images/changelog/2024-11-25-2.gif)
+
 </Update>
 
 <Update label="November 19, 2024" description="v0.2.12">
@@ -840,8 +1063,9 @@ rss: true
   - Resolved flickering when dragging files from the local OS
   - Fixed bug when downloading datasets in data catalog by removing QA bands from band selection
 
-  ![File Management 1](/images/changelog/2024-11-19-1.gif)
-  ![File Management 2](/images/changelog/2024-11-19-2.gif)
+![File Management 1](/images/changelog/2024-11-19-1.gif)
+![File Management 2](/images/changelog/2024-11-19-2.gif)
+
 </Update>
 
 <Update label="October 30, 2024" description="v0.2.11">
@@ -855,18 +1079,22 @@ rss: true
   - Fixed bug that caused file to be moved to outside of the project root folder
   - Fixed flickering issue with the drop file to upload from Windows OS
 
-  ![Enhanced File Search](/images/changelog/2024-10-30.gif)
+![Enhanced File Search](/images/changelog/2024-10-30.gif)
+
 </Update>
 
 <Update label="October 29, 2024" description="v0.2.10">
-  ## Data Catalog Improvements
+  ## Data Catalog Improvements 
   
   ### Bug Fixes
+  
+  
   - Fixed many issues in Data Catalog:
-    - Added form validations for maxCloudCover, maxImages, bands
-    - Added button for select all / clear all bands
-    - Added bound for each data visualized on map (RIGHT CLICK to zoom to fit to layer)
-    - Download dataset can show error message at bottom right if download failed
+  - Added form validations for maxCloudCover, maxImages, bands
+  - Added button for select all / clear all bands
+  - Added bound for each data visualized on map (RIGHT CLICK to zoom to fit to layer)
+  - Download dataset can show error message at bottom right if download failed
+
 </Update>
 
 <Update label="October 28, 2024" description="v0.2.9">
@@ -883,43 +1111,59 @@ rss: true
   - Fixed display data for dataframe table (e.g., print table from duckdb in output)
   - Added ... to the lists so that iPad users can click too
 
-  ![Notebook Resizing](/images/changelog/2024-10-28.gif)
+![Notebook Resizing](/images/changelog/2024-10-28.gif)
+
 </Update>
 
 <Update label="October 22, 2024" description="v0.2.8">
-  ## Data Catalog Introduction
+  ## Data Catalog Introduction 
   
   ### New Features
+  
+  
   - Added Data Catalog to allow users to visualize public datasets from GEE data catalog to map or download them to project file storage
-  - Expect some bugs as we are continuously upgrading this feature in future releases
+  - Expect some bugs as we are continuously upgrading this feature in future releases 
   
   ### Bug Fixes
+  
+  
   - Fixed issue that caused the file list to fail
   - Updated the task manager at bottom right to accommodate more task types
+
 </Update>
 
 <Update label="October 14, 2024" description="v0.2.7">
-  ## Enhanced Machine Types and File Management
+  ## Enhanced Machine Types and File Management 
   
   ### New Features
+  
+  
   - Added Downloader class of machine type with bigger CPU and network throughput
   - Updated files UI to follow the new UI library while retaining all past capabilities
-  - Added .TIF and .TIFF as allowed extensions for GeoTIFF files for add to map
+  - Added .TIF and .TIFF as allowed extensions for GeoTIFF files for add to map 
   
   ### Bug Fixes
+  
+  
   - Fixed behavior that some TIF files cannot be added to map due to server issue
+
 </Update>
 
 <Update label="October 6, 2024" description="v0.2.6">
-  ## AI Enhancement and UI Improvements
+  ## AI Enhancement and UI Improvements 
   
   ### New Features
+  
+  
   - Made the nika AI buttons in notebooks more obvious with `Modify` and `Query` text
   - Upgraded generative AI for coding to a more intelligent version
   - Added demo videos to tutorial steps and each target section: `project`, `machine`, `file`, `notebook`, `layer`
-  - Added button for Fix Code with AI
+  - Added button for Fix Code with AI 
   
   ### Bug Fixes
+  
+  
   - Fixed behavior that clicking range input box in layer control close menu
   - Fixed hvplot not showing up
+
 </Update>

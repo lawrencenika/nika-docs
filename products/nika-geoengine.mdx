@@ -1,0 +1,34 @@
+---
+title: "NikaGeoEngine"
+description: "A Docker-based isolated runtime manager with GPU acceleration, GIS integration, and agentic AI support."
+icon: "cube"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+## Overview
+
+NikaGeoEngine is an advanced runtime manager tailored for isolated execution of Python and R geospatial workloads. By seamlessly encapsulating functions in Docker containers, GeoEngine handles local testing, environmental dependencies, and tool execution—giving you fully reproducible workloads that can interact automatically with desktop GIS software and AI Agents.
+
+![NikaGeoEngine Architecture](/products/nika-geoengine.png)
+
+## Key Features
+
+### Declarative Worker Management
+- **Single-Command Deploy**: Use `geoengine apply` to automatically generate Dockerfiles, build Docker images, save configurations, and register the function as an available worker in your environment.
+- **Dependency Management via Pixi**: Define environments precisely in a Pixi manifest. All GDAL, PyTorch, Conda-forge, and PyPI dependencies are isolated directly inside the Docker container.
+- **Version Snapshots**: Track script versions using Semantic Versioning. Each applied build is snapshotted, meaning you can jump back and run `"v1.0.0"` of an algorithm months later with absolute reproducibility.
+
+### Environment & Compute Execution
+- **Seamless Local & Docker Execution**: Input parameters like `input-file` automatically resolve path mounting seamlessly from host to container boundary behind the scenes. 
+- **GPU Acceleration**: NVIDIA GPU passthrough supports CUDA-accelerated workloads (plus Apple Metal backend support) out of the gate.
+- **Structured JSON Interface**: Run tools purely via CLI outputting rich JSON arrays detailing file outputs, logs, and system statuses.
+
+### Ecosystem Integration
+- **GIS Desktop Integration**: Execute your standalone geospatial functions directly from ArcGIS Pro and QGIS. GeoEngine workers appear in native toolboxes—no proxy services, extensive GUI programming, or wrapper code required.
+- **Agentic AI Enablement**: Built-in AI Agent skills structure (for Claude, Google, and OpenAI models) allow Large Language Models to automatically scaffold, write `geoengine.yaml`, manage arguments, and deploy GeoEngine workers on your behalf.
+- **NikaPlanet Integration**: Deployed tools will integrate securely as managed resources across NikaPlanet workflows and cloud environments.
+
+## Get Expert Help 
+
+<ContactCTACard />

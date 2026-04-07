@@ -47,8 +47,9 @@
               "products/nika-flow",
               "products/nika-labeler",
               "products/nika-studio",
-              "products/nika-function",
-              "products/nika-dashboard"
+              "products/nika-geoengine",
+              "products/nika-dashboard",
+              "products/nika-field"
              ]
           },
           {
@@ -150,6 +151,13 @@
               "guides/image-labeling/import-export-formats",
               "guides/image-labeling/label-on-images",
               "guides/image-labeling/review-existing-annotations"
+            ]
+          },
+          {
+            "group": "Field Survey",
+            "icon": "map-pin",
+            "pages": [
+              "guides/field-survey/ai-audio-gps"
             ]
           },
           {

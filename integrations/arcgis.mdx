@@ -1,160 +1,36 @@
 ---
 title: 'ArcGIS'
-description: 'Seamlessly integrate with ArcGIS through plugins and leverage Nika advanced map visualization capabilities'
+description: 'Integrate NikaGeoEngine and NikaPlanet services directly inside ArcGIS Pro'
+icon: "plug"
 ---
-
-<Note>
-This product is currently still early in testing. Features and functionality may change drastically. If you are interested in accelerating this feature to your specific needs, you may talk to us at [sales@nikaplanet.com](mailto:sales@nikaplanet.com).
-</Note>
 
 import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
-# ArcGIS Integration (Enterprise Plan Only)
+# ArcGIS Integration
 
-Nika provides powerful integration capabilities with ArcGIS, enabling seamless data exchange and enhanced geospatial workflows through dedicated plugins and advanced visualization features.
+Our ArcGIS integration focuses on bridging the power of scalable cloud compute and isolated environments directly into the familiar interface of ArcGIS Pro. We provide powerful integrations for both developers building custom geospatial tooling and non-technical stakeholders looking to consume cloud infrastructure smoothly.
 
-## Plugin-Based Integration
+## 1. NikaGeoEngine Plugin (For Analysts & Developers)
 
-### ArcGIS Plugin for Nika
+The **GeoEngine Plugin for ArcGIS Pro** removes all barriers to getting your custom Python and R scripts running securely inside ArcGIS. Using Docker-based isolation, your scripts execute in clean, scalable container environments directly inside your desktop toolboxes.
 
-Our dedicated ArcGIS plugin enables direct data transfer between ArcGIS and Nika, providing a bridge between traditional GIS workflows and modern cloud-based geospatial analysis.
+### How it Works
+Traditional ArcGIS Python toolsets require complex parameter handling, custom wrapper coding, and constant dependency conflicts with ArcGIS's internal Python interpreter (e.g. `arcpy` version lock-ins). 
 
-**Key Features:**
-- **Bidirectional Data Transfer**: Import and export data between ArcGIS and Nika
-- **Real-time Synchronization**: Keep your data in sync across platforms
-- **Layer Management**: Preserve layer styling and metadata during transfer
-- **Batch Processing**: Handle large datasets efficiently
+With NikaGeoEngine, your script's environment lives entirely separate:
+- **No Wrapper Code**: GeoEngine dynamically reads your `geoengine.yaml` worker declaration and translates it to ArcGIS Pro Toolbox interfaces on the fly. No proxy services required.
+- **Isolated Execution**: Since the code runs via the GeoEngine CLI as a subprocess (inside a Docker container), it never conflicts with the host `arcpy` ecosystem. You can run deep learning workloads with different PyTorch builds effortlessly.
+- **Version Control**: Access all historical, immutable versions of your algorithm directly from the toolbox dropdown in ArcGIS.
+- **Logs & Output**: Background logs smoothly stream out of the container to the ArcGIS Progress windows.
 
-### Why Plugin Integration Matters
+## 2. NikaPlanet Plugin (For GIS Users)
 
-ArcGIS has been the industry standard for GIS professionals for decades, offering robust tools for spatial analysis, cartography, and data management. However, modern geospatial workflows often require:
+While the GeoEngine Plugin helps developers create containerized algorithms smoothly, the **NikaPlanet Plugin** focuses on seamless execution and cloud-infrastructure management for analysts.
 
-- **Cloud-based collaboration** for distributed teams
-- **Real-time data processing** for dynamic applications
-- **Advanced AI/ML integration** for predictive analytics
-- **Scalable infrastructure** for large datasets
-
-Our plugin bridges this gap by allowing you to leverage ArcGIS's powerful desktop capabilities while extending your workflows into Nika's cloud-native environment.
-
-## Enhanced Map Visualization
-
-### Beyond ArcGIS Online
-
-While ArcGIS Online provides excellent web mapping capabilities, Nika offers several advantages for modern geospatial applications:
-
-#### **Performance & Scalability**
-- **Vector Tiles**: Lightning-fast rendering of large datasets
-- **WebGL Acceleration**: Hardware-accelerated visualization
-- **Dynamic Clustering**: Intelligent point aggregation for performance
-- **Lazy Loading**: Efficient memory management for massive datasets
-
-#### **Advanced Styling Options**
-- **Custom Shaders**: Programmable rendering for complex visualizations
-- **3D Terrain**: Immersive elevation visualization
-- **Time-series Animation**: Dynamic temporal data display
-- **Interactive Filters**: Real-time data exploration
-
-#### **Developer-Friendly**
-- **RESTful APIs**: Easy integration with custom applications
-- **JavaScript SDK**: Rich client-side capabilities
-- **Web Components**: Reusable mapping components
-- **Plugin Architecture**: Extensible functionality
-
-## Getting Started
-
-### Installing the ArcGIS Plugin
-
-1. **Download the Plugin**: Available from our plugin marketplace
-2. **Install in ArcGIS**: Follow the installation wizard
-3. **Configure Connection**: Set up your Nika workspace credentials
-4. **Test Connection**: Verify data transfer capabilities
-
-### Basic Workflow
-
-```python
-# Example: Export data from ArcGIS to Nika
-import arcpy
-from nika_plugin import NikaExporter
-
-# Load your ArcGIS layer
-layer = arcpy.mapping.Layer("path/to/your/layer.lyr")
-
-# Initialize Nika exporter
-exporter = NikaExporter(workspace_id="your-workspace")
-
-# Export with styling
-exporter.export_layer(layer, preserve_styling=True)
-```
-
-### Advanced Integration
-
-```python
-# Example: Real-time data synchronization
-from nika_plugin import SyncManager
-
-# Set up automatic synchronization
-sync = SyncManager(
-    arcgis_workspace="your-arcgis-workspace",
-    nika_workspace="your-nika-workspace",
-    sync_interval=300  # 5 minutes
-)
-
-# Start monitoring for changes
-sync.start_monitoring()
-```
-
-## Use Cases
-
-### **Urban Planning**
-- Import detailed parcel data from ArcGIS
-- Perform real-time analysis in Nika
-- Export results back to ArcGIS for final presentation
-
-### **Environmental Monitoring**
-- Sync sensor data from ArcGIS
-- Apply AI models for predictive analysis
-- Visualize results with advanced styling
-
-### **Emergency Response**
-- Real-time data sharing between platforms
-- Collaborative mapping for incident response
-- Mobile-friendly visualization
-
-## Best Practices
-
-### **Data Management**
-- Use consistent coordinate reference systems
-- Maintain metadata during transfers
-- Implement version control for collaborative projects
-
-### **Performance Optimization**
-- Compress large datasets before transfer
-- Use appropriate tile sizes for web visualization
-- Leverage caching for frequently accessed data
-
-### **Security**
-- Secure API credentials
-- Implement proper access controls
-- Audit data transfers regularly
-
-## Troubleshooting
-
-### Common Issues
-
-**Connection Problems**
-- Verify network connectivity
-- Check API credentials
-- Ensure firewall settings allow connections
-
-**Data Transfer Issues**
-- Validate data formats
-- Check coordinate system compatibility
-- Monitor available storage space
-
-**Performance Issues**
-- Optimize dataset size
-- Use appropriate compression
-- Consider batch processing for large datasets
+### Expanding Desktop Capabilities
+- **Manage Resource Deployment**: Start, monitor, and deploy configured NikaGeoEngine Workers and algorithms seamlessly from the ArcGIS interface directly to Nika's cloud without managing CI/CD pipelines.
+- **Execute Cloud Jobs**: Run heavy processing on deployed algorithms, letting NikaPlanet handle the compute provisioning and sending the outputs securely back to your ArcGIS session.
+- **Shared Ecosystems**: Consume shared team assets, vector maps, and algorithms stored globally on NikaHub. 
 
 ## Get Expert Help
 

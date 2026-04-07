@@ -3,8 +3,6 @@ title: "Creating a Geoprocess Worker Manually"
 description: "Turn a Python or R script into a versioned, containerised GeoEngine worker using the CLI"
 ---
 
-import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
-
 A GeoEngine **worker** is a Python or R script packaged into a Docker container, described by a `geoengine.yaml` config and a `pixi.toml` dependency file. Once applied, the worker is registered locally and — if enabled — appears as a native tool in your GIS software.
 
 If you'd prefer to let an AI coder handle the setup for you, see [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker).
@@ -207,7 +205,3 @@ geoengine run my-worker --ver 1.0.0 --input input-file=/path/to/image.tif
 - [Debugging & Troubleshooting](/guides/custom-geoprocess-deployment/debugging) — inspect workers, read logs, and fix build issues
 - [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) — use AI coding assistants with sample prompts to accelerate worker creation
 - [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) — let an AI coder handle the full setup from a single prompt
-
-## Get Expert Help
-
-<ContactCTACard />

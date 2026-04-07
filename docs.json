@@ -161,17 +161,17 @@
             ]
           },
           {
-            "group": "GeoEngine",
+            "group": "Custom Geoprocess Deployment",
             "icon": "cube",
             "pages": [
-              "guides/geoengine/installation",
-              "guides/geoengine/creating-a-worker",
-              "guides/geoengine/running-in-gis",
-              "guides/geoengine/using-ai-agents",
-              "guides/geoengine/versioning",
-              "guides/geoengine/debugging",
-              "guides/geoengine/cloud-push",
-              "guides/geoengine/cli-reference"
+              "guides/custom-geoprocess-deployment/installation",
+              "guides/custom-geoprocess-deployment/creating-a-worker",
+              "guides/custom-geoprocess-deployment/ai-coder-worker",
+              "guides/custom-geoprocess-deployment/running-in-gis",
+              "guides/custom-geoprocess-deployment/versioning",
+              "guides/custom-geoprocess-deployment/debugging",
+              "guides/custom-geoprocess-deployment/cloud-push",
+              "guides/custom-geoprocess-deployment/cli-reference"
             ]
           },
           {
@@ -267,7 +267,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Go to App",
+      "label": "Go to NikaPlanet",
       "href": "https://planet.nika.eco"
     }
   },

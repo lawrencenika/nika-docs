@@ -1,0 +1,261 @@
+---
+title: "Installation & Setup"
+description: "Install GeoEngine, set up prerequisites, initialise AI agent skills, and configure GIS plugins"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+Get GeoEngine installed and ready to use on your machine. This guide walks you through installing Docker, the GeoEngine CLI, logging in, and optionally setting up AI agent skills and GIS plugin support.
+
+## Prerequisites
+
+Before installing GeoEngine, make sure you have the following:
+
+### Required
+- **[Docker](https://docs.docker.com/get-docker/)** — GeoEngine runs all workers in Docker containers. Install Docker Desktop (macOS/Windows) or Docker Engine (Linux) and ensure it is running before using any GeoEngine commands.
+
+### Optional
+- **GIS Platform(s)** — Install one or both if you want to run workers directly from your GIS software:
+  - [QGIS](https://qgis.org) (open source)
+  - [ArcGIS Pro](https://pro.arcgis.com/en/pro-app/latest/get-started/download-arcgis-pro.htm)
+- **AI Agent(s)** — Install one or more if you want to use AI to create and manage workers automatically:
+  - [Claude Code](https://claude.ai/code) by Anthropic (recommended)
+  - [Cursor](https://cursor.com) by Cursor AI
+  - [GitHub Copilot](https://github.com/features/copilot) by VS Code / Microsoft
+  - [Codex](https://openai.com/codex/) by OpenAI
+  - [Antigravity](https://antigravity.google) by Google
+
+---
+
+## Step 1: Install GeoEngine
+
+Choose the installation method that matches your platform:
+
+### Linux / macOS / WSL2
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NikaGeospatial/geoengine/main/install/install.sh | bash
+```
+
+### macOS (Homebrew)
+
+```bash
+brew tap NikaGeospatial/geoengine
+brew install geoengine
+```
+
+### Windows (PowerShell as Administrator)
+
+```powershell
+irm https://raw.githubusercontent.com/NikaGeospatial/geoengine/main/install/install.ps1 | iex
+```
+
+### Offline / Air-Gapped Installation
+
+If your machine has no internet access, copy the `geoengine` binary to the target machine first, then run:
+
+```bash
+./install.sh --local ./geoengine
+```
+
+---
+
+## Setup Troubleshooting
+
+### Xcode Command Line Tools Error (macOS)
+
+GeoEngine itself does not depend on Xcode — it runs workers inside Docker containers. However, **Homebrew** (the macOS package manager used to install the GeoEngine CLI) requires the Xcode Command Line Tools to compile and link packages during installation. Without a compatible version of Xcode or its Command Line Tools, Homebrew cannot build the dependencies it needs, and the `brew install geoengine` step will fail.
+
+If you see errors related to **Xcode** or **Xcode Command Line Tools** when using Homebrew — such as:
+
+```
+Error: Your Xcode (14.0) is too outdated.
+```
+
+```
+Error: Xcode alone is not sufficient on Catalina/Big Sur/Monterey/Ventura/Sonoma/Sequoia.
+```
+
+```
+xcode-select: error: command line tools are already installed, use "Software Update" to install updates
+```
+
+You need to install or update Xcode before proceeding:
+
+1. Visit the [Apple Developer Downloads](https://developer.apple.com/download/all/) page
+2. Sign in with your Apple ID
+3. Search for the latest version of **Xcode** compatible with your macOS version
+4. Download and install it
+5. After installation, open a terminal and run:
+
+```bash
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -runFirstLaunch
+```
+
+6. Then retry the Homebrew installation:
+
+```bash
+brew tap NikaGeospatial/geoengine
+brew install geoengine
+```
+
+<Tip>
+If you only need the **Command Line Tools** (without the full Xcode IDE), you can install them with `xcode-select --install`. However, some Homebrew formulae require the full Xcode application.
+</Tip>
+
+---
+
+## Step 2: Log In
+
+GeoEngine requires a free Nika account. Run the login command before using any other GeoEngine command:
+
+```bash
+geoengine login
+```
+
+This will open a browser window where you can authorise GeoEngine with your Nika account. If the browser does not open automatically, the terminal will display a URL — **Cmd+click** (macOS) or **Ctrl+click** (Windows/Linux) the URL to open it manually.
+
+![GeoEngine OAuth login screen](/guides/custom-geoprocess-deployment/login-oauth.jpg)
+
+Click **Authorize** to complete the login. Your credentials are stored securely on your machine after the first login. You only need to run `geoengine login` again if your credentials expire or become corrupted. Running any GeoEngine command while logged out will print an error prompting you to log in.
+
+---
+
+## Step 3: Initialise AI Agent Skills (Optional)
+
+If you have an AI agent installed, run the following to install GeoEngine skills into your agent:
+
+```bash
+geoengine patch --init
+```
+
+You will be prompted to select which agent(s) to install skills for:
+- **Claude** (Anthropic) — recommended
+- **Cursor** (Cursor AI)
+- **GitHub Copilot** (VS Code / Microsoft)
+- **Codex** (OpenAI)
+- **Antigravity** (Google)
+
+Skills that are already up to date are skipped; changed or missing skills are installed automatically.
+
+### Verify Skills Are Working
+
+After installing, open your AI agent and run the following prompt:
+
+```
+What skills do you have?
+```
+
+If the agent lists the GeoEngine skills (`use-geoengine`, `make-geoengine-worker`, etc.), the installation was successful.
+
+If the agent does not mention GeoEngine skills in its response, try prompting more specifically:
+
+```
+Do you have any GeoEngine-related skills installed?
+```
+
+If the agent still does not recognise the skills, check that the skill files are in the correct agent folder (e.g. `~/.claude/skills` for Claude Code) and restart your agent.
+
+See [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) for the full workflow.
+
+---
+
+## Step 4: GIS Plugin Installation (If Using QGIS or ArcGIS Pro)
+
+<Note>
+This step is only required if you plan to run GeoEngine workers from **QGIS** or **ArcGIS Pro**. If you only use the CLI or AI agents to run workers, you can skip this step entirely.
+</Note>
+
+When you run `geoengine apply` for the first time on a worker that has a GIS plugin enabled in its `geoengine.yaml`, GeoEngine will prompt you to install the plugin automatically during the apply step.
+
+```yaml
+# In your geoengine.yaml:
+plugins:
+  arcgis: false
+  qgis: true   # GeoEngine installs the QGIS plugin on first apply
+```
+
+If you upgrade GeoEngine later, run `geoengine patch` to bring all plugins back in sync:
+
+```bash
+geoengine patch
+```
+
+Follow the steps below for the GIS platform(s) you use:
+
+### Step 4a: Enabling QGIS Plugin
+
+<Note>Only required if you use **QGIS**.</Note>
+
+1. The QGIS plugin is installed automatically when you first run `geoengine apply` with `qgis: true` in your `geoengine.yaml`
+2. Open QGIS and in the top bar, click **Plugins** > **Manage and Install Plugins...**
+3. Navigate to the **Installed** tab and enable the **GeoEngine** plugin
+4. GeoEngine will now be available in the **Processing** menu
+
+### Step 4b: Enabling ArcGIS Pro Plugin
+
+<Note>Only required if you use **ArcGIS Pro**.</Note>
+
+1. The ArcGIS Pro plugin is downloaded to your Documents folder when you first run `geoengine apply` with `arcgis: true` in your `geoengine.yaml`
+2. Locate the plugin toolbox file and copy the path reference
+3. In ArcGIS Pro, navigate to the **Catalog** pane and right-click **Toolboxes** > **Add Toolbox**
+4. Paste the path reference to the plugin in the file dialog and click **OK**
+5. **GeoEngine Tools** should now be available in your Toolboxes
+
+See [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/running-in-gis) for how to use the plugins once installed.
+
+---
+
+## Updating GeoEngine
+
+To update to the latest version, run:
+
+```bash
+geoengine update
+```
+
+GeoEngine detects how it was originally installed (Homebrew, curl, or PowerShell) and upgrades using the same method. After the binary is updated, it automatically runs `geoengine patch` to bring all workers, GIS plugins, and agent skills in sync with the new version.
+
+A typical update looks like this:
+
+```
+⚡ Updates available!
+
+Detected install method: Homebrew
+==> brew update
+==> brew upgrade geoengine
+==> Upgrading nikageospatial/geoengine/geoengine
+  0.6.1 -> 0.6.4
+==> Summary
+🍺  /opt/homebrew/Cellar/geoengine/0.6.4: 4 files, 10.2MB, built in 1 second
+GeoEngine updated via Homebrew
+
+Running geoengine patch...
+Checking global artifacts...
+  ✓ settings.bin
+
+Checking GIS plugins...
+  ✓ QGIS plugin reinstalled (files were stale)
+  • ArcGIS not installed on this machine — skipping
+
+Checking agent skills...
+  ✓ Claude skills up-to-date
+  ✓ Codex skills up-to-date
+  ✓ Antigravity skills up-to-date
+
+Patch complete: 0 workers checked, 1 plugin updated, 0 skills synced,
+               0 migrations applied, 0 issues found.
+
+...
+```
+
+<Tip>
+If the patch step reports that a GIS plugin was updated, restart QGIS or ArcGIS Pro to load the latest plugin version.
+</Tip>
+
+---
+
+## Get Expert Help
+
+<ContactCTACard />

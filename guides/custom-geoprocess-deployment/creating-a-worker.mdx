@@ -1,5 +1,5 @@
 ---
-title: "Creating a Worker"
+title: "Creating a Geoprocess Worker Manually"
 description: "Turn a Python or R script into a versioned, containerised GeoEngine worker using the CLI"
 ---
 
@@ -7,7 +7,7 @@ import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
 
 A GeoEngine **worker** is a Python or R script packaged into a Docker container, described by a `geoengine.yaml` config and a `pixi.toml` dependency file. Once applied, the worker is registered locally and — if enabled — appears as a native tool in your GIS software.
 
-If you'd prefer to let an AI agent handle the setup for you, see [Using AI Agents](/guides/geoengine/using-ai-agents).
+If you'd prefer to let an AI coder handle the setup for you, see [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker).
 
 ---
 
@@ -53,7 +53,7 @@ For example, if your `geoengine.yaml` declares an input named `input-file`, GeoE
 python main.py --input-file /inputs/input-file/image.tif
 ```
 
-If your script does not already have an argument parser, add one using Python's `argparse` or R's `optparse`. The AI agent skill `write-argparse` can do this for you automatically — see [Using AI Agents](/guides/geoengine/using-ai-agents).
+If your script does not already have an argument parser, add one using Python's `argparse` or R's `optparse`. The AI agent skill `write-argparse` can do this for you automatically — see [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker).
 
 ---
 
@@ -180,7 +180,7 @@ If nothing has changed since the last apply, the process is skipped automaticall
 geoengine apply --no-cache
 ```
 
-Refer to the [Versioning documentation](/guides/geoengine/versioning) for more information on versioning your workers, and the
+Refer to the [Versioning documentation](/guides/custom-geoprocess-deployment/versioning) for more information on versioning your workers, and the
 differences of using the `--dev` flag.
 
 ---
@@ -203,9 +203,10 @@ geoengine run my-worker --ver 1.0.0 --input input-file=/path/to/image.tif
 
 ## Next Steps
 
-- [Running Workers in ArcGIS Pro & QGIS](/guides/geoengine/running-in-gis) — find and use your worker directly in your GIS software
-- [Debugging & Troubleshooting](/guides/geoengine/debugging) — inspect workers, read logs, and fix build issues
-- [Using AI Agents](/guides/geoengine/using-ai-agents) — let an AI agent handle the full setup from a single prompt
+- [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/running-in-gis) — find and use your worker directly in your GIS software
+- [Debugging & Troubleshooting](/guides/custom-geoprocess-deployment/debugging) — inspect workers, read logs, and fix build issues
+- [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) — use AI coding assistants with sample prompts to accelerate worker creation
+- [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) — let an AI coder handle the full setup from a single prompt
 
 ## Get Expert Help
 

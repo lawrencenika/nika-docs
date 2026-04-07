@@ -1,0 +1,186 @@
+---
+title: "Create & Modify a Worker Using AI Coder"
+description: "Use AI coding assistants to create, configure, and iterate on GeoEngine workers with sample prompts"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+Instead of manually editing configuration files, you can use AI coding assistants to create and modify GeoEngine workers from natural language prompts. This page provides ready-to-use prompts for popular AI coder tools.
+
+For the full manual workflow, see [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker).
+
+---
+
+## Prerequisites
+
+- GeoEngine is [installed and logged in](/guides/custom-geoprocess-deployment/installation)
+- Docker is running
+- An AI coding assistant of your choice (see supported tools below)
+
+### Supported AI Coder Tools
+
+| Tool | Provider | How to Use |
+|------|----------|------------|
+| [Claude Code](https://claude.ai/code) (recommended) | Anthropic | Run from terminal in your script directory |
+| [Cursor](https://cursor.com) | Cursor | Open your script folder as a project |
+| [GitHub Copilot](https://github.com/features/copilot) | GitHub / OpenAI | Use in VS Code, JetBrains, or CLI |
+| [Windsurf](https://codeium.com/windsurf) | Codeium | Open your script folder as a project |
+| [Codex](https://openai.com/codex/) | OpenAI | Run from terminal in your script directory |
+| [Antigravity IDE](https://antigravity.google) | Google | Open your script folder as workspace |
+
+---
+
+## GeoEngine AI Agent Skills
+
+GeoEngine ships with built-in **AI agent skills** that give your AI coder structured knowledge of the GeoEngine workflow. If you ran `geoengine patch --init` during [installation](/guides/custom-geoprocess-deployment/installation#step-3-initialise-ai-agent-skills-optional), the following skills are already available to your agent:
+
+| Skill | Description |
+|-------|-------------|
+| `use-geoengine` | Master routing skill — handles any GeoEngine request and routes to the correct sub-skill or CLI command |
+| `make-geoengine-worker` | End-to-end workflow: creates a new GeoEngine worker from scratch, including init, argparse, YAML, pixi.toml, and apply |
+| `write-geoengine-yaml` | Writes or updates the `geoengine.yaml` configuration file for a worker |
+| `write-argparse` | Adds CLI argument parsing to a script so GeoEngine can pass `--name value` flags at runtime |
+| `write-pixi-toml` | Writes or updates the `pixi.toml` dependency file for a worker |
+
+<Tip>
+With these skills installed, even short prompts like "Make this script a GeoEngine worker" will trigger the full automated workflow. Without skills, the prompts on this page still work — the AI coder will use the GeoEngine CLI directly based on your instructions.
+</Tip>
+
+---
+
+## Give the AI Coder Access to Your Script
+
+Allow your AI coder access to the directory that contains your script:
+- **Claude Code / Codex** — run the agent from the terminal inside the script's directory
+- **Cursor / Windsurf / GitHub Copilot** — open the script folder as a project in the IDE
+- **Antigravity** — open the project folder as the workspace
+
+The AI coder needs to be able to read and write files in that directory to create and edit `geoengine.yaml`, `pixi.toml`, and your script.
+
+---
+
+## Creating a New Worker
+
+Describe your script, its inputs, and its outputs. The AI coder will handle the rest — initialising the worker, writing the config files, and building the container.
+
+### Prompt Template
+
+```
+I have a [Python/R] script called [script-name] in this directory that [describe what the script does].
+
+Make it a GeoEngine worker called [worker-name] with these inputs and outputs:
+
+Inputs:
+- [name]: [type] — [description]
+- [name]: [type] — [description]
+
+Outputs:
+- [name]: [type] — [description]
+
+[Optional: Enable the QGIS/ArcGIS Pro plugin.]
+```
+
+Available input/output types: `file`, `folder`, `string`, `number`, `boolean`, `enum`, `datetime`.
+
+### Example: GeoTIFF to COG Conversion Worker
+
+```
+I have a Python script called main.py in this directory that converts a GeoTIFF raster
+to a Cloud-Optimized GeoTIFF (COG) using rasterio.
+
+Make it a GeoEngine worker called geotiff-to-cog with these inputs and outputs:
+
+Inputs:
+- input-file: file (.tif, .tiff) — the source GeoTIFF raster to convert
+- compression: enum (deflate, lzw, zstd, none) — compression method, default deflate
+- overview-levels: string — overview levels to generate, default "2 4 8 16"
+
+Outputs:
+- output-folder: folder — directory where the converted COG will be saved
+
+Enable the QGIS plugin.
+```
+
+---
+
+## Modifying an Existing Worker
+
+Describe what you want to change. The AI coder will update the script, config files, and dependencies as needed.
+
+### Prompt Template
+
+```
+I have an existing GeoEngine worker in this directory. [Describe the change you want to make.]
+```
+
+### Examples
+
+```
+Add a new boolean input called "overwrite" to my GeoEngine worker that controls whether
+existing output files should be replaced. Default to false.
+```
+
+```
+Add the numpy and scipy packages to my GeoEngine worker's dependencies.
+```
+
+```
+My GeoEngine worker currently outputs a single GeoJSON file. Change it so it also
+outputs a summary CSV with per-feature statistics.
+```
+
+---
+
+## Debugging with AI Coder
+
+### Prompt: Fix a Build Failure
+
+```
+My GeoEngine worker failed to build. Here is the error output:
+
+[paste the error output from geoengine apply]
+
+Please diagnose the issue and fix it. Common causes include missing dependencies in pixi.toml, incorrect pixi.toml syntax, or script import errors.
+```
+
+### Prompt: Fix a Runtime Error
+
+```
+My GeoEngine worker builds successfully but fails when I run it. Here is the error:
+
+[paste the error output from geoengine run or the GIS log panel]
+
+Please diagnose and fix the issue. Then run `geoengine apply --dev` to rebuild.
+```
+
+### Prompt: Inspect and Explain a Worker
+
+```
+Explain what this GeoEngine worker does. Read the geoengine.yaml, pixi.toml, and the main script in this directory and give me a summary of:
+- What inputs it accepts
+- What it does with them
+- What outputs it produces
+- What dependencies it needs
+```
+
+---
+
+## Tips for Best Results
+
+- **Be specific about inputs and outputs** — mention file types (`.tif`, `.geojson`, `.csv`), whether inputs are read-only or writable outputs, and any optional parameters so the AI sets up `geoengine.yaml` correctly
+- **Bounce with the agent** — AI agents are not perfect. It is unlikely that the agent will succeed on first try. Paste error logs into the prompt to get the agent to fix, before trying again
+- **Iterate with `--dev`** — always use `geoengine apply --dev` during development to skip version checks; run `geoengine apply` (without `--dev`) when ready for a production release
+- **Review generated files** — check that `geoengine.yaml` inputs match your script's argparse arguments
+- **Mention GIS plugins** — if you need QGIS or ArcGIS Pro support, include that in your prompt (e.g. "enable this for QGIS")
+
+---
+
+## Next Steps
+
+- [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker) — understand the manual configuration in detail
+- [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/running-in-gis) — use your worker in GIS software
+- [Debugging & Troubleshooting](/guides/custom-geoprocess-deployment/debugging) — diagnose build and runtime issues
+
+## Get Expert Help
+
+<ContactCTACard />

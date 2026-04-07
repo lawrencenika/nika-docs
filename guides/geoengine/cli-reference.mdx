@@ -1,0 +1,295 @@
+---
+title: "CLI Reference"
+description: "Complete reference for all GeoEngine CLI commands, flags, and options"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+All GeoEngine commands follow the form `geoengine <command> [options]`. Run any command with `--help` to see its usage inline.
+
+---
+
+## Authentication
+
+### `geoengine login`
+Sign in to GeoEngine with your Nika account. Credentials are stored securely on your machine and persist across sessions. Required before using any other command.
+
+```bash
+geoengine login
+```
+
+### `geoengine logout`
+Sign out and remove stored credentials.
+
+```bash
+geoengine logout
+```
+
+---
+
+## Worker Setup
+
+### `geoengine init`
+Create a new `geoengine.yaml` and `pixi.toml` template in the current directory.
+
+```bash
+geoengine init [--name <worker>] [--env py|r]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--name <worker>` | Worker name. Defaults to the current directory name if omitted. |
+| `--env py` | Generate a Python environment template (default). |
+| `--env r` | Generate an R environment template. |
+
+---
+
+### `geoengine apply`
+Register the worker, save config, generate a Dockerfile, build the Docker image, and manage GIS plugins — all in one step.
+
+```bash
+geoengine apply [<worker>] [--dev] [--no-cache] [--build-arg KEY=VALUE]
+```
+
+| Flag | Description |
+|------|-------------|
+| `<worker>` | Worker name or path. Defaults to the worker in the current directory. |
+| `--dev` | Skip semantic version validation; tag the image as `latest` only; do not save a config snapshot. |
+| `--no-cache` | Force a full Docker rebuild, bypassing the layer cache. |
+| `--build-arg KEY=VALUE` | Pass a custom Docker build argument into the image build. |
+
+**What apply does:**
+1. Validates `geoengine.yaml`
+2. Generates a `Dockerfile` from `pixi.toml` (if one doesn't already exist)
+3. Builds the Docker image (skipped automatically if config and image are unchanged)
+4. Registers the worker if new
+5. Saves a config snapshot (production mode only)
+6. Installs or updates GIS plugins based on the `plugins` section
+
+See [Creating a Worker](/guides/geoengine/creating-a-worker) and [Versioning Workers](/guides/geoengine/versioning) for full details.
+
+---
+
+## Running Workers
+
+### `geoengine run`
+Execute a worker in a Docker container. File and folder inputs are auto-mounted.
+
+```bash
+geoengine run [<worker>] --input KEY=VALUE [--input KEY=VALUE ...] [--json] [--ver <version>] [-- <extra args>]
+```
+
+| Flag | Description |
+|------|-------------|
+| `<worker>` | Worker name. Defaults to the worker in the current directory. |
+| `--input KEY=VALUE` | Pass an input to the worker. Repeat for multiple inputs. File/folder paths are auto-mounted into the container. |
+| `--json` | Structured output mode: container logs go to stderr, a JSON result is printed to stdout on completion. |
+| `--ver <version>` | Run a specific previously-built version using its snapshotted config. Defaults to `latest`. |
+| `-- <extra args>` | Pass additional arguments directly to the container command (after the trailing `--`). |
+
+**Input mounting:**
+- `file` inputs are mounted at `/inputs/<key>/<filename>`
+- `folder` inputs are mounted at `/mnt/input_<key>/`
+- Non-path values are passed through as plain string arguments
+
+**JSON result format (with `--json`):**
+```json
+{
+  "status": "completed",
+  "exit_code": 0,
+  "files": [
+    { "name": "output.geojson", "path": "/path/on/host", "size": 1024, "kind": "output" }
+  ]
+}
+```
+
+---
+
+## Inspecting Workers
+
+### `geoengine workers`
+List all registered workers.
+
+```bash
+geoengine workers [--all] [--json] [--gis arcgis|qgis]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--all` | Expand all version sub-rows inline below each worker. |
+| `--json` | Output as JSON (includes `name`, `has_tool`, `description`). |
+| `--gis arcgis\|qgis` | List only workers registered in the specified GIS plugin. |
+
+**Output columns:** `WORKER`, `LATEST VER`, `VERSIONS`, `LAST APPLIED`, `QGIS`, `ARCGIS`
+
+---
+
+### `geoengine describe`
+Show detailed information about a specific worker.
+
+```bash
+geoengine describe [<worker>] [--ver <version>] [--json]
+```
+
+| Flag | Description |
+|------|-------------|
+| `<worker>` | Worker name. Defaults to the worker in the current directory. |
+| `--ver <version>` | Show info for a specific version snapshot instead of the latest. |
+| `--json` | Output as JSON (includes `name`, `description`, `version`, `inputs`, `applied_at`, `available_versions`, `config_hash`, `plugins_qgis`, `plugins_arcgis`). |
+
+---
+
+### `geoengine diff`
+Check which tracked files have changed since the last apply.
+
+```bash
+geoengine diff [--file all|config|dockerfile|worker]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--file all` | Check all tracked files (default). |
+| `--file config` | Check only `geoengine.yaml`. |
+| `--file dockerfile` | Check only the `Dockerfile`. |
+| `--file worker` | Check only the worker script directory. |
+
+---
+
+## Managing Workers
+
+### `geoengine delete`
+Delete a worker or a specific version.
+
+```bash
+geoengine delete [--name <worker>] [--ver <version>]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--name <worker>` | Worker to delete. Defaults to the worker in the current directory. |
+| `--ver <version>` | Delete only this version (removes its Docker image, map entry, and config snapshot). Omit to delete the entire worker. |
+
+Running without `--ver` shows a confirmation prompt before deleting the worker's registration, all saved configs, and all state.
+
+---
+
+## Image Management
+
+### `geoengine image list`
+List all GeoEngine-managed Docker images.
+
+```bash
+geoengine image list
+```
+
+### `geoengine image import`
+Import a Docker image from a tarball (useful for air-gapped environments).
+
+```bash
+geoengine image import <file.tar> --tag <name:tag>
+```
+
+### `geoengine image remove`
+Remove a Docker image and its associated version entry and config snapshot.
+
+```bash
+geoengine image remove <image:tag>
+```
+
+---
+
+## Environment Variables
+
+Global environment variables are injected into every worker container at runtime.
+
+### `geoengine env set`
+Set one or more global environment variables.
+
+```bash
+geoengine env set KEY=value
+geoengine env set KEY="value with spaces"
+geoengine env set KEY1=val1 KEY2=val2
+geoengine env set -f path/to/.env   # Load from a .env file
+```
+
+Inline variables override file variables if both are provided in the same command.
+
+### `geoengine env unset`
+Remove one or more global environment variables.
+
+```bash
+geoengine env unset KEY
+geoengine env unset KEY1 KEY2
+```
+
+### `geoengine env list`
+List all currently set global environment variables.
+
+```bash
+geoengine env list
+```
+
+### `geoengine env show`
+Show the value of a single global environment variable.
+
+```bash
+geoengine env show KEY
+```
+
+---
+
+## Maintenance & Updates
+
+### `geoengine patch`
+Validate all GeoEngine artifacts and repair anything that is broken or out of date. Safe to run at any time; exits with a non-zero status if issues are found.
+
+```bash
+geoengine patch
+```
+
+Run this after upgrading GeoEngine to sync workers, GIS plugins, and agent skills with the new binary.
+
+```bash
+geoengine patch --init   # Interactive — select which AI agents to install skills for
+```
+
+### `geoengine update`
+Update GeoEngine to the latest version using the original install method (Homebrew, curl, or PowerShell), then automatically run `geoengine patch`.
+
+```bash
+geoengine update
+```
+
+### `geoengine uninstall`
+Remove the GeoEngine binary and `~/.geoengine`.
+
+```bash
+geoengine uninstall
+```
+
+---
+
+## Quick Reference
+
+| Command | Description |
+|---------|-------------|
+| `geoengine login` | Sign in (required before any other command) |
+| `geoengine logout` | Sign out |
+| `geoengine init [--name] [--env py\|r]` | Create `geoengine.yaml` and `pixi.toml` templates |
+| `geoengine apply [--dev] [--no-cache] [--build-arg K=V]` | Register, build image, and install GIS plugins |
+| `geoengine run [<worker>] --input K=V [--json] [--ver V]` | Run a worker in a container |
+| `geoengine diff [--file all\|config\|dockerfile\|worker]` | Check tracked file changes since last apply |
+| `geoengine workers [--all] [--json] [--gis arcgis\|qgis]` | List registered workers |
+| `geoengine describe [<worker>] [--ver V] [--json]` | Show worker details and config hash |
+| `geoengine delete [--name <worker>] [--ver V]` | Delete a worker or a single version |
+| `geoengine image list\|import\|remove` | Manage Docker images |
+| `geoengine env set\|unset\|list\|show` | Manage global environment variables |
+| `geoengine patch [--init]` | Repair artifacts and sync plugins/agent skills |
+| `geoengine update` | Update to latest version, then run patch |
+| `geoengine uninstall` | Remove GeoEngine binary and data |
+
+---
+
+## Get Expert Help
+
+<ContactCTACard />

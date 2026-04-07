@@ -1,0 +1,105 @@
+---
+title: "Running Workers in ArcGIS Pro & QGIS"
+description: "Find and run your GeoEngine workers directly inside ArcGIS Pro and QGIS after applying them"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+After you have applied a GeoEngine worker with GIS plugins enabled, it appears as a native tool inside your GIS software — no proxy service, no extra configuration. This guide shows you how to find and run your workers from QGIS and ArcGIS Pro.
+
+If you haven't applied a worker yet, see [Creating a Worker](/guides/geoengine/creating-a-worker) first.
+
+---
+
+## How GIS Plugins Work
+
+GeoEngine installs a plugin into QGIS and/or ArcGIS Pro on the first `geoengine apply` for a worker that has plugins enabled. The plugin:
+
+1. **Discovers workers** by calling `geoengine workers --json` and `geoengine describe <worker> --json`
+2. **Displays each worker** as a tool entry in the GIS toolbox, one per available version plus a `latest` entry
+3. **Runs workers** by invoking `geoengine run <worker> --json --input KEY=VALUE` as a subprocess
+4. **Streams logs** to the GIS progress panel in real time
+5. **Returns outputs** as a structured JSON result; output files are automatically loaded into the GIS view
+
+---
+
+## Running in QGIS
+
+### Step 1: Open the Processing Toolbox
+
+In QGIS, open the **Processing** menu and click **Toolbox**, or press `Ctrl+Alt+T`. The Processing Toolbox panel will appear on the right side of the screen.
+
+### Step 2: Find Your Worker
+
+Expand the **GeoEngine** provider in the toolbox. Your workers are listed by name. Each worker that has been applied in production shows individual version entries (e.g. `my-worker (1.0.0)`, `my-worker (1.1.0)`), plus a **`my-worker (*latest)`** entry at the top of the list (the `*` prefix sorts it above the versioned entries).
+
+Click on any entry to see its description, config hash, and last-applied time in the help panel on the right.
+
+### Step 3: Fill In Inputs and Run
+
+Double-click a worker entry to open the tool dialog. Fill in the required input parameters:
+- **File inputs** — use the file selector to browse to a file on your machine; GeoEngine mounts it automatically
+- **Folder inputs** — select a directory
+- **Other inputs** (enum, number, boolean, string) — displayed as dropdowns, number fields, checkboxes, or text fields
+
+Click **Run**. Container logs stream into the QGIS log panel in real time. When the run finishes, output files are automatically added as layers to your QGIS project.
+
+---
+
+## Running in ArcGIS Pro
+
+### Step 1: Open the GeoEngine Toolbox
+
+In ArcGIS Pro, open the **Analysis** tab and click **Tools** to open the Geoprocessing pane. Search for **GeoEngine** in the search bar, or browse to the GeoEngine toolbox in the **Toolboxes** section of the Catalog pane.
+
+### Step 2: Find Your Worker
+
+Expand the GeoEngine toolbox. Your applied workers appear as tool entries, listed by name and version. Click a tool to see its description and parameters.
+
+### Step 3: Fill In Inputs and Run
+
+Double-click a worker to open its tool dialog. Fill in the required parameters and click **Run**. Container logs appear in the Geoprocessing history and messages panel. Output files are added to your ArcGIS Pro map automatically when the run completes.
+
+---
+
+## Understanding Output
+
+When a worker finishes, GeoEngine returns a structured JSON result:
+
+```json
+{
+  "status": "completed",
+  "exit_code": 0,
+  "files": [
+    {
+      "name": "output.geojson",
+      "path": "/path/to/output/file",
+      "size": 123,
+      "kind": "output"
+    }
+  ]
+}
+```
+
+- **`kind: "output"`** — a file produced by the worker; automatically added to your GIS view
+- **`kind: "input"`** — an input file that was passed in; also shown in the GIS so you can compare input and output side by side
+
+If a run fails, the exit code and any error messages from the container appear in the GIS messages panel.
+
+---
+
+## Cancelling a Run
+
+You can cancel a running worker at any time using the cancel button in the GIS progress dialog. Cancellation terminates the GeoEngine subprocess, which in turn stops and removes the Docker container immediately.
+
+---
+
+## Refreshing the Worker List
+
+The plugin reads the worker list fresh each time the toolbox is opened. If you apply a new worker or a new version and it doesn't appear in your GIS yet, close and reopen the Processing Toolbox (QGIS) or Geoprocessing pane (ArcGIS Pro) to trigger a refresh.
+
+---
+
+## Get Expert Help
+
+<ContactCTACard />

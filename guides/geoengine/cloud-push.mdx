@@ -1,0 +1,52 @@
+---
+title: "Cloud Push (Coming Soon)"
+description: "Push your GeoEngine worker to the cloud so non-technical users can run it without a local setup"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+<Note>
+Cloud Push is currently in development. This page will be updated with full instructions when the feature becomes available. If you'd like early access, reach out to us at [sales@nikaplanet.com](mailto:sales@nikaplanet.com).
+</Note>
+
+## Overview
+
+Cloud Push will let you publish a GeoEngine worker to Nika's cloud infrastructure with a single command. Once pushed, non-technical users — analysts, stakeholders, field teams — can run the worker directly from the Nika web interface without needing Docker, a terminal, or any local setup.
+
+This bridges the gap between the developer workflow (local CLI + GIS plugins) and broader team usage (web-based self-service).
+
+---
+
+## Planned Workflow
+
+The steps below outline the intended workflow. Commands and UI are subject to change before release.
+
+### Step 1: Authenticate and Select a Target Workspace
+
+Log in to GeoEngine (if not already) and select the Nika workspace you want to publish the worker to:
+
+```bash
+geoengine login
+```
+
+### Step 2: Push the Worker
+
+From your worker directory, push the current version to the cloud:
+
+```bash
+# Planned command — not yet available
+geoengine push
+```
+
+GeoEngine will package the worker, upload the container image, and register it in the selected workspace.
+
+### Step 3: Available to Your Team
+
+After a successful push, your team members will be able to find the worker in their QGIS or ArcGIS Pro plugin. They will be
+able to run the worker through the cloud without needing to install anything else locally.
+
+---
+
+## Get Expert Help
+
+<ContactCTACard />

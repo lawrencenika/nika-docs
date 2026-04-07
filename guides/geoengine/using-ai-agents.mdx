@@ -1,0 +1,101 @@
+---
+title: "Using AI Agents to Create Workers"
+description: "Let Claude, Codex, or Antigravity handle the full GeoEngine worker setup from a single prompt"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+GeoEngine ships with a set of **AI agent skills** that automate the full worker creation workflow — from writing the argument parser and `geoengine.yaml`, to installing dependencies and running `geoengine apply`. This is the recommended path if you want to skip the manual configuration steps.
+
+Supported agents:
+- **Claude Code** (Anthropic)
+- **Codex** (OpenAI)
+- **Antigravity IDE** (Google)
+
+---
+
+## Step 1: Install Agent Skills
+
+If you haven't done this during initial setup, run:
+
+```bash
+geoengine patch --init
+```
+
+You will be prompted to select which agent(s) to install skills for. Select all that you have installed. Skills are written to the agent's skills folder (e.g. `~/.claude/skills` for Claude Code).
+
+---
+
+## Step 2: Verify Skills Are Working
+
+Open your AI agent and send the following prompt:
+
+```
+What skills do you have?
+```
+
+If the agent lists the GeoEngine skills shown in the table below, the installation was successful. If not, check that the skills files are in the correct agent folder and restart your agent.
+
+### Available Skills
+
+| Skill | Description |
+|-------|-------------|
+| `use-geoengine` | Master routing skill — handles any GeoEngine request and routes to the correct sub-skill or CLI command |
+| `make-geoengine-worker` | End-to-end workflow: creates a new GeoEngine worker from scratch, including init, argparse, YAML, pixi.toml, and apply |
+| `write-geoengine-yaml` | Writes or updates the `geoengine.yaml` configuration file for a worker |
+| `write-argparse` | Adds CLI argument parsing to a script so GeoEngine can pass `--name value` flags at runtime |
+| `write-pixi-toml` | Writes or updates the `pixi.toml` dependency file for a worker |
+
+---
+
+## Step 3: Give the Agent Access to Your Script
+
+Allow your AI agent access to the directory that contains your script. In most agents, this means:
+- **Claude Code** — run the agent from the terminal inside the script's directory, or open the folder in the agent's file explorer
+- **Codex / Antigravity** — open the project folder as the workspace
+
+The agent needs to be able to read and write files in that directory to create and edit `geoengine.yaml`, `pixi.toml`, and your script.
+
+---
+
+## Step 4: Prompt the Agent
+
+Tell the agent what you want. Be specific about which function or file to wrap. For example:
+
+```
+Make the function `run_hotspot_analysis_from_files()` from `hotspot_analysis.py` a GeoEngine worker.
+```
+
+Or more generally:
+
+```
+Create a GeoEngine worker from main.py that takes an input GeoTIFF and outputs a classified raster.
+```
+
+The agent will then automatically:
+1. Add an argument parser to your script (if it doesn't have one)
+2. Run `geoengine init` to create template files
+3. Write `geoengine.yaml` with the correct inputs, program, and plugin settings
+4. Write `pixi.toml` with the required dependencies
+5. Run `geoengine apply --dev` to build and register the worker
+
+---
+
+## Tips for Best Results
+
+- **Be specific about inputs and outputs** — mention file types, whether inputs are read-only or writable outputs, and any optional parameters
+- **Bounce with the agent** — AI agents are not perfect. It is unlikely that the agent will succeed on first try. Paste error logs into the prompt to get the agent to fix, before trying again.
+- **Mention GIS plugin needs** — if you want the worker available in QGIS or ArcGIS Pro, include that in your prompt (e.g. "enable this for QGIS")
+- **Iterate with `--dev`** — the agent uses `apply --dev` by default to skip version checks during development; run `geoengine apply` (without `--dev`) when ready for a production release
+
+---
+
+## Next Steps
+
+- [Creating a Worker](/guides/geoengine/creating-a-worker) — understand the manual workflow and configuration options in detail
+- [Running Workers in ArcGIS Pro & QGIS](/guides/geoengine/running-in-gis) — use your worker in GIS software
+- [Debugging & Troubleshooting](/guides/geoengine/debugging) — diagnose issues if a build or run fails
+
+## Get Expert Help
+
+<ContactCTACard />

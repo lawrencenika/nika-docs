@@ -1,0 +1,184 @@
+---
+title: "Debugging & Troubleshooting"
+description: "Diagnose worker issues using GeoEngine's CLI inspection commands and log output"
+---
+
+import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
+
+GeoEngine provides a set of CLI commands to inspect workers, read container logs, and repair broken state. This guide covers the most common debugging scenarios.
+
+---
+
+## Check What Has Changed
+
+Before re-applying a worker, use `geoengine diff` to see which tracked files have changed since the last apply:
+
+```bash
+# Check all tracked files: geoengine.yaml, Dockerfile, and your script
+geoengine diff
+
+# Check only the geoengine.yaml configuration
+geoengine diff --file config
+
+# Check only the Dockerfile
+geoengine diff --file dockerfile
+
+# Check only the worker script directory
+geoengine diff --file worker
+```
+
+This is useful for confirming which changes will be picked up when you run `geoengine apply` next.
+
+---
+
+## Inspect Registered Workers
+
+List all registered workers and their current status:
+
+```bash
+# Summary view
+geoengine workers
+
+# Expanded view — shows all versions as sub-rows beneath each worker
+geoengine workers --all
+```
+
+The output table includes the following columns:
+
+| Column | Description |
+|--------|-------------|
+| **WORKER** | Worker name |
+| **LATEST VER** | Highest semantic version applied in production (blank for dev-only workers) |
+| **VERSIONS** | Total count of available built versions |
+| **LAST APPLIED** | Relative time since last apply (e.g. `3min 42s ago`) |
+| **QGIS** | Whether the worker is registered in the QGIS plugin |
+| **ARCGIS** | Whether the worker is registered in the ArcGIS Pro plugin |
+
+If a worker is missing from this list after `geoengine apply`, run `geoengine patch` to repair the worker registry (see below).
+
+---
+
+## Inspect a Specific Worker
+
+Get detailed information about a single worker:
+
+```bash
+# Show the latest applied version, config hash, and available versions list
+geoengine describe my-worker
+
+# Show info for a specific previously-built version
+geoengine describe my-worker --ver 1.2.3
+```
+
+The output includes:
+- **Name and description**
+- **Version** and **applied at** timestamp
+- **Config hash** — a SHA-256 of the applied config; useful to confirm two builds used the same configuration
+- **Available versions** — all versions currently on disk
+- **Plugin flags** — which GIS plugins were enabled when this version was applied
+
+---
+
+## Read Container Logs
+
+Container logs stream to **stderr** automatically when you run a worker. To separate logs from the structured result, use `--json` mode:
+
+```bash
+geoengine run my-worker --json --input input-file=/path/to/file.tif
+```
+
+- **stderr** — container log output, streamed in real time
+- **stdout** — the final JSON result, printed on completion:
+
+```json
+{
+  "status": "completed",
+  "exit_code": 0,
+  "files": [
+    {
+      "name": "output.geojson",
+      "path": "/path/to/output/file",
+      "size": 1024,
+      "kind": "output"
+    }
+  ]
+}
+```
+
+A non-zero `exit_code` means the container script exited with an error. Check stderr for the Python/R traceback.
+
+---
+
+## Force a Clean Rebuild
+
+If your Docker image is stale or a dependency change isn't being picked up, force a full rebuild with `--no-cache`:
+
+```bash
+geoengine apply --no-cache
+```
+
+This bypasses Docker's layer cache and rebuilds the image from scratch. Use it when:
+- You've updated a package version in `pixi.toml` but the old version is still being used
+- The image is in an inconsistent state after a failed build
+- You want to confirm the image builds cleanly from the current config
+
+---
+
+## Repair GeoEngine Artifacts
+
+`geoengine patch` performs a maintenance sweep and repairs any broken state across all GeoEngine-managed artifacts:
+
+```bash
+geoengine patch
+```
+
+Run this after upgrading GeoEngine, or whenever workers, plugins, or agent skills are behaving unexpectedly. It checks and repairs:
+
+- **Global registry** (`~/.geoengine/settings.bin`) — validates the settings file
+- **Worker state files** — validates `state/*.json`, reports orphaned records
+- **Config snapshots** — validates `saves/<worker>/map.json`, checks all referenced snapshots exist
+- **GIS plugins** — reinstalls stale or missing plugin files for QGIS and ArcGIS Pro
+- **Agent skills** — syncs skill files into each installed agent's skills folder; files with matching SHA-256 hashes are skipped
+
+`geoengine patch` exits with a non-zero status if any validation issue is found, making it safe to use in scripts.
+
+---
+
+## Delete a Worker or Version
+
+If a worker is in a broken state and needs to be removed:
+
+```bash
+# Delete a worker entirely (shows a confirmation prompt)
+geoengine delete --name my-worker
+
+# Delete the worker defined in the current directory
+geoengine delete
+
+# Delete a specific version only (removes image, mapping, and snapshot)
+geoengine delete --ver 1.2.3
+```
+
+After deleting, re-apply the worker with `geoengine apply` to recreate it cleanly.
+
+---
+
+## Common Issues
+
+### Build fails: `command.script` not found
+Make sure the `script` path in `geoengine.yaml` is relative to the worker directory and the file actually exists there.
+
+### `geoengine apply` rejects my version number
+In production mode, the version in `geoengine.yaml` must be a valid semantic version (`MAJOR.MINOR.PATCH`) and must be greater than or equal to the highest version already recorded. Use `geoengine apply --dev` to skip this check during development.
+
+### Worker appears in `geoengine workers` but not in QGIS/ArcGIS
+Run `geoengine patch` to reinstall any stale plugin files, then close and reopen the GIS Processing Toolbox to refresh the worker list.
+
+### Dependency changes not reflected after apply
+Run `geoengine apply --no-cache` to force a full Docker rebuild. Docker may be using a cached layer that predates your `pixi.toml` changes.
+
+---
+
+## Get Expert Help
+
+<ContactCTACard />

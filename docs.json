@@ -161,6 +161,20 @@
             ]
           },
           {
+            "group": "GeoEngine",
+            "icon": "cube",
+            "pages": [
+              "guides/geoengine/installation",
+              "guides/geoengine/creating-a-worker",
+              "guides/geoengine/running-in-gis",
+              "guides/geoengine/using-ai-agents",
+              "guides/geoengine/versioning",
+              "guides/geoengine/debugging",
+              "guides/geoengine/cloud-push",
+              "guides/geoengine/cli-reference"
+            ]
+          },
+          {
             "group": "Best Practices",
             "icon": "check",
             "pages": [

@@ -9,23 +9,11 @@ If you haven't applied a worker yet, see [Creating a Worker](/guides/custom-geop
 
 ---
 
-## How GIS Plugins Work
-
-GeoEngine installs a plugin into QGIS and/or ArcGIS Pro on the first `geoengine apply` for a worker that has plugins enabled. The plugin:
-
-1. **Discovers workers** by calling `geoengine workers --json` and `geoengine describe <worker> --json`
-2. **Displays each worker** as a tool entry in the GIS toolbox, one per available version plus a `latest` entry
-3. **Runs workers** by invoking `geoengine run <worker> --json --input KEY=VALUE` as a subprocess
-4. **Streams logs** to the GIS progress panel in real time
-5. **Returns outputs** as a structured JSON result; output files are automatically loaded into the GIS view
-
----
-
 ## Running in QGIS
 
 ### Step 1: Open the Processing Toolbox
 
-In QGIS, open the **Processing** menu and click **Toolbox**, or press `Ctrl+Alt+T`. The Processing Toolbox panel will appear on the right side of the screen.
+In QGIS, open the **Processing** menu and click **Toolbox**, or press `Ctrl+Alt+T` (`⌥+⌘+T` on Mac). The Processing Toolbox panel will appear on the right side of the screen.
 
 ### Step 2: Find Your Worker
 

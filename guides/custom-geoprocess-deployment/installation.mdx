@@ -186,6 +186,8 @@ Follow the steps below for the GIS platform(s) you use:
 
 <Note>Only required if you use **QGIS**.</Note>
 
+![Enabling QGIS Plugin](/guides/custom-geoprocess-deployment/installation-1.gif)
+
 1. The QGIS plugin is installed automatically when you first run `geoengine apply` with `qgis: true` in your `geoengine.yaml`
 2. Open QGIS and in the top bar, click **Plugins** > **Manage and Install Plugins...**
 3. Navigate to the **Installed** tab and enable the **GeoEngine** plugin
@@ -218,7 +220,8 @@ GeoEngine detects how it was originally installed (Homebrew, curl, or PowerShell
 A typical update looks like this:
 
 ```
-⚡ Updates available!
+⚡ Update available!
+   Please run 'geoengine update' to update to the latest version!
 
 Detected install method: Homebrew
 ==> brew update

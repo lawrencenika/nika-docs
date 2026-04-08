@@ -1,0 +1,155 @@
+---
+title: "Modify Legend for Viewing"
+description: "Control which layers appear in the map legend, add captions, and understand how each layer type displays its legend"
+---
+
+The Legend view gives you a summarized, read-friendly overview of every layer on your map and what its symbology means. You can toggle layers in and out of the legend, add captions, and reorder entries by reordering the layers themselves.
+
+When your map is published, the legend shown to viewers respects these settings. You can customize which layers show their entries to most effectively present your maps.
+
+## Accessing the Legend
+
+The layer panel has two tabs at the top: **Layers** and **Legend**.
+
+- **Layers tab**: The full layer list where you manage, reorder, and style layers
+- **Legend tab**: A focused view showing only the legend-relevant information for each layer
+
+![Legend Tab](/guides/become-map-expert/modify-legend-0.jpg)
+
+Click the **Legend** tab to switch to the legend view.
+
+## Legend Entry Structure
+
+Each layer included in the legend displays:
+
+1. **Layer icon** — indicates the layer type (vector, raster, etc.)
+2. **Layer name** — the name as shown in the layer list
+3. **Visibility toggle** — an eye icon to show or hide the layer on the map directly from the legend
+4. **Remove from legend button** — an X icon to exclude the layer from the legend without removing it from the map
+5. **Caption** (if set) — descriptive text displayed below the layer name
+6. **Symbology** — the visual representation of how the layer is styled (color swatches, gradients, class breaks, etc.)
+
+![Legend Example](/guides/become-map-expert/modify-legend-1.jpg)
+
+## Show and Hide Layers in the Legend
+
+By default, all layers are **included** in the legend. You can control which layers appear.
+
+### Remove a Layer from the Legend
+
+You have two options:
+
+- In the **Legend tab**: Click the **X** button on any legend entry to remove it
+- In the **Layer Styles panel**: Toggle the **Show** switch off in the Legend section
+
+![Layer Style Control](/guides/become-map-expert/modify-legend-2.jpg)
+The layer remains on the map — it is only hidden from the legend view.
+
+### Restore a Layer to the Legend
+
+Layers removed from the legend appear in a collapsible **"Other layers"** section at the bottom of the Legend tab.
+
+1. Click **"Other layers (N)"** to expand the section
+2. Click the **arrow-up icon** next to any layer to add it back to the legend
+
+![Layer Style Control](/guides/become-map-expert/modify-legend-3.jpg)
+
+Alternatively, open the layer's styling panel and toggle the **Show** switch on in the Legend section.
+
+### Toggle Layer Visibility
+
+The **eye icon** on each legend entry controls whether the layer is visible on the map. This is the same as toggling visibility in the Layers tab — hidden layers remain in the legend but are not rendered on the map.
+
+## Add a Caption
+
+Captions add descriptive text below the layer name in the legend entry.
+
+1. **Select the layer** to open its styling panel
+2. Expand the **Legend** section
+3. Type your caption in the **Caption** field
+4. The caption is saved automatically (with a short debounce delay)
+
+Captions appear in both the Legend tab and when the map is published.
+
+## Legend Order
+
+The legend displays layers in the **same order as the layer list**. To change the legend order:
+
+1. Switch to the **Layers** tab
+2. **Drag and drop** layers to reorder them
+3. Switch back to the **Legend** tab — the order is reflected immediately
+
+Layers at the bottom of the layer list render on top of the map, and appear in the same position in the legend.
+
+## How Each Layer Type Displays in the Legend
+
+The legend automatically generates symbology based on each layer's current styling configuration.
+
+### Vector Layers
+
+Vector layer legends are organized by geometry type when a layer contains mixed geometries. Each geometry section shows its own symbology.
+
+#### Polygons
+
+- **Solid color**: A filled square swatch showing the fill color, with an outline if stroke is enabled
+- **Gradient (continuous)**: A smooth color ramp bar with min/max labels, labeled by the property name
+- **Gradient (discrete/classify)**: A list of colored swatches with value range labels (e.g., "0.5 – 1.2")
+- **Unique values**: A list of colored swatches, one per unique value with its label
+
+#### Lines
+
+- **Solid color**: A horizontal line swatch in the line color
+- **Gradient / Unique values**: Same class-break or value list format as polygons, but with line swatches
+
+#### Points
+
+- **Solid color**: A filled circle swatch in the icon/point color
+- **Gradient / Unique values**: Same format as polygons, but with circle swatches
+
+### Raster Layers
+
+Raster legend display depends on the visualization type and color mode.
+
+#### Single Channel with Named Colormap
+
+A **color ramp bar** showing the gradient from the selected colormap (e.g., Viridis, Blues), with min and max rescale values at either end. The band name or algebra expression is shown as a label.
+
+#### Single Channel with Classify
+
+A **discrete class list** showing colored swatches for each class break with value range labels (e.g., "< 0.2", "0.2 – 0.4", ">= 0.8").
+
+#### Single Channel with Unique Values
+
+A **value list** showing one colored swatch per unique integer value, with custom labels if set.
+
+#### RGB Channels (Multi-Channel)
+
+A three-part **red/green/blue swatch** labeled "RGB Composite", with the band assignments listed below (e.g., "R: b4 · G: b3 · B: b2").
+
+#### Raster Algebra
+
+Displays the same as Single Channel — the algebra expression name (e.g., NDVI) is shown as the label, with the colormap gradient and rescale range.
+
+#### No Colormap Set
+
+Falls back to a **grayscale gradient** bar (black to white) with the rescale range.
+
+<div style={{ display: "flex", gap: "1rem" }}>
+	<img
+		src="/guides/become-map-expert/modify-legend-4.jpg"
+		alt="Sample Legend Appearance 1"
+		style={{ flex: 1, maxWidth: "50%" }}
+	/>
+	<img
+		src="/guides/become-map-expert/modify-legend-5.jpg"
+		alt="Sample Legend Appearance 2"
+		style={{ flex: 1, maxWidth: "50%" }}
+	/>
+</div>
+
+## Best Practices
+
+- **Include only meaningful layers** — remove background or reference layers from the legend to keep it focused on the data that matters
+- **Add captions** to provide context — a short description like "Population density per km²" makes the legend self-explanatory
+- **Use consistent layer naming** — legend entries show the layer name, so clear names make the legend readable without captions
+- **Order layers logically** — since legend order follows layer order, arrange layers so the legend reads naturally from top to bottom

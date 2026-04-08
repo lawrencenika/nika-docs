@@ -3,8 +3,6 @@ title: "Debugging & Troubleshooting"
 description: "Diagnose worker issues using GeoEngine's CLI inspection commands and log output"
 ---
 
-import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
-
 GeoEngine provides a set of CLI commands to inspect workers, read container logs, and repair broken state. This guide covers the most common debugging scenarios.
 
 ---
@@ -177,8 +175,3 @@ Run `geoengine patch` to reinstall any stale plugin files, then close and reopen
 ### Dependency changes not reflected after apply
 Run `geoengine apply --no-cache` to force a full Docker rebuild. Docker may be using a cached layer that predates your `pixi.toml` changes.
 
----
-
-## Get Expert Help
-
-<ContactCTACard />

@@ -3,8 +3,6 @@ title: "Versioning Workers"
 description: "Understand how GeoEngine versions workers, when to bump versions, and how to reproduce any past build exactly"
 ---
 
-import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
-
 GeoEngine uses [Semantic Versioning](https://semver.org/) to track worker builds. Every production apply creates a permanent snapshot of the worker configuration, so any version can be reproduced and run at any time — even after the code has changed.
 
 ---
@@ -133,8 +131,3 @@ geoengine apply          # saves snapshot for 1.1.0, latest = 1.1.0
 geoengine run my-worker --ver 1.0.0 --input input-file=/data.tif
 ```
 
----
-
-## Get Expert Help
-
-<ContactCTACard />

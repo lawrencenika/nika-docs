@@ -3,8 +3,6 @@ title: "Installation & Setup"
 description: "Install GeoEngine, set up prerequisites, initialise AI agent skills, and configure GIS plugins"
 ---
 
-import { ContactCTACard } from '/snippets/contact-cta-card.mdx';
-
 Get GeoEngine installed and ready to use on your machine. This guide walks you through installing Docker, the GeoEngine CLI, logging in, and optionally setting up AI agent skills and GIS plugin support.
 
 ## Prerequisites
@@ -188,6 +186,8 @@ Follow the steps below for the GIS platform(s) you use:
 
 <Note>Only required if you use **QGIS**.</Note>
 
+![Enabling QGIS Plugin](/guides/custom-geoprocess-deployment/installation-1.gif)
+
 1. The QGIS plugin is installed automatically when you first run `geoengine apply` with `qgis: true` in your `geoengine.yaml`
 2. Open QGIS and in the top bar, click **Plugins** > **Manage and Install Plugins...**
 3. Navigate to the **Installed** tab and enable the **GeoEngine** plugin
@@ -220,7 +220,8 @@ GeoEngine detects how it was originally installed (Homebrew, curl, or PowerShell
 A typical update looks like this:
 
 ```
-⚡ Updates available!
+⚡ Update available!
+   Please run 'geoengine update' to update to the latest version!
 
 Detected install method: Homebrew
 ==> brew update
@@ -254,8 +255,3 @@ Patch complete: 0 workers checked, 1 plugin updated, 0 skills synced,
 If the patch step reports that a GIS plugin was updated, restart QGIS or ArcGIS Pro to load the latest plugin version.
 </Tip>
 
----
-
-## Get Expert Help
-
-<ContactCTACard />

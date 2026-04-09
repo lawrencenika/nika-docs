@@ -1,0 +1,76 @@
+---
+title: "Overview"
+description: "NIKA is an AI-powered desktop agent for geospatial analysis, data conversion, and spatial knowledge management."
+---
+
+![NIKA Desktop Agent](/nika-desktop/nika-desktop-app.jpg)
+
+## Overview
+
+NIKA — **Nexus Interactive Kartographic Agent** — is a desktop application that brings AI agents directly into your geospatial workflows. NIKA provides a chat-driven interface where AI can read and inspect your data, run geospatial tools, convert between 100+ formats, build interactive visualizations, and manage multi-step tasks — all from a single conversation.
+
+## GeoVault
+
+Enterprises accumulate vast amounts of geospatial data over years — environmental reports, survey PDFs, regulatory filings, satellite imagery metadata, field notes, and engineering documents — scattered across drives, databases, and inboxes. The institutional knowledge locked inside these files often lives only in the heads of senior staff.
+
+NIKA's **GeoVault** changes that. Ingest your organization's documents and NIKA transforms them into a spatially-aware knowledge base that any team member can query through natural language. Questions that previously required decades of experience to answer — *"Have we surveyed for protected species near this river corridor before?"* or *"What soil conditions were reported across our northern sites?"* — are now accessible to everyone on the team, instantly.
+
+<a href="/nika-desktop/geovault">Learn more about the GeoVault →</a>
+
+## Geospatial Tools
+
+NIKA includes built-in tools for inspecting and converting geospatial data without leaving the chat.
+
+### Data Inspection
+- **Vector metadata** — read layers, coordinate reference systems, and attribute schemas from any supported vector format
+- **Raster metadata** — read dimensions, band counts, CRS, and statistics from any supported raster format
+
+### Format Conversion (100+ Formats)
+
+Convert between formats with a single request to the agent:
+
+| Category | Formats |
+|----------|---------|
+| **Raster** | COG, GeoTIFF, JPEG2000, ECW, MrSID, PNG, JPEG |
+| **Vector** | GeoJSON, Shapefile, GeoPackage, FlatGeoBuf, GeoParquet, KML, KMZ, CSV, DXF |
+| **Vector Tiles** | PMTiles, MBTiles |
+| **3D** | LAS, LAZ, Cesium 3D Tiles, COPC, STL, OBJ, GLB, glTF |
+| **Styles** | SLD, QGIS QML |
+
+## Interactive Visualizations
+
+The agent can generate rich visualizations directly in the conversation:
+
+- **Charts** — AI generates interactive chart specifications from your data
+- **Dashboards** — compose multiple charts into a drag-and-drop dashboard canvas
+- **Maps** — interactive maps with raster, vector, and GeoJSON layer management
+- **3D Viewer** — visualize 3D scans, point clouds, and terrain models
+- **Surveys** — design and preview field survey forms directly in the agent
+- **Web Apps** — generate and preview self-contained web applications
+- **Diagrams** — automatic diagram rendering for architecture, flowcharts, and workflows
+
+## Extensibility
+
+### Plugin System
+Drop plugins into the plugins directory with a `plugin.json` manifest. Each plugin registers tools with input schemas that the AI agent can discover and call automatically.
+
+### MCP Server Integration
+Connect external tools via the **Model Context Protocol (MCP)**. Configure MCP servers and NIKA dynamically discovers their tools, making them available to the agent alongside built-in capabilities.
+
+### Skill Templates
+Save reusable prompt templates as skills. Skills provide domain-specific instructions that guide the agent's behavior for recurring workflows — from standard data processing pipelines to compliance report generation.
+
+## AI Chat with Multi-Provider Support
+
+NIKA's chat interface connects to multiple LLM providers, so you can choose the model that best fits your task and budget.
+
+| Provider | Models |
+|----------|--------|
+| **Anthropic** | Claude Sonnet 4.5, Claude Opus 4, Claude Haiku 4 |
+| **OpenAI** | GPT-4.1, GPT-4.1 Mini, o3, o4-mini |
+| **Google Gemini** | Gemini 2.5 Pro, Gemini 2.5 Flash |
+| **Ollama (Local)** | Llama 3.3, Mistral, Mixtral, CodeLlama, Qwen 2.5 |
+
+The agent operates in an **agentic tool loop** — it autonomously reads files, executes geospatial operations, inspects results, and iterates until the task is complete. Streaming responses show tool execution in real time so you always know what the agent is doing.
+
+Multiple chat sessions are persisted to disk, so you can pick up any prior conversation exactly where you left off.

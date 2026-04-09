@@ -1,0 +1,71 @@
+---
+title: "Field Survey"
+icon: "clipboard-list"
+description: "Compliance survey engine with voice recording, AI auto-fill, and GPS tracking."
+---
+
+## Overview
+
+NIKA Mobile's survey engine is purpose-built for environmental field data collection. It combines a standards-compatible form renderer with voice recording, on-device transcription, and AI-powered auto-fill — so surveyors spend less time typing and more time observing.
+
+## Survey Hierarchy
+
+Surveys are organized in a three-level hierarchy designed for complex ecological assessments:
+
+1. **Survey** — the top-level project (e.g., "BNG Habitat Assessment — Site A")
+2. **Plan** — a spatial unit within the survey (a habitat parcel, transect route, carbon plot, or point location)
+3. **Session** — a single data collection visit to a plan, capturing form responses, GPS tracks, photos, and audio
+
+This structure supports repeat visits, seasonal monitoring, and multi-surveyor coordination across large sites.
+
+## Form Engine
+
+### Rich Field Types
+The form renderer supports the full range of field types needed for compliance surveys:
+- **Text & numeric** — free text, integer, decimal inputs
+- **Selection** — single-select (radio) and multi-select (checkbox) with choice lists
+- **Spatial** — geopoint, geotrace (line), and geoshape (polygon) capture via interactive map picker
+- **Media** — photo capture and audio recording
+- **Temporal** — date, time, and datetime pickers
+- **Logic** — skip logic (relevant expressions) and constraint validation
+
+### Compliance Schemas
+Pre-built form schemas for industry-standard environmental methodologies:
+
+| Schema | Standard |
+|--------|----------|
+| BNG Habitat Condition | DEFRA Biodiversity Metric 4.0 |
+| Bat Emergence Survey | BCT 4th Edition |
+| Tidal Wetland Carbon | Verra VM0033 |
+| REDD+ Forest Carbon | Verra VM0007 |
+| Social Baseline | IFC Performance Standards (ESIA) |
+| Screening Assessment | EIA Screening |
+
+### LLM Form Generation
+Describe the survey you need in plain language and the AI generates a form schema for you — no spreadsheet editing required.
+
+## Voice-to-Form AI
+
+The standout feature for field productivity:
+
+1. **Record** — tap the floating microphone button to start recording while you observe and narrate
+2. **Transcribe** — on-device AI model converts speech to text in real time, entirely offline
+3. **Auto-fill** — Claude analyzes the transcript against your form schema and extracts structured values into the correct fields
+4. **Review** — auto-filled values are highlighted for quick review and manual adjustment before saving
+
+The AI handles type coercion (matching spoken choices to select lists, parsing numbers, validating dates) so the extracted data is immediately usable.
+
+## GPS Integration
+
+### Position Capture
+- Survey-grade position averaging from multiple GPS samples
+- Accuracy-aware indicators (green/yellow/red) so you know when readings are reliable
+- Multiple coordinate formats (DD, DMS, DDM, UTM)
+
+### Trail Recording
+Record a GPS breadcrumb trail for every survey session. Trails are stored as GeoJSON LineStrings with distance, duration, and sample count statistics — useful for verifying site coverage and documenting transect paths.
+
+### Spatial Data Types
+- **Geopoint** — single tap on map to capture a coordinate
+- **Geotrace** — walk a route to capture a line geometry
+- **Geoshape** — walk a boundary to capture a polygon geometry

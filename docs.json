@@ -25,50 +25,47 @@
           {
             "group": "Get Started",
             "pages": [
-              "index",
-              "quickstart",
-              "concepts"
+              "index"
             ]
           },
           {
-            "group": "Changelog",
+            "group": "NIKA (Nexus Interactive Kartographic Agent)",
             "pages": [
-              "changelog"
+              "nika-desktop/overview",
+              "nika-desktop/geovault"
             ]
           },
           {
-            "group": "Products",
+            "group": "NIKA Planet (Cloud GIS Platform)",
             "pages": [
-              "products/nika-workspace",
-              "products/nika-notebook",
-              "products/nika-hub",
-              "products/nika-map",
-              "products/nika-dbms",
-              "products/nika-flow",
-              "products/nika-labeler",
-              "products/nika-studio",
-              "products/nika-geoengine",
-              "products/nika-dashboard",
-              "products/nika-field"
+              "nika-planet/overview",
+              "nika-planet/changelog",
+              "nika-planet/nika-workspace",
+              "nika-planet/nika-notebook",
+              "nika-planet/nika-hub",
+              "nika-planet/nika-map",
+              "nika-planet/nika-dbms",
+              "nika-planet/nika-flow",
+              "nika-planet/nika-labeler",
+              "nika-planet/nika-studio",
+              "nika-planet/nika-dashboard"
              ]
           },
           {
-            "group": "Integrations",
+            "group": "NIKA Mobile",
             "pages": [
-              "integrations/arcgis",
-              "integrations/qgis",
-              "integrations/google-earth-engine",
-              "integrations/fme"
+              "nika-mobile/overview",
+              "nika-mobile/nika-mobile-chat",
+              "nika-mobile/nika-mobile-team-maps",
+              "nika-mobile/nika-mobile-survey"
             ]
           },
           {
-            "group": "Agentic AI",
+            "group": "NIKA GeoEngine (Deployment CLI)",
             "pages": [
-              "agents/nika-ai-overview",
-              "agents/anthropic",
-              "agents/openai",
-              "agents/gemini",
-              "agents/xai"
+              "nika-geoengine/overview",
+              "nika-geoengine/arcgis",
+              "nika-geoengine/qgis"
             ]
           }
         ]

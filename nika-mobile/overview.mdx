@@ -1,0 +1,65 @@
+---
+title: "Overview"
+description: "AI-first mobile app for environmental field surveys with voice-to-form automation, offline mapping, and team collaboration."
+---
+
+## Overview
+
+NIKA Mobile is an AI-first field survey application built for environmental compliance teams. It combines on-device speech-to-text, LLM-powered form auto-fill, GPS tracking, and offline-first architecture into a single mobile app — so field teams can collect high-quality structured data without reliable connectivity.
+
+Available on iOS and Android.
+
+![NikaMobile Workflow](/nika-mobile/nikamobile-workflow.png)
+
+## Key Capabilities
+
+### Voice-to-Form AI Auto-Fill
+
+Stop typing in the field. Speak naturally about what you observe, and NIKA Mobile's AI automatically extracts structured values into 15+ form fields.
+
+1. **Record** — tap the microphone to narrate your observations hands-free
+2. **Transcribe** — on-device AI model converts speech to text in real time, with zero connectivity required
+3. **Auto-fill** — Claude analyzes the transcript against your form schema and fills in the correct fields with validated values
+4. **Review** — highlighted auto-filled values are ready for quick review before saving
+
+![AI Auto-Fill](/guides/field-survey/survey-session-autofilled-from-transcript.png)
+
+### Compliance-Ready Survey Schemas
+
+Pre-built form templates for demanding environmental methodologies:
+
+- **BNG Habitat Condition** — DEFRA Biodiversity Metric 4.0
+- **Bat Emergence Survey** — BCT 4th Edition
+- **Tidal Wetland Carbon** — Verra VM0033
+- **REDD+ Forest Carbon** — Verra VM0007
+- **ESIA Social Baseline** — IFC Performance Standards
+- **EIA Screening Assessment** — generic environmental impact
+
+Surveys support rich hierarchies — parent-child relationships, repeat groups, and nested plot structures needed for comprehensive ecological audits.
+
+![Survey Session](/guides/field-survey/survey-session.png)
+
+### GPS & Field Mapping
+
+- **Survey-grade positioning** with multi-sample averaging and accuracy indicators
+- **GPS breadcrumb trails** recorded as GeoJSON for coverage verification
+- **Spatial data capture** — geopoint, geotrace (line), and geoshape (polygon) via interactive map picker
+- **Coordinate formats** — DD, DMS, DDM, UTM
+
+![GPS Trail](/guides/field-survey/survey-session-trail.png)
+
+### Team Maps
+
+View your team's NikaPlanet project maps on mobile with live layer sync, multiple basemaps, and offline caching. Navigate to survey sites with your GPS position overlaid on the latest project data.
+
+### Agent Chat with GeoVault
+
+Ask questions in natural language and get AI answers grounded in your team's ingested documents, reports, and prior survey data. Your GPS location provides spatial context automatically — the AI prioritizes knowledge relevant to where you are.
+
+### Offline-First Architecture
+
+Every feature is designed for remote fieldwork:
+- **Local database** stores all survey data on-device
+- **Map caching** loads cached snapshots instantly, refreshes when online
+- **Background sync** uploads completed sessions when connectivity returns
+- **On-device transcription** works entirely without internet

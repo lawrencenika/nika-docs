@@ -269,6 +269,9 @@
       "href": "https://planet.nika.eco"
     }
   },
+  "custom": {
+    "scripts": ["/floating-cta.js", "/geovault-chat-theme.js"]
+  },
   "contextual": {
     "options": [
      "copy",

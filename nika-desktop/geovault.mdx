@@ -635,21 +635,50 @@ The vault is shared across your team. Documents ingested by anyone are available
 ### Continuous Learning
 The vault grows with your organization. As new surveys are completed, new reports filed, and new datasets acquired, they are ingested into the vault. Your knowledge base stays current without manual curation.
 
-![GeoVault Workflow](/nika-desktop/geovault-workflow.png)
+## Frequently Asked Questions
 
-## Use Cases
+<AccordionGroup>
 
-### Environmental Consultancies
-Turn decades of EIA reports, habitat surveys, and species records into a queryable knowledge base. New joiners get up to speed in days instead of years. Bid teams can quickly check whether the firm has relevant prior experience for a new project.
+<Accordion title="How do I set up GeoVault?">
+  Setting up GeoVault takes just a few steps. From the Nika Desktop sidebar, open the GeoVault panel and click **New Vault**. Give your vault a name, then upload your documents — PDFs, shapefiles, spreadsheets, or any supported format. GeoVault processes and indexes your files automatically. Once ingestion is complete (usually within minutes for most document sets), you can start querying straight away. No configuration of models or infrastructure is required.
 
-### Infrastructure & Engineering
-Ingest geotechnical reports, utility surveys, topographic data, and construction records. Project teams can instantly check what's been built, surveyed, or permitted in any location — critical for avoiding costly site surprises.
+  ![GeoVault](/nika-desktop/geovault-workflow.png)
+</Accordion>
 
-### Natural Resource Management
-Aggregate forestry inventories, water quality monitoring data, mineral exploration reports, and land management plans. Field teams and regulators can query the knowledge base for site-specific history and compliance status.
+<Accordion title="How do I update my vault with new documents?">
+  GeoVault learns continuously as your team works. After each session, you'll see a prompt asking whether you'd like to add that session's queries and insights to your knowledge base — you stay in full control of what gets retained.
 
-### Government & Public Sector
-Consolidate planning applications, environmental monitoring archives, land registry data, and inspection reports. Officers can answer citizen queries and make planning decisions with full historical context at their fingertips.
+  You can also manage the vault manually at any time through the GeoVault UI, where you can browse all indexed content, add new documents, remove outdated entries, and reorganise your knowledge base as your data evolves.
+</Accordion>
+
+<Accordion title="How can team members access the vault?">
+  GeoVault is shared at the organisation level. Any team member with access to your Nika Desktop workspace can open and query the same vault. Permissions are managed through your organisation's Nika account — administrators can control who can add or delete documents, while read access can be granted more broadly. There is no per-vault seat limit.
+</Accordion>
+
+<Accordion title="What formats of data does GeoVault support?">
+  GeoVault accepts a wide range of geospatial and document formats, including:
+
+  - **Documents:** PDF, DOCX, XLSX, CSV, TXT
+  - **Geospatial vector data:** Shapefile (.shp), GeoJSON, KML, GeoPackage (.gpkg), DXF
+  - **Raster data:** GeoTIFF, ECW, JPEG2000
+  - **Tabular data with coordinates:** CSV or Excel files containing latitude/longitude or easting/northing columns
+
+  If you have a format not listed here, contact us — we can often add support for bespoke data types.
+</Accordion>
+
+<Accordion title="How does the location-awareness work?">
+  When you upload geospatial files or documents that contain spatial references (coordinates, place names, grid references, or embedded geometries), GeoVault extracts and indexes the location metadata. When you ask a spatial question — for example, *"show me all site investigations within 500 m of this point"* — GeoVault uses that location index to filter and rank results geographically. You can also draw an area of interest directly on the map and GeoVault will scope its answers to that extent.
+</Accordion>
+
+<Accordion title="Is data stored in the vault secure?">
+  It depends on how you use GeoVault:
+
+  - **Single user (local vault):** Your vault is created and stored entirely on your local machine. No data leaves your desktop — there is no cloud upload, no external server, and no network dependency. Your documents stay where you put them.
+
+  - **Team sharing (cloud vault):** When you share a vault with your team, the data is synced to the cloud. All documents are encrypted at rest using AES-256 and in transit using TLS 1.3. Each organisation's vault is stored in isolated, organisation-scoped storage — your data is never shared across organisations or used to train any model. You retain full ownership and can delete individual documents or entire vaults at any time, with permanent deletion confirmed within 24 hours.
+</Accordion>
+
+</AccordionGroup>
 
 ## Try GeoVault With Your Data
 

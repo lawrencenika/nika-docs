@@ -25,7 +25,8 @@
           {
             "group": "Get Started",
             "pages": [
-              "index"
+              "index",
+              "pricing"
             ]
           },
           {
@@ -227,14 +228,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Website",
+          "anchor": "About Us",
           "href": "https://nikaplanet.com",
           "icon": "globe"
         },
         {
-          "anchor": "Forum",
-          "href": "https://github.com/orgs/NikaEco/discussions",
-          "icon": "bookmark"
+          "anchor": "Pricing",
+          "href": "/pricing",
+          "icon": "credit-card"
         },
         {
           "anchor": "Support",
@@ -251,12 +252,12 @@
   "navbar": {
     "links": [
       {
-        "label": "Website",
+        "label": "About Us",
         "href": "https://nikaplanet.com"
       },
       {
-        "label": "Forum",
-        "href": "https://github.com/orgs/NikaEco/discussions"
+        "label": "Pricing",
+        "href": "/pricing"
       },
       {
         "label": "Support",

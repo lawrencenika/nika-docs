@@ -142,9 +142,7 @@
     '}',
     '@media (max-width: 640px) {',
     '  #nika-floating-cta {',
-    '    width: calc(100% - 32px);',
-    '    right: 16px;',
-    '    bottom: 16px;',
+    '    display: none !important;',
     '  }',
     '}'
   ].join('\n');

@@ -48,22 +48,66 @@ Choose from these pre-configured options:
 ### Status Indicators
 Your machine status is shown as a colored indicator dot in the machine panel and the bottom-left icon. The color reflects the current state:
 
+<style>
+{`
+  .status-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+  .status-card-green {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+  }
+  .status-card-orange {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+  }
+  .status-card-red {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+  }
+  .status-card-grey {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+  }
+  .dark .status-card-green {
+    background-color: #052e16;
+    border-color: #166534;
+  }
+  .dark .status-card-orange {
+    background-color: #422006;
+    border-color: #854d0e;
+  }
+  .dark .status-card-red {
+    background-color: #350a0a;
+    border-color: #991b1b;
+  }
+  .dark .status-card-grey {
+    background-color: #1a1a1a;
+    border-color: #333333;
+  }
+`}
+</style>
+
 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', margin: '16px 0' }}>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+  <div className="status-card status-card-green">
     <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#00FF00', flexShrink: 0 }} />
     <div>
       <strong>Green — Accessible</strong><br />
       Machine is running and ready to execute code.
     </div>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#fffbeb', border: '1px solid #fde68a' }}>
+  <div className="status-card status-card-orange">
     <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#FFA500', flexShrink: 0 }} />
     <div>
       <strong>Orange — Starting</strong><br />
       Machine is being provisioned. Applies to <em>Pending</em>, <em>Running</em> (container starting), and <em>Succeeded</em> states. Wait for it to turn green.
     </div>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>
+  <div className="status-card status-card-red">
     <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#FF0000', flexShrink: 0 }} />
     <div>
       <strong>Red — Error</strong><br />
@@ -74,7 +118,7 @@ Your machine status is shown as a colored indicator dot in the machine panel and
       </ul>
     </div>
   </div>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
+  <div className="status-card status-card-grey">
     <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#D3D3D3', flexShrink: 0 }} />
     <div>
       <strong>Grey — Terminated</strong><br />

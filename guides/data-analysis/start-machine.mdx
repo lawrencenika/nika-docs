@@ -11,20 +11,22 @@ Learn how to start and manage VM kernels for your Nika notebooks. Choose from di
 Choose from these pre-configured options:
 
 #### CPU Machines
-- **CPUx3**: 3 CPU cores, 24GB RAM, ready in under 30 seconds
-- **CPUx7**: 7 CPU cores, 53GB RAM, ready in over 2 minutes
-- **CPUx21**: 20 CPU cores, 156GB RAM, ready in over 2 minutes
+
+| Machine | CPU Cores | RAM | Ready Time |
+|---------|-----------|-----|------------|
+| **CPUx3** | 3 | 24 GB | &lt;30 sec |
+| **CPUx7** | 7 | 53 GB | >2 min |
+| **CPUx20** | 20 | 156 GB | >2 min |
+| **CPUx42** | 42 | 326 GB | >2 min |
 
 #### GPU Machines
-- **Nvidia T4 x1**: 6 CPU cores, 24GB RAM, 1x T4 GPU (16GB), ready in over 2 minutes
-- **Nvidia T4 x2**: 14 CPU cores, 50GB RAM, 2x T4 GPUs (32GB), ready in over 2 minutes
-- **Nvidia T4 x4**: 30 CPU cores, 100GB RAM, 4x T4 GPUs (64GB), ready in over 2 minutes
 
-### Advanced Configurations
-For larger machines (H100, more RAM, etc.):
-- **Contact Support**: Send email request for custom configurations
-- **Custom Specs**: Specify your exact requirements
-- **Availability Check**: Support will confirm availability and pricing
+| Machine | CPU Cores | RAM | GPU | GPU Memory | Ready Time |
+|---------|-----------|-----|-----|------------|------------|
+| **Nvidia T4 x1** | 6 | 24 GB | 1x Tesla T4 | 16 GB | >2 min |
+| **Nvidia T4 x2** | 14 | 50 GB | 2x Tesla T4 | 32 GB | >2 min |
+| **Nvidia T4 x4** | 30 | 100 GB | 4x Tesla T4 | 64 GB | >2 min |
+| **Nvidia H100 x1** | 24 | 210 GB | 1x H100 | 80 GB | >2 min |
 
 ![Machine Selection Options](/guides/data-analysis/start-machine-3.jpg)
 
@@ -36,26 +38,63 @@ For larger machines (H100, more RAM, etc.):
 3. **Wait for Ready**: Machine will be ready in 15-40 seconds depending on type
 
 ### Start Times
-- **CPUx3**: ~15 seconds (fastest)
-- **Other Configurations**: ~40 seconds or more (varies by availability)
+- **CPUx3**: Under 30 seconds (fastest)
+- **All other machines**: Over 2 minutes (varies by availability)
 
 ![Start Machine Button](/guides/data-analysis/start-machine-1.jpg)
 
 ## Step 3: Monitor Machine Status
 
 ### Status Indicators
-Monitor your machine status in two ways:
+Your machine status is shown as a colored indicator dot in the machine panel and the bottom-left icon. The color reflects the current state:
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', margin: '16px 0' }}>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+    <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#00FF00', flexShrink: 0 }} />
+    <div>
+      <strong>Green — Accessible</strong><br />
+      Machine is running and ready to execute code.
+    </div>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#fffbeb', border: '1px solid #fde68a' }}>
+    <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#FFA500', flexShrink: 0 }} />
+    <div>
+      <strong>Orange — Starting</strong><br />
+      Machine is being provisioned. Applies to <em>Pending</em>, <em>Running</em> (container starting), and <em>Succeeded</em> states. Wait for it to turn green.
+    </div>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>
+    <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#FF0000', flexShrink: 0 }} />
+    <div>
+      <strong>Red — Error</strong><br />
+      Something went wrong. This covers:
+      <ul style={{ margin: '4px 0 0 0', paddingLeft: '18px' }}>
+        <li><strong>Failed</strong> — the machine crashed or encountered an error.</li>
+        <li><strong>Unavailable</strong> — the required cloud compute resources could not be provisioned after multiple auto-retries on NikaPlanet's backend. It could be due to overwhelming demand for this machine type by all cloud users. You will have to wait for the supply to increased by cloud service provider.</li>
+      </ul>
+    </div>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px', borderRadius: '8px', backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
+    <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#D3D3D3', flexShrink: 0 }} />
+    <div>
+      <strong>Grey — Terminated</strong><br />
+      Machine is stopped. No compute charges apply.
+    </div>
+  </div>
+</div>
+
+### Viewing Status
 
 #### Method 1: Machine Panel
-- **Hover over green dot**: Shows detailed status information
+- **Hover over the indicator dot**: Shows detailed status information
 - **View metrics**: Uptime, CPU usage, memory usage
-- **Real-time updates**: Status updates automatically
+- **Real-time updates**: Status updates automatically every 10 seconds
 
 ![Machine Status Panel](/guides/data-analysis/start-machine-2.jpg)
 
 #### Method 2: Bottom Left Icon
 - **Hover over machine icon**: Quick status overview
-- **Visual indicator**: Shows if machine is running or terminated
+- **Visual indicator**: Colored dot matches the states above
 - **Easy access**: Always visible in workspace
 
 ![Bottom Left Status Icon](/guides/data-analysis/start-machine-4.jpg)
@@ -74,19 +113,6 @@ Monitor your machine status in two ways:
 
 ![Stop Machine Button](/guides/data-analysis/start-machine-5.jpg)
 
-## Auto-Shutdown Feature
-
-### Smart Shutdown
-- **15-Minute Timer**: Machine auto-shuts down 15 minutes after last user leaves
-- **No Code Running**: Only shuts down when no code is executing
-- **Retry Logic**: Retries shutdown every 15 minutes if conditions aren't met
-- **Cost Savings**: Helps save compute hour quota
-
-### When Auto-Shutdown Triggers
-- **All users left workspace**: No active users in the notebook
-- **No active code**: No code cells currently running
-- **Idle period**: 15 minutes of inactivity
-
 ## Best Practices
 
 ### Machine Selection
@@ -99,7 +125,6 @@ Monitor your machine status in two ways:
 - **Stop When Done**: Stop machines when not actively working
 - **Monitor Usage**: Check status regularly
 - **Plan Sessions**: Start machines when ready to work
-- **Use Auto-Shutdown**: Let the system manage idle machines
 
 ## Next Steps
 

@@ -164,12 +164,15 @@
             "icon": "cube",
             "pages": [
               "guides/custom-geoprocess-deployment/installation",
+              "guides/custom-geoprocess-deployment/step-by-step",
               "guides/custom-geoprocess-deployment/creating-a-worker",
               "guides/custom-geoprocess-deployment/ai-coder-worker",
               "guides/custom-geoprocess-deployment/running-in-gis",
+              "guides/custom-geoprocess-deployment/maintenance",
               "guides/custom-geoprocess-deployment/versioning",
               "guides/custom-geoprocess-deployment/debugging",
               "guides/custom-geoprocess-deployment/cloud-push",
+              "guides/custom-geoprocess-deployment/worker-collaboration",
               "guides/custom-geoprocess-deployment/cli-reference"
             ]
           },

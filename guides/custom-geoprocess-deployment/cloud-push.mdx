@@ -1,45 +1,59 @@
 ---
-title: "Cloud Push (Coming Soon)"
-description: "Push your GeoEngine worker to the cloud so non-technical users can run it without a local setup"
+title: "Cloud Push"
+description: "Push your GeoEngine worker to the cloud so your whole team can run it without a local setup"
 ---
 
-<Note>
-Cloud Push is currently in development. This page will be updated with full instructions when the feature becomes available. If you'd like early access, reach out to us at [sales@nikaplanet.com](mailto:sales@nikaplanet.com).
-</Note>
-
-## Overview
-
-Cloud Push will let you publish a GeoEngine worker to Nika's cloud infrastructure with a single command. Once pushed, non-technical users — analysts, stakeholders, field teams — can run the worker directly from the Nika web interface without needing Docker, a terminal, or any local setup.
-
-This bridges the gap between the developer workflow (local CLI + GIS plugins) and broader team usage (web-based self-service).
+`geoengine push` publishes a previously-applied production worker image to Nika's cloud registry. Once pushed, team members can run the worker directly from their QGIS or ArcGIS Pro plugin — without needing Docker, a terminal, or a local GeoEngine setup.
 
 ---
 
-## Planned Workflow
+## Prerequisites
 
-The steps below outline the intended workflow. Commands and UI are subject to change before release.
+- GeoEngine installed and authenticated (`geoengine auth login`)
+- A production apply completed: `geoengine apply` (without `--dev`) — dev builds cannot be pushed
 
-### Step 1: Authenticate and Select a Target Workspace
+---
 
-Log in to GeoEngine (if not already) and select the Nika workspace you want to publish the worker to:
+## Workflow
+
+### Step 1: Apply in Production Mode
+
+From your worker directory, bump the version in `geoengine.yaml` if needed, then run a production apply:
 
 ```bash
-geoengine login
+geoengine apply
 ```
 
-### Step 2: Push the Worker
+This builds a versioned image and saves a config snapshot. Dev builds (`--dev`) are not eligible for push.
 
-From your worker directory, push the current version to the cloud:
+### Step 2: Push to the Cloud
 
 ```bash
-# Planned command — not yet available
+geoengine push [--uuid <worker-uuid>] [--ver <version>] [--tenant <tenant>]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--uuid <worker-uuid>` | Worker to push. Defaults to the worker in the current directory (via `geoengine.lock`). |
+| `--ver <version>` | Version to push. Defaults to the highest numbered version available locally. |
+| `--tenant <tenant>` | Tenant to publish under. Defaults to your owned tenant. |
+
+Run from your worker directory without any flags to push the latest production version:
+
+```bash
 geoengine push
 ```
 
-GeoEngine will package the worker, upload the container image, and register it in the selected workspace.
+GeoEngine will package the worker, upload the container image to the cloud registry, and register it in the selected workspace.
 
 ### Step 3: Available to Your Team
 
-After a successful push, your team members will be able to find the worker in their QGIS or ArcGIS Pro plugin. They will be
-able to run the worker through the cloud without needing to install anything else locally.
+After a successful push, team members will see the worker in their QGIS or ArcGIS Pro GeoEngine plugin and can run it through the cloud without installing anything locally.
 
+---
+
+## Notes
+
+- Only production images (from `geoengine apply` without `--dev`) can be pushed. If you've only run `geoengine apply --dev`, run `geoengine apply` first.
+- If you have access to multiple tenants, use `--tenant` to target a specific one.
+- Use `geoengine workers` to see which versions have already been pushed (`LATEST PUSHED` column).

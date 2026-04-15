@@ -45,10 +45,12 @@ The output table includes the following columns:
 
 | Column | Description |
 |--------|-------------|
-| **WORKER** | Worker name |
-| **LATEST VER** | Highest semantic version applied in production (blank for dev-only workers) |
-| **VERSIONS** | Total count of available built versions |
-| **LAST APPLIED** | Relative time since last apply (e.g. `3min 42s ago`) |
+| **UUID** | Worker UUID used by the CLI and Docker tags |
+| **NAME** | Worker name |
+| **LATEST APPLIED** | Highest applied semver version plus the total number of available versions, e.g. `1.0.7 (7)` |
+| **LAST APPLIED** | Relative time since last apply (e.g. `3 min 42 s ago`) |
+| **LATEST PUSHED** | Highest pushed version for the displayed tenant plus that tenant's pushed-version count |
+| **TEAM** | Tenant name for the displayed push history |
 | **QGIS** | Whether the worker is registered in the QGIS plugin |
 | **ARCGIS** | Whether the worker is registered in the ArcGIS Pro plugin |
 
@@ -62,10 +64,10 @@ Get detailed information about a single worker:
 
 ```bash
 # Show the latest applied version, config hash, and available versions list
-geoengine describe my-worker
+geoengine describe
 
 # Show info for a specific previously-built version
-geoengine describe my-worker --ver 1.2.3
+geoengine describe --ver 1.2.3
 ```
 
 The output includes:
@@ -82,7 +84,7 @@ The output includes:
 Container logs stream to **stderr** automatically when you run a worker. To separate logs from the structured result, use `--json` mode:
 
 ```bash
-geoengine run my-worker --json --input input-file=/path/to/file.tif
+geoengine run --json --input input-file=/path/to/file.tif
 ```
 
 - **stderr** — container log output, streamed in real time
@@ -148,9 +150,9 @@ If a worker is in a broken state and needs to be removed:
 
 ```bash
 # Delete a worker entirely (shows a confirmation prompt)
-geoengine delete --name my-worker
+geoengine delete --uuid <worker-uuid>
 
-# Delete the worker defined in the current directory
+# Delete the worker in the current directory
 geoengine delete
 
 # Delete a specific version only (removes image, mapping, and snapshot)

@@ -9,18 +9,25 @@ All GeoEngine commands follow the form `geoengine <command> [options]`. Run any 
 
 ## Authentication
 
-### `geoengine login`
+### `geoengine auth login`
 Sign in to GeoEngine with your Nika account. Credentials are stored securely on your machine and persist across sessions. Required before using any other command.
 
 ```bash
-geoengine login
+geoengine auth login
 ```
 
-### `geoengine logout`
+### `geoengine auth logout`
 Sign out and remove stored credentials.
 
 ```bash
-geoengine logout
+geoengine auth logout
+```
+
+### `geoengine auth status`
+Reads logged in user's details.
+
+```bash
+geoengine auth status
 ```
 
 ---
@@ -28,7 +35,7 @@ geoengine logout
 ## Worker Setup
 
 ### `geoengine init`
-Create a new `geoengine.yaml` and `pixi.toml` template in the current directory.
+Create a new `geoengine.yaml` and `pixi.toml` template in the current directory. Also generates `.dockerignore`, `Dockerfile`, and `geoengine.lock` which should not be touched.
 
 ```bash
 geoengine init [--name <worker>] [--env py|r]
@@ -74,12 +81,12 @@ See [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker) 
 Execute a worker in a Docker container. File and folder inputs are auto-mounted.
 
 ```bash
-geoengine run [<worker>] --input KEY=VALUE [--input KEY=VALUE ...] [--json] [--ver <version>] [-- <extra args>]
+geoengine run [<worker-uuid>] --input KEY=VALUE [--input KEY=VALUE ...] [--json] [--ver <version>] [-- <extra args>]
 ```
 
 | Flag | Description |
 |------|-------------|
-| `<worker>` | Worker name. Defaults to the worker in the current directory. |
+| `<worker-uuid>` | Worker UUID. Defaults to the worker in the current directory (via `geoengine.lock`). |
 | `--input KEY=VALUE` | Pass an input to the worker. Repeat for multiple inputs. File/folder paths are auto-mounted into the container. |
 | `--json` | Structured output mode: container logs go to stderr, a JSON result is printed to stdout on completion. |
 | `--ver <version>` | Run a specific previously-built version using its snapshotted config. Defaults to `latest`. |
@@ -103,6 +110,25 @@ geoengine run [<worker>] --input KEY=VALUE [--input KEY=VALUE ...] [--json] [--v
 
 ---
 
+## Publishing Workers
+
+### `geoengine push`
+Publish a previously-applied production worker image to the cloud registry, making it available for team members to run via the QGIS or ArcGIS Pro plugin without a local setup.
+
+```bash
+geoengine push [--uuid <worker-uuid>] [--ver <version>] [--tenant <tenant>]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--uuid <worker-uuid>` | Worker to push. Defaults to the worker in the current directory (via `geoengine.lock`). |
+| `--ver <version>` | Version to push. Defaults to the highest numbered version available locally. |
+| `--tenant <tenant>` | Tenant to publish under. Defaults to your owned tenant. |
+
+Requires a prior **production** `geoengine apply` (without `--dev`). See [Cloud Push](/guides/custom-geoprocess-deployment/cloud-push) for the full workflow.
+
+---
+
 ## Inspecting Workers
 
 ### `geoengine workers`
@@ -115,10 +141,17 @@ geoengine workers [--all] [--json] [--gis arcgis|qgis]
 | Flag | Description |
 |------|-------------|
 | `--all` | Expand all version sub-rows inline below each worker. |
-| `--json` | Output as JSON (includes `name`, `has_tool`, `description`). |
+| `--json` | Output as JSON (includes `uuid`, `name`, `has_tool`, `description`). |
 | `--gis arcgis\|qgis` | List only workers registered in the specified GIS plugin. |
 
-**Output columns:** `WORKER`, `LATEST VER`, `VERSIONS`, `LAST APPLIED`, `QGIS`, `ARCGIS`
+**Output columns (default):** `UUID`, `NAME`, `LATEST APPLIED`, `LAST APPLIED`, `LATEST PUSHED`, `TEAM`, `QGIS`, `ARCGIS`
+
+- **LATEST APPLIED** — highest applied semver version plus the number of available versions, e.g. `1.0.7 (7)`
+- **LAST APPLIED** — relative time since last apply (e.g. `3 min 42 s ago`)
+- **LATEST PUSHED** — highest pushed version for the displayed tenant plus that tenant's pushed-version count
+- **TEAM** — tenant name for the displayed push history
+
+With `--all`, the columns change to `UUID`, `NAME`, `VERSION`, `LAST APPLIED`, `PUSHED`, `TEAM`, `QGIS`, `ARCGIS` — expanding each worker with sub-rows for every version.
 
 ---
 
@@ -126,12 +159,12 @@ geoengine workers [--all] [--json] [--gis arcgis|qgis]
 Show detailed information about a specific worker.
 
 ```bash
-geoengine describe [<worker>] [--ver <version>] [--json]
+geoengine describe [<worker-uuid>] [--ver <version>] [--json]
 ```
 
 | Flag | Description |
 |------|-------------|
-| `<worker>` | Worker name. Defaults to the worker in the current directory. |
+| `<worker-uuid>` | Worker UUID. Defaults to the worker in the current directory (via `geoengine.lock`). |
 | `--ver <version>` | Show info for a specific version snapshot instead of the latest. |
 | `--json` | Output as JSON (includes `name`, `description`, `version`, `inputs`, `applied_at`, `available_versions`, `config_hash`, `plugins_qgis`, `plugins_arcgis`). |
 
@@ -159,12 +192,12 @@ geoengine diff [--file all|config|dockerfile|worker]
 Delete a worker or a specific version.
 
 ```bash
-geoengine delete [--name <worker>] [--ver <version>]
+geoengine delete [--uuid <worker-uuid>] [--ver <version>]
 ```
 
 | Flag | Description |
 |------|-------------|
-| `--name <worker>` | Worker to delete. Defaults to the worker in the current directory. |
+| `--uuid <worker-uuid>` | Worker to delete. Defaults to the worker in the current directory (via `geoengine.lock`). |
 | `--ver <version>` | Delete only this version (removes its Docker image, map entry, and config snapshot). Omit to delete the entire worker. |
 
 Running without `--ver` shows a confirmation prompt before deleting the worker's registration, all saved configs, and all state.
@@ -259,7 +292,7 @@ geoengine update
 ```
 
 ### `geoengine uninstall`
-Remove the GeoEngine binary and `~/.geoengine`.
+Remove the GeoEngine binary and GeoEngine files.
 
 ```bash
 geoengine uninstall
@@ -271,15 +304,15 @@ geoengine uninstall
 
 | Command | Description |
 |---------|-------------|
-| `geoengine login` | Sign in (required before any other command) |
-| `geoengine logout` | Sign out |
-| `geoengine init [--name] [--env py\|r]` | Create `geoengine.yaml` and `pixi.toml` templates |
+| `geoengine auth login\|logout\|status` | Authentication-related commands, to login, logout, and see user details |
+| `geoengine init [--name] [--env py\|r]` | Create GeoEngine-required worker artifacts |
 | `geoengine apply [--dev] [--no-cache] [--build-arg K=V]` | Register, build image, and install GIS plugins |
-| `geoengine run [<worker>] --input K=V [--json] [--ver V]` | Run a worker in a container |
+| `geoengine push [--uuid <uuid>] [--ver V] [--tenant T]` | Publish a production image to the cloud registry |
+| `geoengine run [<worker-uuid>] --input K=V [--json] [--ver V]` | Run a worker in a container (UUID or current directory) |
 | `geoengine diff [--file all\|config\|dockerfile\|worker]` | Check tracked file changes since last apply |
 | `geoengine workers [--all] [--json] [--gis arcgis\|qgis]` | List registered workers |
-| `geoengine describe [<worker>] [--ver V] [--json]` | Show worker details and config hash |
-| `geoengine delete [--name <worker>] [--ver V]` | Delete a worker or a single version |
+| `geoengine describe [<worker-uuid>] [--ver V] [--json]` | Show worker details and config hash |
+| `geoengine delete [--uuid <worker-uuid>] [--ver V]` | Delete a worker or a single version |
 | `geoengine image list\|import\|remove` | Manage Docker images |
 | `geoengine env set\|unset\|list\|show` | Manage global environment variables |
 | `geoengine patch [--init]` | Repair artifacts and sync plugins/agent skills |

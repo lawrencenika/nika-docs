@@ -1,0 +1,92 @@
+---
+title: "Collaborating on Workers"
+description: "Share a worker's source code with your team using GitHub so multiple developers can contribute and push updates"
+---
+
+GeoEngine workers are just files — `geoengine.yaml`, `pixi.toml`, your script, and a `geoengine.lock`. Putting them in a Git repository lets your whole development team work on the same worker, review changes, and push new versions independently.
+
+---
+
+## Step 1: Create a GitHub Repository
+
+Go to [github.com](https://github.com) and create a new repository. Name it after your worker (e.g. `land-cover-classifier`). Leave it empty — no README, no `.gitignore` — you'll push the worker directory as the initial commit.
+
+---
+
+## Step 2: Initialise Git in Your Worker Directory
+
+From inside the worker directory, run:
+
+```bash
+echo "# land-cover-classifier" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin <repo_link>
+git push -u origin main
+```
+
+Replace `<repo_link>` with the HTTPS or SSH URL from your GitHub repo (e.g. `https://github.com/your-org/land-cover-classifier.git`).
+
+Then add the rest of the worker files:
+
+```bash
+git add geoengine.yaml pixi.toml geoengine.lock *.py   # or *.R for R workers
+git commit -m "add worker files"
+git push
+```
+
+<Note>
+Commit `geoengine.lock` — it stores the worker UUID that ties local builds to the cloud registry. Without it, teammates who clone the repo will get a fresh UUID and create a separate worker instead of sharing yours.
+</Note>
+
+---
+
+## Step 3: Teammates Clone and Apply
+
+Anyone on the team can clone the repo and apply the worker locally:
+
+```bash
+git clone <repo_link>
+cd land-cover-classifier
+geoengine apply --dev
+```
+
+Because `geoengine.lock` is committed, everyone works against the same worker UUID. Local builds stay on each person's machine — nothing is shared until someone runs `geoengine push`.
+
+---
+
+## Step 4: Pushing Changes
+
+The normal development loop for each contributor:
+
+```bash
+# Pull the latest changes
+git pull
+
+# Make your edits, then apply locally to test
+geoengine apply --dev
+geoengine run --input input-file=/path/to/test.tif
+
+# When ready to release, bump the version in geoengine.yaml, then:
+geoengine apply        # production apply — builds versioned image
+geoengine push         # publish to the cloud
+
+# Commit and push the source changes
+git add geoengine.yaml pixi.toml *.py
+git commit -m "feat: add confidence threshold input (v1.1.0)"
+git push
+```
+
+Any team member with access to the same Nika tenant can run `geoengine push` and the worker will appear under the same entry in the cloud registry — no extra setup needed.
+
+---
+
+## Known Limitations
+
+**Versioning is on you.** GeoEngine enforces that each production apply uses a version that is greater than or equal to the highest version already recorded locally — but it does not enforce coordination between different machines. If two developers both bump to `1.1.0` in their local `geoengine.yaml` and try to push, GeoEngine will accept both applies locally. Agree on version numbers with your team before doing a production apply, and use the Git commit as the source of truth for what version is current.
+
+**First push wins for a given version.** If two teammates both apply and push the same version (e.g. `1.1.0`), only the first push will succeed; subsequent pushes of the same version will be rejected. Coordinate releases, or use a simple rule: the person who merged the PR does the push.
+
+**Dev builds are local only.** `geoengine apply --dev` never touches the cloud. Only production applies (`geoengine apply` without `--dev`) produce images that can be pushed.

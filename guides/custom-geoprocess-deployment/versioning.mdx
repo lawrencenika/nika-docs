@@ -69,7 +69,7 @@ If any of these checks fail, the apply is rejected with an error.
 To run a previously-built version instead of `latest`:
 
 ```bash
-geoengine run my-worker --ver 1.0.0 --input input-file=/path/to/data.tif
+geoengine run --ver 1.0.0 --input input-file=/path/to/data.tif
 ```
 
 GeoEngine loads the snapshotted configuration for that version and runs the corresponding Docker image. This works regardless of what the current `geoengine.yaml` says — the snapshot is self-contained.
@@ -85,7 +85,7 @@ If `--ver` is omitted, `geoengine run` always uses `latest`, which tracks the mo
 - Running `geoengine apply --dev` after a production apply will overwrite `latest` with the dev state
 - Running `geoengine apply` (production) also updates `latest` to that version
 
-This means `geoengine run my-worker` (without `--ver`) and GIS plugin `latest` entries always reflect the last apply. **If you need a stable, pinned version in GIS, always use a production apply and run via version number.**
+This means `geoengine run` (without `--ver`) and GIS plugin `latest` entries always reflect the last apply. **If you need a stable, pinned version in GIS, always use a production apply and run via version number.**
 
 ---
 
@@ -99,10 +99,10 @@ geoengine delete --ver 1.0.0
 
 The version check during the next `geoengine apply` always reads the live `map.json`, so deleting an older version does not affect the minimum allowed version for the next apply.
 
-To remove a worker entirely:
+To remove a worker entirely (run from the worker directory, or pass `--uuid <worker-uuid>`):
 
 ```bash
-geoengine delete --name my-worker
+geoengine delete
 ```
 
 ---
@@ -128,6 +128,6 @@ geoengine apply --dev    # keep iterating
 geoengine apply          # saves snapshot for 1.1.0, latest = 1.1.0
 
 # --- Run a specific old version ---
-geoengine run my-worker --ver 1.0.0 --input input-file=/data.tif
+geoengine run --ver 1.0.0 --input input-file=/data.tif
 ```
 

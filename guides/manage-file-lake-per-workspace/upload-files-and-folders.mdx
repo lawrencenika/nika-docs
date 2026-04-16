@@ -1,0 +1,64 @@
+---
+title: "Upload Files and Folders"
+description: "Learn how to upload files and folders to your workspace's file storage for data migration"
+---
+
+Every workspace in NikaPlanet has a built-in File Storage panel on the left sidebar. You can use it to upload, organize, and manage files and folders for your geospatial data workflows.
+
+<Note>
+  There is no limit to how much data you can store in a single workspace. Users have stored over 100 TB of data in a single workspace for complex projects — the architecture is well tested and proven at scale. For projects of that size, we also provide a dedicated data migration service to ensure timely delivery. [Book a call](https://cal.com/lawrence-nika/nika-expert) or email [support@nikaplanet.com](mailto:support@nikaplanet.com) to learn more.
+</Note>
+
+File Storage is the foundation that all other NikaPlanet services build on. Notebooks can access all files here directly in the attached VM, maps can load spatial files from this storage, and pipelines can read and write data here — making it the central hub for your geospatial workflows.
+
+## Step 1: Create Folders
+
+Before uploading, you may want to set up a folder structure to keep your data organized.
+
+1. **Open File Storage**: Click the Files icon in the left sidebar of your workspace
+2. **Click "+" Button**: Click the "+" button at the top right of the file list
+3. **Select "Create Folder"**: Choose "Create Folder" from the dropdown menu
+4. **Name Your Folder**: Enter a name for your new folder
+
+![Create Folder](/guides/manage-file-lake-per-workspace/create-new-folder.jpg)
+
+You can repeat this process to create subfolders and build out your desired folder hierarchy.
+
+## Step 2: Navigate Folders
+
+To navigate into a folder, **double-click** it. The breadcrumb at the top of the panel shows your current location. `/data/` is the root folder of every workspace.
+
+![Navigate into Subfolder](/guides/manage-file-lake-per-workspace/move-into-subfolder.jpg)
+
+To go back:
+- **Click the back arrow** to move up one level
+- **Click any parent folder** in the breadcrumb to jump directly to it
+
+## Step 3: Upload Files or Folders
+
+Once you have navigated to the target folder, there are two ways to upload.
+
+### Method 1: Drag and Drop
+
+Simply drag one or more files or folders from your desktop and drop them onto the File Storage panel.
+
+![Drag and Drop Upload](/guides/manage-file-lake-per-workspace/upload-files-folders-by-drop.jpg)
+
+### Method 2: Upload via Menu
+
+1. **Click "+" Button**: Click the "+" button at the top right
+2. **Select "Upload File" or "Upload Folder"**: Choose the appropriate option from the dropdown
+
+![Upload via Menu](/guides/manage-file-lake-per-workspace/upload-files-folders-by-select.jpg)
+
+## Step 4: Track Upload Progress
+
+Once the upload starts, an **Active Operations** dialog appears showing the progress of each file with percentage bars.
+
+![Upload Progress](/guides/manage-file-lake-per-workspace/upload-files-folders-progress.jpg)
+
+## Step 5: Verify Uploaded Files
+
+As files finish uploading batch by batch, they automatically appear in the File Storage panel if you are still viewing the folder they were uploaded to. No manual refresh is needed.
+
+![Uploaded Files Auto-Refresh](/guides/manage-file-lake-per-workspace/upload-files-folders-auto-refresh.jpg)

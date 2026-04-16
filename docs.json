@@ -30,7 +30,7 @@
             ]
           },
           {
-            "group": "NIKA (Nexus Interactive Kartographic Agent)",
+            "group": "NIKA Desktop",
             "pages": [
               "nika-desktop/overview",
               "nika-desktop/geovault"
@@ -90,6 +90,16 @@
             "pages": [
               "guides/access-control/invite-to-team",
               "guides/access-control/invite-to-workspace"
+            ]
+          },
+          {
+            "group": "File Storage",
+            "icon": "folder",
+            "pages": [
+              "guides/manage-file-lake-per-workspace/upload-files-and-folders",
+              "guides/manage-file-lake-per-workspace/organize-files-and-folders",
+              "guides/manage-file-lake-per-workspace/download-files-and-folders",
+              "guides/manage-file-lake-per-workspace/monitor-file-storage"
             ]
           },
           {

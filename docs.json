@@ -175,7 +175,6 @@
             "pages": [
               "guides/custom-geoprocess-deployment/installation",
               "guides/custom-geoprocess-deployment/step-by-step",
-              "guides/custom-geoprocess-deployment/creating-a-worker",
               "guides/custom-geoprocess-deployment/ai-coder-worker",
               "guides/custom-geoprocess-deployment/running-in-gis",
               "guides/custom-geoprocess-deployment/maintenance",

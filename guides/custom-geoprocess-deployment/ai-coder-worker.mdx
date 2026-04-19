@@ -1,13 +1,15 @@
 ---
-title: "Create & Modify a Worker Using AI Coder"
+title: "Your Second Worker: AI-assisted"
 description: "Use AI coding assistants to create, configure, and iterate on GeoEngine workers with sample prompts"
 ---
 
 Instead of manually editing configuration files, you can use AI coding assistants to create and modify GeoEngine workers from natural language prompts. This page provides ready-to-use prompts for popular AI coder tools.
 
-For the full manual workflow, see [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker).
+Follow the [manual steps]((/guides/custom-geoprocess-deployment/step-by-step)) first to understand the flow before trying the AI agent route.
 
 ---
+
+import PlatformSelector from '/snippets/platform-selector.mdx';
 
 ## Prerequisites
 
@@ -25,6 +27,12 @@ For the full manual workflow, see [Creating a Worker](/guides/custom-geoprocess-
 | [Codex](https://openai.com/codex/) | OpenAI | Run from terminal in your script directory |
 | [Antigravity IDE](https://antigravity.google) | Google | Open your script folder as workspace |
 
+<Tip>
+
+If you have yet to install the skills, please follow the guide [here](/guides/installation/#step-3-initialise-ai-agent-skills-(optional)) to get the skills to your agent.
+
+</Tip>
+
 ---
 
 ## GeoEngine AI Agent Skills
@@ -40,30 +48,50 @@ GeoEngine ships with built-in **AI agent skills** that give your AI coder struct
 | `write-pixi-toml` | Writes or updates the `pixi.toml` dependency file for a worker |
 
 <Tip>
-With these skills installed, even short prompts like "Make this script a GeoEngine worker" will trigger the full automated workflow. Without skills, the prompts on this page still work — the AI coder will use the GeoEngine CLI directly based on your instructions.
+With these skills installed, even short prompts like "Make this script a GeoEngine worker" will trigger the full automated workflow.
 </Tip>
 
 ---
 
-## Give the AI Coder Access to Your Script
+<PlatformSelector />
+
+## Step 1: Download the Starter Script
+
+<a href="https://github.com/NikaGeospatial/geoengine/releases/download/docs-downloads/sg_pgpt_gen.R" download>Download the starter script</a> and save it in an isolated folder somewhere on your machine — your home directory or Desktop works fine.
+
+<Tabs>
+<Tab title="macOS">
+For this example, we will assume you created a directory in `/Users/<user>/Downloads/sg-pgpt-gen`. Place the script into this directory.
+</Tab>
+<Tab title="Windows">
+For this example, we will assume you created a directory in `C:/Users/<user>/Downloads/sg-pgpt-gen`. Place the script into this directory.
+</Tab>
+<Tab title="Linux">
+For this example, we will assume you created a directory in `/home/<user>/Downloads/sg-pgpt-gen`. Place the script into this directory.
+</Tab>
+</Tabs>
+
+---
+
+## Step 2: Point the Agent to the Directory
 
 Allow your AI coder access to the directory that contains your script:
-- **Claude Code / Codex** — run the agent from the terminal inside the script's directory
-- **Cursor / GitHub Copilot** — open the script folder as a project in the IDE
-- **Antigravity** — open the project folder as the workspace
+- **Claude Code / Codex** — select the script's directory as the workspace
+- **Cursor / GitHub Copilot** — open the script's directory  as a project in the IDE
+- **Antigravity** — open the script's directory  as the workspace in the IDE
 
 The AI coder needs to be able to read and write files in that directory to create and edit `geoengine.yaml`, `pixi.toml`, and your script.
 
 ---
 
-## Creating a New Worker
+## Step 3: Creating the Worker
 
-Describe your script, its inputs, and its outputs. The AI coder will handle the rest — initialising the worker, writing the config files, and building the container.
+Describe your script, its inputs, and its outputs as much as possible. The AI coder will handle the rest — initialising the worker, writing the config files, and building the container.
 
 ### Prompt Template
 
-```
-I have a [Python/R] script called [script-name] in this directory that [describe what the script does].
+```text
+I have a(n) [Python/R] script called [script-name] in this directory that [describe what the script does].
 
 Make it a GeoEngine worker called [worker-name] with these inputs and outputs:
 
@@ -79,56 +107,90 @@ Outputs:
 
 Available input/output types: `file`, `folder`, `string`, `number`, `boolean`, `enum`, `datetime`.
 
-### Example: GeoTIFF to COG Conversion Worker
+### Prompt to Use
 
-```
-I have a Python script called main.py in this directory that converts a GeoTIFF raster
-to a Cloud-Optimized GeoTIFF (COG) using rasterio.
+Based on the template, you can use the following prompt in your agent.
 
-Make it a GeoEngine worker called geotiff-to-cog with these inputs and outputs:
+```text
+I have an R script called sg_pgpt_gen.R in this directory that generates polygons and points within Singapore.
+
+Make it a GeoEngine worker called sg-pgpt-gen with these inputs and outputs:
 
 Inputs:
-- input-file: file (.tif, .tiff) — the source GeoTIFF raster to convert
-- compression: enum (deflate, lzw, zstd, none) — compression method, default deflate
-- overview-levels: string — overview levels to generate, default "2 4 8 16"
+- n-polygons: number - number of polygons to generate
+- n-points: number - number of points to generate
+- min-sides: number - minimum number of sides per polygon
+- max-sides: number - maxmimum number of sides per polygon
+- seed: number - seed for reproducibility
 
 Outputs:
-- output-folder: folder — directory where the converted COG will be saved
-
-Enable the QGIS plugin.
+- output-folder: folder — directory where the generated GeoJSON file will be saved
 ```
+
+Add in one more line at the end to specify the GIS plugin you want to enable the worker for (QGIS/ArcGIS Pro).
+
+After the agent is done, ensure the following:
+
+- The directory contains all the necessary artifacts.
+- Running `geoengine workers` shows the worker "sg-pgpt-gen", and that it is enabled for the correct plugin.
 
 ---
 
-## Modifying an Existing Worker
+## Step 4: Verifying in GIS Platform
 
-Describe what you want to change. The AI coder will update the script, config files, and dependencies as needed.
+You can now test your worker following the [steps outlined](/guides/custom-geoprocess-deployment/step-by-step#step-7-—-gis-testing) in the guide. The AI agent
+should have done a developmental apply, so you will only find the worker with a "latest" version.
+
+---
+
+## Step 5: Saving a Worker Version
+
+When you are happy with the worker, run a production apply so that the stable version of the script is saved. Run the following in a terminal that is opened to your worker directory.
+
+```bash
+geoengine apply
+```
+
+With this, the worker should now have `v1.0.0` applied and readily available for you to use.
+
+---
+
+## Step 6: Improving the Worker
+
+Sometimes, you might want to improve on the script. With the help of the AI agent, you can just describe what you want to change.
+The AI coder will update the script, config files, and dependencies as needed.
 
 ### Prompt Template
 
-```
-I have an existing GeoEngine worker in this directory. [Describe the change you want to make.]
-```
-
-### Examples
-
-```
-Add a new boolean input called "overwrite" to my GeoEngine worker that controls whether
-existing output files should be replaced. Default to false.
+```text
+I have an existing GeoEngine worker in this directory.
+[Describe the change you want to make.]
 ```
 
-```
-Add the numpy and scipy packages to my GeoEngine worker's dependencies.
+### Example
+
+Using the same worker, let's say that we want to manually specify the bounding box rather than using an automatic bounding box approximation of Singapore.
+Use the following prompt to improve on the worker.
+
+```text
+I have an existing GeoEngine worker in this directory.
+Make the worker take in a parameter of a GeoJSON file that acts as the bounding box, instead of using the hard-coded bounding box.
 ```
 
-```
-My GeoEngine worker currently outputs a single GeoJSON file. Change it so it also
-outputs a summary CSV with per-feature statistics.
-```
+When the AI is done, you can proceed to test using the "latest" version of the worker in your GIS plugin. Once you are happy with it, feel free to follow
+[these steps](/guides/step-by-step#step-9-—-push-to-the-cloud) to push the next version to the cloud.
+
+<Tip>
+
+Remember to bump the version number before your next `geoengine apply`!
+
+</Tip>
 
 ---
 
 ## Debugging with AI Coder
+
+Here are some prompt templates you can use to debug with your AI coding agent.
 
 ### Prompt: Fix a Build Failure
 
@@ -169,11 +231,3 @@ Explain what this GeoEngine worker does. Read the geoengine.yaml, pixi.toml, and
 - **Iterate with `--dev`** — always use `geoengine apply --dev` during development to skip version checks; run `geoengine apply` (without `--dev`) when ready for a production release
 - **Review generated files** — check that `geoengine.yaml` inputs match your script's argparse arguments
 - **Mention GIS plugins** — if you need QGIS or ArcGIS Pro support, include that in your prompt (e.g. "enable this for QGIS")
-
----
-
-## Next Steps
-
-- [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker) — understand the manual configuration in detail
-- [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/running-in-gis) — use your worker in GIS software
-- [Debugging & Troubleshooting](/guides/custom-geoprocess-deployment/debugging) — diagnose build and runtime issues

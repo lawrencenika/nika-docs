@@ -4,6 +4,36 @@ description: "Product updates and announcements for NikaPlanet products"
 rss: true
 ---
 
+<Update label="April 19, 2026" description="v0.5.32">
+  ## In-App Documentation Links & Workspace Separation
+
+### New Features
+
+- **Inline Documentation Links**: Every feature in NikaPlanet (files, maps, notebooks, workflows, databases, labeler, workspaces) now has an open-book icon that links directly to the relevant tutorial in the docs, so help is one click away from where you're working
+- **File Management Tutorial Series**: Added a new tutorial series covering file upload, download, and organization workflows for NikaPlanet
+- **Personal vs Team Workspace Separation**: Personal workspaces and workers are now clearly separated from team workspaces in the UI, with "Personal Account" labeling and member-invitation upsell prompts on personal tiers
+
+### Feature Improvements
+
+- **Unified Plan Resolution**: Consolidated plan-based feature checks into a single effective-plan lookup so team members consistently inherit the workspace's plan capabilities (including LLM chat access) regardless of their personal plan
+- **Internationalized Guide Tooltip**: The bar header guide tooltip and button label are now translated across all supported languages
+
+</Update>
+
+<Update label="April 14, 2026" description="v0.5.31.1">
+  ## Machine Resource Availability Handling
+
+### New Features
+
+- **Resources Unavailable Status**: Machines now surface a dedicated "Resources Unavailable" state in the UI when the underlying cloud zone cannot fulfil the requested VM options, so users immediately understand why a machine won't start instead of seeing a generic spinning state
+- **Machine Status Reference Page**: Added a new documentation page explaining every possible machine status and what to do when a machine enters each state, making it easier to self-diagnose startup issues
+
+### Bug Fixes
+
+- **Reliable VM Option Fallback**: Reworked the machine provisioning fallback so NikaKernel VMs reliably retry with an available machine type when the preferred configuration is unavailable in the target zone
+
+</Update>
+
 <Update label="April 13, 2026" description="v0.5.31">
   ## Newsletter & What's New
 

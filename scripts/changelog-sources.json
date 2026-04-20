@@ -1,0 +1,9 @@
+[
+  {
+    "repo": "NikaGeospatial/geoengine",
+    "outputPath": "nika-geoengine/releases.mdx",
+    "title": "NIKA GeoEngine Releases",
+    "description": "Release notes synced from GitHub",
+    "includePrereleases": false
+  }
+]

@@ -1,0 +1,57 @@
+name: Sync GitHub Releases to Changelog
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: "Optional owner/repo to sync a single entry (empty = all)"
+        required: false
+        type: string
+  repository_dispatch:
+    types: [release-published]
+  schedule:
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-releases
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Resolve repo filter
+        id: filter
+        run: |
+          FILTER="${{ github.event.inputs.repo }}"
+          if [ -z "$FILTER" ] && [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            FILTER="${{ github.event.client_payload.repo }}"
+          fi
+          echo "filter=$FILTER" >> "$GITHUB_OUTPUT"
+
+      - name: Sync releases
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_RELEASES_TOKEN: ${{ secrets.GH_RELEASES_TOKEN }}
+        run: node scripts/sync-releases.mjs ${{ steps.filter.outputs.filter }}
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "No changelog changes."
+            exit 0
+          fi
+          git add -- '*.mdx'
+          git commit -m "chore(changelog): sync GitHub releases [skip ci]"
+          git push

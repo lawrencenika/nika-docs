@@ -1,0 +1,54 @@
+---
+title: "GeoEngine Changelog"
+description: "Changelog for GeoEngine releases"
+rss: true
+---
+
+{/* AUTO-GENERATED from GitHub Releases by scripts/sync-releases.mjs — do not edit by hand. */}
+
+<Update label="April 17, 2026" description="v0.7.1">
+## What's Changed
+
+### Minor Patches
+* Added worker website as push completion message.
+* Fixed QGIS Windows path issue.
+* Refactored `readonly` boolean param to `output` boolean param.
+
+### Deprecations
+* `readonly` input params are now refactored. Previously `readonly: false` params will now be `output: true` params.
+* `local_dir_mounts` are no longer supported. Directly include the data folders into the worker directory, and refer to them with a `/app` prefix. e.g. To refer to a data file `./data/data.geojson`, use `/app/data/data.geojson` in the worker script instead.
+
+<Warning>
+**Big worker changes needed**
+
+Run `geoengine apply --dev` on every worker to update them. If any of them fail, delete the workers and re-apply them.
+
+_Applies when upgrading to version 0.7.1._
+</Warning>
+</Update>
+
+<Update label="April 16, 2026" description="v0.7.0">
+## What's Changed
+
+### Major Changes
+* Added ability to cloud push to a Nika account. Users can now push versioned workers to their team.
+
+### Minor Patches
+* Improved ArcGIS Pro plugin with layer loading and input.
+* Removed invasive Windows CMD behaviour.
+* Refactored auth commands to `geoengine auth login|logout|status`.
+
+### Deprecations
+* Referencing workers by name is no longer supported. Use `--uuid` flags to reference workers by their UUIDs instead.
+</Update>
+
+<Update label="April 15, 2026" description="v0.6.5">
+## What's Changed
+
+### Minor Patches
+* Added ArcGIS Pro plugin layer selection.
+* Re-wired auth flow.
+* Added better error logging to QGIS plugin.
+* Improved shapefile handling in AI skills.
+* Code refactoring.
+</Update>

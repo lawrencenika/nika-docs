@@ -25,7 +25,37 @@ With NikaGeoEngine, your script's environment lives entirely separate:
 
 While the GeoEngine Plugin helps developers create containerized algorithms smoothly, the **NikaPlanet Plugin** focuses on seamless execution and cloud-infrastructure management for analysts.
 
+### Getting Started
+
+Open the Nika panel inside ArcGIS Pro and sign in with your NikaPlanet account. The plugin shares credentials with the GeoEngine CLI — if you're already logged in via the CLI, you'll be signed in automatically.
+
+<img src="/nika-geoengine/arcgis-login.png" alt="NikaPlanet Plugin login screen in ArcGIS Pro" />
+
+### Browse the Worker Catalog
+
+After signing in, the plugin loads all GeoEngine workers published to your team. Workers are grouped by name and expandable to show individual versions. Click any version to open its configuration window.
+
+<img src="/nika-geoengine/arcgis-worker-catalog.png" alt="Worker catalog showing grouped workers and versions" />
+
+### Configure and Run a Job
+
+Select your input files, set any required parameters, and choose a compute tier. Click **Run** to submit the job to Nika's cloud — no local Docker or CLI required.
+
+<img src="/nika-geoengine/arcgis-configure-job.png" alt="Job configuration window with input fields and compute tier selector" />
+
+### Monitor Live Progress
+
+Once submitted, the plugin switches to a live log view. Status updates stream in as the job moves through cold start, execution, and completion. You can cancel at any time.
+
+<img src="/nika-geoengine/arcgis-live-log.png" alt="Live log view showing job status and streaming output" />
+
+### Job History
+
+The Sessions tab shows all past and active jobs. Filter by worker or date range to find a specific run and review its logs or download outputs.
+
+<img src="/nika-geoengine/arcgis-job-history.png" alt="Job history tab with filter controls and past job cards" />
+
 ### Expanding Desktop Capabilities
 - **Manage Resource Deployment**: Start, monitor, and deploy configured NikaGeoEngine Workers and algorithms seamlessly from the ArcGIS interface directly to Nika's cloud without managing CI/CD pipelines.
 - **Execute Cloud Jobs**: Run heavy processing on deployed algorithms, letting NikaPlanet handle the compute provisioning and sending the outputs securely back to your ArcGIS session.
-- **Shared Ecosystems**: Consume shared team assets, vector maps, and algorithms stored globally on NikaHub. 
+- **Shared Ecosystems**: Consume shared team assets, vector maps, and algorithms stored globally on NikaHub.

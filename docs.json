@@ -1,324 +1,311 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "linden",
-  "name": "Nika",
-  "colors": {
-    "primary": "#003646",
-    "light": "#c5ff5a",
-    "dark": "#003646"
-  },
-  "appearance": {
-    "default": "system"
-  },
-  "fonts": {
-    "family": "Space Grotesk"
-  },
-  "background": {
-    "decoration": "windows"
-  },
-  "favicon": "/favicon.ico",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Product/Features",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "index",
-              "pricing"
-            ]
-          },
-          {
-            "group": "NIKA Desktop",
-            "pages": [
-              "nika-desktop/overview",
-              "nika-desktop/geovault"
-            ]
-          },
-          {
-            "group": "NIKA Planet (Cloud GIS Platform)",
-            "pages": [
-              "nika-planet/overview",
-              "nika-planet/changelog",
-              "nika-planet/nika-workspace",
-              "nika-planet/nika-notebook",
-              "nika-planet/nika-hub",
-              "nika-planet/nika-map",
-              "nika-planet/nika-dbms",
-              "nika-planet/nika-flow",
-              "nika-planet/nika-labeler",
-              "nika-planet/nika-studio",
-              "nika-planet/nika-dashboard"
-             ]
-          },
-          {
-            "group": "NIKA Mobile",
-            "pages": [
-              "nika-mobile/overview",
-              "nika-mobile/nika-mobile-chat",
-              "nika-mobile/nika-mobile-team-maps",
-              "nika-mobile/nika-mobile-survey"
-            ]
-          },
-          {
-            "group": "NIKA GeoEngine (Deployment CLI)",
-            "pages": [
-              "nika-geoengine/overview",
-              "nika-geoengine/arcgis",
-              "nika-geoengine/qgis",
-              "nika-geoengine/releases"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Step-by-Step Guides",
-        "groups": [
-          {
-            "group": "Tutorials",
-            "icon": "rocket",
-            "pages": [
-              "guides/tutorials/getting-started-with-nikaworkspace",
-              "guides/tutorials/building-first-app",
-              "guides/tutorials/geospatial-analysis",
-              "guides/tutorials/map-visualization"
-            ]
-          },
-          {
-            "group": "Access Control",
-            "icon": "shield",
-            "pages": [
-              "guides/access-control/invite-to-team",
-              "guides/access-control/invite-to-workspace"
-            ]
-          },
-          {
-            "group": "File Storage",
-            "icon": "folder",
-            "pages": [
-              "guides/manage-file-lake-per-workspace/upload-files-and-folders",
-              "guides/manage-file-lake-per-workspace/organize-files-and-folders",
-              "guides/manage-file-lake-per-workspace/download-files-and-folders",
-              "guides/manage-file-lake-per-workspace/monitor-file-storage"
-            ]
-          },
-          {
-            "group": "Map Visualization",
-            "icon": "map",
-            "pages": [
-              "guides/become-map-expert/create-your-first-map",
-              "guides/become-map-expert/add-layers-to-map",
-              "guides/become-map-expert/vector-styling",
-              "guides/become-map-expert/raster-styling",
-              "guides/become-map-expert/modify-legend",
-              "guides/become-map-expert/collaborative-mapping",
-              "guides/become-map-expert/change-base-map",
-              "guides/become-map-expert/sync-multiple-maps",
-              "guides/become-map-expert/set-initial-view",
-              "guides/become-map-expert/publish-map"
-            ]
-          },
-          {
-            "group": "Data Analysis",
-            "icon": "code",
-            "pages": [
-              "guides/data-analysis/create-your-first-notebook",
-              "guides/data-analysis/start-machine",
-              "guides/data-analysis/run-code-in-notebook",
-              "guides/data-analysis/ai-coding-in-notebook",
-              "guides/data-analysis/gdal-cuda-installation",
-              "guides/data-analysis/supported-python-libraries",
-              "guides/data-analysis/publish-notebook"
-            ]
-          },
-          {
-            "group": "Database Management",
-            "icon": "database",
-            "pages": [
-              "guides/database-management/create-managed-duckdb",
-              "guides/database-management/connect-postgres",
-              "guides/database-management/connect-motherduck",
-              "guides/database-management/query-managed-duckdb"
-            ]
-          },
-          {
-            "group": "Data Conversion Pipeline",
-            "icon": "water",
-            "pages": [
-              "guides/data-conversion-pipeline/create-new-flow",
-              "guides/data-conversion-pipeline/edit-conversion-flow",
-              "guides/data-conversion-pipeline/execute-and-verify-pipeline"
-            ]
-          },
-          {
-            "group": "Image Labeling",
-            "icon": "tag",
-            "pages": [
-              "guides/image-labeling/create-labeling-job",
-              "guides/image-labeling/assign-labeling-job",
-              "guides/image-labeling/edit-labeling-classes",
-              "guides/image-labeling/import-export-formats",
-              "guides/image-labeling/label-on-images",
-              "guides/image-labeling/review-existing-annotations"
-            ]
-          },
-          {
-            "group": "Field Survey",
-            "icon": "map-pin",
-            "pages": [
-              "guides/field-survey/ai-audio-gps"
-            ]
-          },
-          {
-            "group": "Custom Geoprocess Deployment",
-            "icon": "cube",
-            "pages": [
-              "guides/custom-geoprocess-deployment/installation",
-              "guides/custom-geoprocess-deployment/step-by-step",
-              "guides/custom-geoprocess-deployment/ai-coder-worker",
-              "guides/custom-geoprocess-deployment/running-in-gis",
-              "guides/custom-geoprocess-deployment/maintenance",
-              "guides/custom-geoprocess-deployment/versioning",
-              "guides/custom-geoprocess-deployment/debugging",
-              "guides/custom-geoprocess-deployment/cloud-push",
-              "guides/custom-geoprocess-deployment/worker-collaboration",
-              "guides/custom-geoprocess-deployment/cli-reference"
-            ]
-          },
-          {
-            "group": "Best Practices",
-            "icon": "check",
-            "pages": [
-              "guides/best-practices/best-practices",
-              "guides/best-practices/performance",
-              "guides/best-practices/security"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Industrial Solutions",
-        "groups": [
-          {
-            "group": "Water Resources & Hydrology",
-            "pages": [
-              "industrial-solutions/river-ecology-stress-hotspot",
-              "industrial-solutions/watershed-urban-impact-analysis",
-              "industrial-solutions/urban-construction-riparian-areas",
-              "industrial-solutions/river-corridor-urbanisation"
-            ]
-          },
-          {
-            "group": "Coastal & Marine",
-            "pages": [
-              "industrial-solutions/mean-sea-level-coastal-regions"
-            ]
-          },
-          {
-            "group": "Transportation & Infrastructure",
-            "pages": [
-              "industrial-solutions/adsb-flight-data",
-              "industrial-solutions/singapore-mrt-yearly-visualisation"
-            ]
-          },
-          {
-            "group": "Urban Planning & Development",
-            "pages": [
-              "industrial-solutions/flood-risk-data-lulc-urban-areas",
-              "industrial-solutions/river-urbanisation-major-cities-comparisons"
-            ]
-          },
-          {
-            "group": "Mining & Natural Resources",
-            "pages": [
-              "industrial-solutions/mineral-vegetation-index-sentinel2"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "About Us",
-          "href": "https://nikaplanet.com",
-          "icon": "globe"
-        },
-        {
-          "anchor": "Pricing",
-          "href": "/pricing",
-          "icon": "credit-card"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@nikaplanet.com",
-          "icon": "question"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/images/hero-light.png",
-    "dark": "/images/hero-dark.png"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "About Us",
-        "href": "https://nikaplanet.com"
-      },
-      {
-        "label": "Pricing",
-        "href": "/pricing"
-      },
-      {
-        "label": "Support",
-        "href": "mailto:support@nikaplanet.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Go to NikaPlanet",
-      "href": "https://planet.nika.eco"
-    }
-  },
-  "custom": {
-    "scripts": ["/floating-cta.js", "/geovault-chat-theme.js"]
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/nikaplanet",
-      "github": "https://github.com/nikaplanet",
-      "linkedin": "https://linkedin.com/company/nikaplanet"
-    },
-    "links": [
-      {
-        "header": "Company",
-        "items": [
-          {
-            "label": "Blog",
-            "href": "https://www.nikaplanet.com/resources"
-          },
-          {
-            "label": "Terms and Conditions",
-            "href": "https://www.nikaplanet.com/terms-conditions"
-          }
-        ]
-      }
-    ]
-  }
+	"$schema": "https://mintlify.com/docs.json",
+	"theme": "linden",
+	"name": "Nika",
+	"colors": {
+		"primary": "#003646",
+		"light": "#c5ff5a",
+		"dark": "#003646"
+	},
+	"appearance": {
+		"default": "system"
+	},
+	"fonts": {
+		"family": "Space Grotesk"
+	},
+	"background": {
+		"decoration": "windows"
+	},
+	"favicon": "/favicon.ico",
+	"navigation": {
+		"tabs": [
+			{
+				"tab": "Product/Features",
+				"groups": [
+					{
+						"group": "Get Started",
+						"pages": ["index", "pricing"]
+					},
+					{
+						"group": "NIKA Desktop",
+						"pages": ["nika-desktop/overview", "nika-desktop/geovault"]
+					},
+					{
+						"group": "NIKA Planet (Cloud GIS Platform)",
+						"pages": [
+							"nika-planet/overview",
+							"nika-planet/changelog",
+							"nika-planet/nika-workspace",
+							"nika-planet/nika-notebook",
+							"nika-planet/nika-hub",
+							"nika-planet/nika-map",
+							"nika-planet/nika-dbms",
+							"nika-planet/nika-flow",
+							"nika-planet/nika-labeler",
+							"nika-planet/nika-studio",
+							"nika-planet/nika-dashboard"
+						]
+					},
+					{
+						"group": "NIKA Mobile",
+						"pages": [
+							"nika-mobile/overview",
+							"nika-mobile/nika-mobile-chat",
+							"nika-mobile/nika-mobile-team-maps",
+							"nika-mobile/nika-mobile-survey"
+						]
+					},
+					{
+						"group": "NIKA GeoEngine (Deployment CLI)",
+						"pages": [
+							"nika-geoengine/overview",
+							"nika-geoengine/arcgis",
+							"nika-geoengine/qgis",
+							"nika-geoengine/releases"
+						]
+					}
+				]
+			},
+			{
+				"tab": "Step-by-Step Guides",
+				"groups": [
+					{
+						"group": "Tutorials",
+						"icon": "rocket",
+						"pages": [
+							"guides/tutorials/getting-started-with-nikaworkspace",
+							"guides/tutorials/building-first-app",
+							"guides/tutorials/geospatial-analysis",
+							"guides/tutorials/map-visualization"
+						]
+					},
+					{
+						"group": "Access Control",
+						"icon": "shield",
+						"pages": [
+							"guides/access-control/invite-to-team",
+							"guides/access-control/invite-to-workspace"
+						]
+					},
+					{
+						"group": "File Storage",
+						"icon": "folder",
+						"pages": [
+							"guides/manage-file-lake-per-workspace/upload-files-and-folders",
+							"guides/manage-file-lake-per-workspace/organize-files-and-folders",
+							"guides/manage-file-lake-per-workspace/download-files-and-folders",
+							"guides/manage-file-lake-per-workspace/monitor-file-storage"
+						]
+					},
+					{
+						"group": "Map Visualization",
+						"icon": "map",
+						"pages": [
+							"guides/become-map-expert/create-your-first-map",
+							"guides/become-map-expert/add-layers-to-map",
+							"guides/become-map-expert/vector-styling",
+							"guides/become-map-expert/raster-styling",
+							"guides/become-map-expert/modify-legend",
+							"guides/become-map-expert/collaborative-mapping",
+							"guides/become-map-expert/change-base-map",
+							"guides/become-map-expert/sync-multiple-maps",
+							"guides/become-map-expert/set-initial-view",
+							"guides/become-map-expert/publish-map"
+						]
+					},
+					{
+						"group": "Data Analysis",
+						"icon": "code",
+						"pages": [
+							"guides/data-analysis/create-your-first-notebook",
+							"guides/data-analysis/start-machine",
+							"guides/data-analysis/run-code-in-notebook",
+							"guides/data-analysis/ai-coding-in-notebook",
+							"guides/data-analysis/gdal-cuda-installation",
+							"guides/data-analysis/supported-python-libraries",
+							"guides/data-analysis/publish-notebook"
+						]
+					},
+					{
+						"group": "Database Management",
+						"icon": "database",
+						"pages": [
+							"guides/database-management/create-managed-duckdb",
+							"guides/database-management/connect-postgres",
+							"guides/database-management/connect-motherduck",
+							"guides/database-management/query-managed-duckdb"
+						]
+					},
+					{
+						"group": "Data Conversion Pipeline",
+						"icon": "water",
+						"pages": [
+							"guides/data-conversion-pipeline/create-new-flow",
+							"guides/data-conversion-pipeline/edit-conversion-flow",
+							"guides/data-conversion-pipeline/execute-and-verify-pipeline"
+						]
+					},
+					{
+						"group": "Image Labeling",
+						"icon": "tag",
+						"pages": [
+							"guides/image-labeling/create-labeling-job",
+							"guides/image-labeling/assign-labeling-job",
+							"guides/image-labeling/edit-labeling-classes",
+							"guides/image-labeling/import-export-formats",
+							"guides/image-labeling/label-on-images",
+							"guides/image-labeling/review-existing-annotations"
+						]
+					},
+					{
+						"group": "Field Survey",
+						"icon": "map-pin",
+						"pages": ["guides/field-survey/ai-audio-gps"]
+					},
+					{
+						"group": "Custom Geoprocess Deployment",
+						"icon": "cube",
+						"pages": [
+							"guides/custom-geoprocess-deployment/installation",
+							"guides/custom-geoprocess-deployment/step-by-step",
+							"guides/custom-geoprocess-deployment/ai-coder-worker",
+							"guides/custom-geoprocess-deployment/running-in-gis",
+							"guides/custom-geoprocess-deployment/maintenance",
+							"guides/custom-geoprocess-deployment/versioning",
+							"guides/custom-geoprocess-deployment/debugging",
+							"guides/custom-geoprocess-deployment/cloud-push",
+							"guides/custom-geoprocess-deployment/worker-collaboration",
+							"guides/custom-geoprocess-deployment/cli-reference"
+						]
+					},
+					{
+						"group": "Custom Geoprocess Usage",
+						"icon": "plug",
+						"pages": [
+							"guides/custom-geoprocess-usage/setup-plugin-in-gis",
+							"guides/custom-geoprocess-usage/submitting-a-job",
+							"guides/custom-geoprocess-usage/access-job-outputs"
+						]
+					},
+					{
+						"group": "Best Practices",
+						"icon": "check",
+						"pages": [
+							"guides/best-practices/best-practices",
+							"guides/best-practices/performance",
+							"guides/best-practices/security"
+						]
+					}
+				]
+			},
+			{
+				"tab": "Industrial Solutions",
+				"groups": [
+					{
+						"group": "Water Resources & Hydrology",
+						"pages": [
+							"industrial-solutions/river-ecology-stress-hotspot",
+							"industrial-solutions/watershed-urban-impact-analysis",
+							"industrial-solutions/urban-construction-riparian-areas",
+							"industrial-solutions/river-corridor-urbanisation"
+						]
+					},
+					{
+						"group": "Coastal & Marine",
+						"pages": ["industrial-solutions/mean-sea-level-coastal-regions"]
+					},
+					{
+						"group": "Transportation & Infrastructure",
+						"pages": [
+							"industrial-solutions/adsb-flight-data",
+							"industrial-solutions/singapore-mrt-yearly-visualisation"
+						]
+					},
+					{
+						"group": "Urban Planning & Development",
+						"pages": [
+							"industrial-solutions/flood-risk-data-lulc-urban-areas",
+							"industrial-solutions/river-urbanisation-major-cities-comparisons"
+						]
+					},
+					{
+						"group": "Mining & Natural Resources",
+						"pages": ["industrial-solutions/mineral-vegetation-index-sentinel2"]
+					}
+				]
+			}
+		],
+		"global": {
+			"anchors": [
+				{
+					"anchor": "About Us",
+					"href": "https://nikaplanet.com",
+					"icon": "globe"
+				},
+				{
+					"anchor": "Pricing",
+					"href": "/pricing",
+					"icon": "credit-card"
+				},
+				{
+					"anchor": "Support",
+					"href": "mailto:support@nikaplanet.com",
+					"icon": "question"
+				}
+			]
+		}
+	},
+	"logo": {
+		"light": "/images/hero-light.png",
+		"dark": "/images/hero-dark.png"
+	},
+	"navbar": {
+		"links": [
+			{
+				"label": "About Us",
+				"href": "https://nikaplanet.com"
+			},
+			{
+				"label": "Pricing",
+				"href": "/pricing"
+			},
+			{
+				"label": "Support",
+				"href": "mailto:support@nikaplanet.com"
+			}
+		],
+		"primary": {
+			"type": "button",
+			"label": "Go to NikaPlanet",
+			"href": "https://planet.nika.eco"
+		}
+	},
+	"custom": {
+		"scripts": ["/floating-cta.js", "/geovault-chat-theme.js"]
+	},
+	"contextual": {
+		"options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
+	},
+	"footer": {
+		"socials": {
+			"x": "https://x.com/nikaplanet",
+			"github": "https://github.com/nikaplanet",
+			"linkedin": "https://linkedin.com/company/nikaplanet"
+		},
+		"links": [
+			{
+				"header": "Company",
+				"items": [
+					{
+						"label": "Blog",
+						"href": "https://www.nikaplanet.com/resources"
+					},
+					{
+						"label": "Terms and Conditions",
+						"href": "https://www.nikaplanet.com/terms-conditions"
+					}
+				]
+			}
+		]
+	}
 }
-

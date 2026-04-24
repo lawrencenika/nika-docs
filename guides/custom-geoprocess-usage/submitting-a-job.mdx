@@ -1,0 +1,52 @@
+---
+title: "Submit a Job"
+---
+
+import GisSelector from "/snippets/gis-selector.mdx";
+
+<GisSelector />
+
+<Tabs>
+<Tab title="QGIS">
+
+To submit a job, your team (or a team you have access to) must have a worker deployed to their workspace. To learn more about deploying a worker, see the [Geoengine deployment](/guides/custom-geoprocess-deployment/step-by-step) guide.
+
+1. Identify the worker you want to run. Take note of the worker's name and version.
+   ![QGIS Worker List](/guides/custom-geoprocess-usage/qgis-workerexample.png)
+2. Click "select this version" to open the job dialog.
+3. Fill in the required input parameters and choose an appropriate machine type. Note that larger machines may take longer to start up.
+   ![QGIS Input Parameters](/guides/custom-geoprocess-usage/qgis-worker-input.png)
+4. Configure what you want to do after the job completes:
+    - Download the outputs to your local machine
+    - Add the outputs as layers to your QGIS project
+      ![QGIS Post Job Behavior](/guides/custom-geoprocess-usage/qgis-post-run-behavior.png)
+5. Click the "Submit Job" button to submit the job. If you choose to download the outputs, you will be prompted to select a folder to download the outputs to.
+6. The job will be submitted and you will be able to view the job in the "Job History" panel.
+   ![QGIS Job List](/guides/custom-geoprocess-usage/qgis-runlist.png)
+7. Once the job completes, you will be able to view the outputs by clicking on the job in the "Job History" panel and clicking on the "outputs" tab.
+   ![QGIS Outputs](/guides/custom-geoprocess-usage/qgis-outputs.png)
+
+</Tab>
+
+<Tab title="ArcGIS Pro">
+
+To submit a job, your team (or a team you have access to) must have a worker deployed to their workspace. To learn more about deploying a worker, see the [Geoengine deployment](/guides/custom-geoprocess-deployment/step-by-step) guide.
+
+1. Identify the worker you want to run. Take note of the worker's name and version.
+   ![ArcGIS Worker List](/guides/custom-geoprocess-usage/qgis-workerexample.png)
+2. Click "select this version" to open the job dialog.
+3. Fill in the required input parameters and choose an appropriate machine type. Note that larger machines may take longer to start up.
+   ![ArcGIS Input Parameters](/guides/custom-geoprocess-usage/qgis-worker-input.png)
+4. Configure what you want to do after the job completes:
+    - Download the outputs to your local machine
+    - Add the outputs as layers to your ArcGIS Pro project
+      ![ArcGIS Post Job Behavior](/guides/custom-geoprocess-usage/qgis-post-run-behavior.png)
+5. Click the "Submit Job" button to submit the job. If you choose to download the outputs, you will be prompted to select a folder to download the outputs to.
+6. The job will be submitted and you will be able to view the job in the "Job History" panel.
+   ![ArcGIS Job List](/guides/custom-geoprocess-usage/qgis-runlist.png)
+7. Once the job completes, you will be able to view the outputs by clicking on the job in the "Job History" panel and clicking on the "outputs" tab.
+   ![ArcGIS Outputs](/guides/custom-geoprocess-usage/qgis-outputs.png)
+
+</Tab>
+
+</Tabs>

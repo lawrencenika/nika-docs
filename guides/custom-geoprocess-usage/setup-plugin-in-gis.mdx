@@ -1,0 +1,62 @@
+---
+title: "Setup the Plugin in GIS"
+---
+
+import GisSelector from "/snippets/gis-selector.mdx";
+import PlatformSelector from "/snippets/platform-selector.mdx";
+import ArcGISUnsupportedTip from "/snippets/arcgis-unsupported-tip.mdx";
+
+<GisSelector />
+
+<Tabs>
+<Tab title="QGIS">
+
+## Installing the plugin
+
+The QGIS plugin for NikaPlanet is available [here](https://github.com/NikaGeospatial/nikaplanet-qgis-plugin).
+
+To install the plugin:
+
+1. On the github repository page, click on the code button and select "Download ZIP"
+   ![QGIS Zip Download](/guides/custom-geoprocess-usage/qgis-install.png)
+2. In QGIS, go to the "Plugins" menu (upper left) and select "Manage and Install Plugins..."
+   ![QGIS Plugin Menu](/guides/custom-geoprocess-usage/qgis-pluginmenu.png)
+3. Click the "Install Plugin From ZIP" button, then click the "..." button and select the downloaded ZIP file
+   ![QGIS Install Plugin From ZIP](/guides/custom-geoprocess-usage/qgis-zipinstall.png)
+4. Click the "Install Plugin" button
+5. The plugin will be installed and you can now use it to connect to NikaPlanet
+
+## Logging in to NikaPlanet
+
+Logins are shared between the NikaPlanet website and the QGIS plugin. If you are already logged in to NikaPlanet, you simply need to authorize the plugin to access your account.
+
+1. In QGIS, click the "NikaPlanet" button in the top bar. It is generally located beside the Python button.
+   ![QGIS Plugin Button](/guides/custom-geoprocess-usage/qgis-pluginbutton.png)
+2. If this is your first time logging in, you will be prompted to authorize the plugin to access your account. Click the "Sign in with NikaPlanet" button.
+   ![QGIS Login Prompt](/guides/custom-geoprocess-usage/qgis-login.png)
+3. You will be redirected to the NikaPlanet login page. Enter your NikaPlanet credentials and click the "Sign in" button.
+   ![NikaPlanet Login](/guides/custom-geoprocess-usage/qgis-authorize.png)
+4. You will be redirected back to QGIS and the NikaPlanet panel will automatically navigate to the dashboard. Click the "Geoengine Workers" button to view your workers.
+   ![QGIS Landing](/guides/custom-geoprocess-usage/qgis-workernavi.png)
+
+</Tab>
+<Tab title="ArcGIS Pro">
+
+## Installing the plugin
+
+The ArcGIS Pro plugin is currently not available for download. Please contact us at support@nikaplanet.com if you are interested in using the plugin.
+
+## Logging in to NikaPlanet
+
+Logins are shared between the NikaPlanet website and the ArcGIS Pro plugin. If you are already logged in to NikaPlanet, you simply need to authorize the plugin to access your account.
+
+1. In ArcGIS Pro, click the "Nika" tab in the top bar, then click the "Show Panel" button.
+2. If this is your first time logging in, you will be prompted to authorize the plugin to access your account. Click the "Sign in with NikaPlanet" button.
+   ![ArcGIS Login Prompt](/guides/custom-geoprocess-usage/qgis-login.png)
+3. You will be redirected to the NikaPlanet login page. Enter your NikaPlanet credentials and click the "Sign in" button.
+   ![NikaPlanet Login](/guides/custom-geoprocess-usage/qgis-authorize.png)
+4. You will be redirected back to ArcGIS Pro and the NikaPlanet panel will automatically navigate to the dashboard. Click the "Geoengine Workers" button to view your workers.
+   ![ArcGIS Landing](/guides/custom-geoprocess-usage/qgis-workernavi.png)
+
+</Tab>
+</Tabs>

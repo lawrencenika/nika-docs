@@ -1,2 +1,5 @@
 .DS_Store
 **/.DS_Store
+
+# Newsletter drafts — not part of the docs build
+newsletter/

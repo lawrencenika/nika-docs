@@ -3,12 +3,12 @@
 	"theme": "linden",
 	"name": "Nika",
 	"colors": {
-		"primary": "#003646",
+		"primary": "#eba941",
 		"light": "#c5ff5a",
-		"dark": "#003646"
+		"dark": "#170d19"
 	},
 	"appearance": {
-		"default": "system"
+		"default": "dark"
 	},
 	"fonts": {
 		"family": "Space Grotesk"
@@ -256,8 +256,8 @@
 		}
 	},
 	"logo": {
-		"light": "/images/hero-light.png",
-		"dark": "/images/hero-dark.png"
+		"light": "/images/nika-geospatial-logo-light.svg",
+		"dark": "/images/nika-geospatial-logo-dark.svg"
 	},
 	"navbar": {
 		"links": [
@@ -272,16 +272,25 @@
 			{
 				"label": "Support",
 				"href": "mailto:support@nikaplanet.com"
+			},
+			{
+				"label": "Download Desktop",
+				"href": "https://www.nikaplanet.com/download"
 			}
 		],
 		"primary": {
 			"type": "button",
-			"label": "Go to NikaPlanet",
+			"label": "Planet Console",
 			"href": "https://planet.nika.eco"
 		}
 	},
 	"custom": {
-		"scripts": ["/floating-cta.js", "/geovault-chat-theme.js"]
+		"scripts": [
+			"/nika-background-theme.js",
+			"/floating-cta.js",
+			"/geovault-chat-theme.js",
+			"/topbar-actions.js"
+		]
 	},
 	"contextual": {
 		"options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]

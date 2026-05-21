@@ -65,4 +65,4 @@ GeoEngine checks the integrity of all artifacts and reports any issues it finds.
 | Issue                    | Solution                                                                  |
 |--------------------------|---------------------------------------------------------------------------|
 | Stale config files found | Run `geoengine delete` and `geoengine apply` again to reset worker cache. |
-| Missing GIS plugins      | Run `geoengine apply --dev` on a worker with the GIS enabled.             |
+| Missing GIS plugins      | Run `geoengine setup plugins`, then restart QGIS or re-add the ArcGIS toolbox. |

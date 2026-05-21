@@ -3,9 +3,9 @@ title: "Run Workers in ArcGIS Pro or QGIS"
 description: "Find and run your GeoEngine workers directly inside ArcGIS Pro and QGIS after applying them"
 ---
 
-After you have applied a GeoEngine worker with GIS plugins enabled, it appears as a native tool inside your GIS software — no proxy service, no extra configuration. This guide shows you how to find and run your workers from QGIS and ArcGIS Pro.
+After you have installed the GIS plugin and applied a GeoEngine worker, it appears as a native tool inside your GIS software — no proxy service, no per-worker plugin configuration. This guide shows you how to find and run your workers from QGIS and ArcGIS Pro.
 
-If you haven't applied a worker yet, see [Creating a Worker](/guides/custom-geoprocess-deployment/creating-a-worker) first.
+If you haven't applied a worker yet, see [Your First Worker: Step-by-Step](/guides/custom-geoprocess-deployment/step-by-step) first.
 
 ---
 
@@ -17,7 +17,7 @@ In QGIS, open the **Processing** menu and click **Toolbox**, or press `Ctrl+Alt+
 
 ### Step 2: Find Your Worker
 
-Expand the **GeoEngine** provider in the toolbox. Your workers are listed by name. Each worker that has been applied in production shows individual version entries (e.g. `my-worker (1.0.0)`, `my-worker (1.1.0)`), plus a **`my-worker (*latest)`** entry at the top of the list (the `*` prefix sorts it above the versioned entries).
+Expand the **GeoEngine** provider in the toolbox. Your workers are listed by name. Each worker shows a **`my-worker (*latest)`** entry, plus one entry for each applied production local tag (for example `my-worker (1.0.0)` or `my-worker (release-candidate)`).
 
 Click on any entry to see its description, config hash, and last-applied time in the help panel on the right.
 
@@ -30,6 +30,8 @@ Double-click a worker entry to open the tool dialog. Fill in the required input 
 
 Click **Run**. Container logs stream into the QGIS log panel in real time. When the run finishes, output files are automatically added as layers to your QGIS project.
 
+Local QGIS executions are stamped in GeoEngine run history with `--actor QGIS`.
+
 ---
 
 ## Running in ArcGIS Pro
@@ -40,11 +42,13 @@ In ArcGIS Pro, open the **Analysis** tab and click **Tools** to open the Geoproc
 
 ### Step 2: Find Your Worker
 
-Expand the GeoEngine toolbox. Your applied workers appear as tool entries, listed by name and version. Click a tool to see its description and parameters.
+Expand the GeoEngine toolbox. Your applied workers appear as tool entries. The latest entry uses the worker name; tagged production entries include the local tag in brackets, for example `my-worker [1.0.0]`. Click a tool to see its description and parameters.
 
 ### Step 3: Fill In Inputs and Run
 
 Double-click a worker to open its tool dialog. Fill in the required parameters and click **Run**. Container logs appear in the Geoprocessing history and messages panel. Output files are added to your ArcGIS Pro map automatically when the run completes.
+
+Local ArcGIS Pro executions are stamped in GeoEngine run history with `--actor "ArcGIS Pro"`.
 
 ---
 
@@ -54,6 +58,7 @@ When a worker finishes, GeoEngine returns a structured JSON result:
 
 ```json
 {
+  "job_id": "01HX4V2Z9B2F4T8H6P9K3N7Q1M",
   "status": "completed",
   "exit_code": 0,
   "files": [
@@ -67,6 +72,7 @@ When a worker finishes, GeoEngine returns a structured JSON result:
 }
 ```
 
+- **`job_id`** — the saved run ID; use it with `geoengine worker runs show` or `geoengine worker runs logs` when inspecting local run history
 - **`kind: "output"`** — a file produced by the worker; automatically added to your GIS view
 - **`kind: "input"`** — an input file that was passed in; also shown in the GIS so you can compare input and output side by side
 
@@ -83,4 +89,3 @@ You can cancel a running worker at any time using the cancel button in the GIS p
 ## Refreshing the Worker List
 
 The plugin reads the worker list fresh each time the toolbox is opened. If you apply a new worker or a new version and it doesn't appear in your GIS yet, close and reopen the Processing Toolbox (QGIS) or Geoprocessing pane (ArcGIS Pro) to trigger a refresh.
-

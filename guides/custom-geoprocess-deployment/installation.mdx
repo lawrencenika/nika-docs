@@ -25,6 +25,7 @@ Before installing GeoEngine, make sure you have the following:
   - [GitHub Copilot](https://github.com/features/copilot) by VS Code / Microsoft
   - [Codex](https://openai.com/codex/) by OpenAI
   - [Antigravity](https://antigravity.google) by Google
+  - NIKA local agent tooling, if your organisation uses it
 
 ---
 
@@ -148,7 +149,7 @@ No platform-specific issues are common at this stage. If you encounter problems,
 
 ## Step 2: Log In
 
-GeoEngine requires a free Nika account. Run the login command before using any other GeoEngine command:
+GeoEngine requires a free Nika account. Run the login command before using worker build, run, registry, and cloud commands:
 
 ```bash
 geoengine auth login
@@ -158,16 +159,16 @@ This will open a browser window where you can authorise GeoEngine with your Nika
 
 ![GeoEngine OAuth login screen](/guides/custom-geoprocess-deployment/login-oauth.jpg)
 
-Click **Authorize** to complete the login. Your credentials are stored securely on your machine after the first login. You only need to run `geoengine auth login` again if your credentials expire or become corrupted. Running any GeoEngine command while logged out will print an error prompting you to log in.
+Click **Authorize** to complete the login. Your credentials are stored securely on your machine after the first login. You only need to run `geoengine auth login` again if your credentials expire or become corrupted. Commands such as `geoengine setup`, `geoengine lint`, `geoengine patch`, `geoengine update`, and `geoengine uninstall` do not require login, but worker commands like `geoengine apply`, `geoengine run`, `geoengine workers`, and `geoengine push` will prompt you to log in if your session is missing.
 
 ---
 
 ## Step 3: Initialise AI Agent Skills (Optional)
 
-If you have an AI agent installed, run the following to install GeoEngine skills into your agent:
+If you have an AI agent installed, run the following to install the GeoEngine skill bundle into your agent:
 
 ```bash
-geoengine patch --init
+geoengine setup skills
 ```
 
 You will be prompted to select which agent(s) to install skills for:
@@ -176,8 +177,15 @@ You will be prompted to select which agent(s) to install skills for:
 - **GitHub Copilot** (VS Code / Microsoft)
 - **Codex** (OpenAI)
 - **Antigravity** (Google)
+- **NIKA** (local NIKA tooling)
 
-Skills that are already up to date are skipped; changed or missing skills are installed automatically.
+GeoEngine currently installs one top-level skill, `use-geoengine`. That skill contains the internal workflow guidance, references, and templates needed for worker creation, YAML updates, dependency updates, tests, cloud push, and maintenance commands. Skills that are already up to date are skipped; changed or missing files are installed automatically.
+
+To install skills for one agent non-interactively, pass `--agent`:
+
+```bash
+geoengine setup skills --agent Codex
+```
 
 ### Verify Skills Are Working
 
@@ -187,15 +195,15 @@ After installing, open your AI agent and run the following prompt:
 What skills do you have?
 ```
 
-If the agent lists the GeoEngine skills (`use-geoengine`, `make-geoengine-worker`, etc.), the installation was successful.
+If the agent lists the GeoEngine skill (`use-geoengine`), the installation was successful.
 
-If the agent does not mention GeoEngine skills in its response, try prompting more specifically:
+If the agent does not mention the GeoEngine skill in its response, try prompting more specifically:
 
 ```
 Do you have any GeoEngine-related skills installed?
 ```
 
-If the agent still does not recognise the skills, check that the skill files are in the correct agent folder (e.g. `~/.claude/skills` for Claude Code) and restart your agent.
+If the agent still does not recognise the skill, check that the skill files are in the correct agent folder (e.g. `~/.claude/skills` for Claude Code) and restart your agent.
 
 See [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployment/ai-coder-worker) for the full workflow.
 
@@ -208,14 +216,21 @@ See [Create & Modify a Worker Using AI Coder](/guides/custom-geoprocess-deployme
 This step is only required if you plan to run GeoEngine workers from **QGIS** or **ArcGIS Pro**. If you only use the CLI or AI agents to run workers, you can skip this step entirely.
 </Note>
 
-When you run `geoengine apply` for the first time on a worker that has a GIS plugin enabled in its `geoengine.yaml`, GeoEngine will prompt you to install the plugin automatically during the apply step.
+Install the local GIS plugin once with:
 
-```yaml
-# In your geoengine.yaml:
-plugins:
-  arcgis: false
-  qgis: true   # GeoEngine installs the QGIS plugin on first apply
+```bash
+geoengine setup plugins
 ```
+
+You can also install a specific plugin non-interactively:
+
+```bash
+geoengine setup plugins --qgis
+geoengine setup plugins --arcgis   # Windows only
+geoengine setup plugins --all
+```
+
+After the plugin is installed, applied workers are discovered from your local GeoEngine registry. You no longer need to enable individual workers with a `plugins:` section in `geoengine.yaml`.
 
 If you upgrade GeoEngine later, run `geoengine patch` to bring all plugins back in sync:
 
@@ -233,7 +248,7 @@ You are now ready to start using GeoEngine! Follow the [step-by-step guide](/gui
 ## Enabling GIS Plugin
 <Note>
 
-This section will only apply after your first `geoengine apply` step. It is included for your information, but not part of
+This section will only apply after you have done the `geoengine setup plugins` step. It is included for your information, but not part of
 GeoEngine's core installation.
 
 </Note>
@@ -249,7 +264,7 @@ You can install QGIS from the [QGIS website](https://qgis.org).
 
 ![Enabling QGIS Plugin](/guides/custom-geoprocess-deployment/installation-1.gif)
 
-1. The QGIS plugin is installed automatically when you first run `geoengine apply [--dev]` with `qgis: true` in your `geoengine.yaml`
+1. Run `geoengine setup plugins --qgis`, or select QGIS from the interactive plugin menu.
 2. Open QGIS and in the top bar, click **Plugins** > **Manage and Install Plugins...**
 3. Navigate to the **Installed** tab and enable the **GeoEngine** plugin
 4. GeoEngine will now be available in the **Processing** menu
@@ -264,11 +279,11 @@ See [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/
 
 You can install ArcGIS Pro from the [ArcGIS website](https://pro.arcgis.com/en/pro-app/latest/get-started/download-arcgis-pro.htm).
 
-1. The ArcGIS Pro plugin is downloaded to your Documents folder when you first run `geoengine apply [--dev]` with `arcgis: true` in your `geoengine.yaml`
-2. Locate the plugin toolbox file and copy the path reference
-3. In ArcGIS Pro, navigate to the **Catalog** pane and right-click **Toolboxes** > **Add Toolbox**
-4. Paste the path reference to the plugin in the file dialog and click **OK**
-5. **GeoEngine Tools** should now be available in your Toolboxes
+1. Run `geoengine setup plugins --arcgis`, or select ArcGIS from the interactive plugin menu.
+2. GeoEngine prints the path to `GeoEngineTools.pyt`.
+3. In ArcGIS Pro, navigate to the **Catalog** pane and right-click **Toolboxes** > **Add Toolbox**.
+4. Select the printed `GeoEngineTools.pyt` path and click **OK**.
+5. **GeoEngine Tools** should now be available in your Toolboxes.
 
 See [Running Workers in ArcGIS Pro & QGIS](/guides/custom-geoprocess-deployment/running-in-gis) for how to use the plugins once installed.
 

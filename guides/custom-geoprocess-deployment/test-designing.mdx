@@ -1,0 +1,719 @@
+---
+title: "Designing Worker Tests"
+description: "Design tight but stable GeoEngine worker tests using fixtures, expected outputs, and semantic comparisons"
+---
+
+GeoEngine workers can do almost anything: read rasters, create vectors, write folders of outputs, run analysis, transform files, or generate reports. That flexibility is powerful, but it also makes testing tricky.
+
+`geoengine test` gives you a structured way to test open-ended workers. Instead of only checking exact file matches, you describe small test cases with inputs and expectations: the worker should run successfully, create the right output files, and, whenever possible, match expected semantic output.
+
+<Note>
+Use `geoengine test` during development, before a production `geoengine apply` and `geoengine push`. It helps you catch broken inputs, missing dependencies, incorrect output paths, and accidental behavior changes earlier.
+</Note>
+
+---
+
+## What `geoengine test` Does
+
+A GeoEngine test case runs your worker through the same runtime path as:
+
+```bash
+geoengine run --actor CLI --json
+```
+
+That means tests use the applied worker image, the saved `geoengine.yaml` command contract, and GeoEngine's normal file/folder mounting behavior.
+
+A test can check things like:
+
+- The worker exits with code `0`
+- An output file was created
+- An output file has a minimum size
+- A folder contains a certain number of outputs
+- A file hash matches exactly
+- Text output matches with normalized whitespace
+- JSON or GeoJSON matches with numeric tolerance
+
+The best tests are tight but not brittle. They prove the worker produced the right result without failing on harmless serialization details.
+
+---
+
+## Test Folder Layout
+
+When you run `geoengine init`, GeoEngine can scaffold a `tests/` folder for you.
+
+The scaffolded layout is:
+
+```text
+tests/
+  geoengine.test.yaml
+  fixtures/
+  expected/
+```
+
+| Path | Purpose |
+|------|---------|
+| `tests/geoengine.test.yaml` | The test manifest. This is where test cases are declared. |
+| `tests/fixtures/` | Small input files used by tests. |
+| `tests/expected/` | Expected output files, if you need comparisons. |
+| `tests/validators/` | Optional project-side helper scripts if your team wants them. `geoengine init` does not create this folder, and the core `geoengine test` command does not run these automatically. |
+
+When tests run, GeoEngine writes generated outputs to:
+
+```text
+.geoengine-test/
+```
+
+You should not use `.geoengine-test/` as a fixture folder. It is a temporary output area created by `geoengine test`.
+
+<Tip>
+`tests/` and `.geoengine-test/` are excluded from the Docker build context. Test fixtures should not be baked into your worker image.
+</Tip>
+
+---
+
+## Path Resolution Rules
+
+`geoengine test` resolves paths differently depending on whether the input is read-only or writable.
+
+### Read-only file and folder inputs
+
+For normal file/folder inputs, relative paths are resolved from `tests/`.
+
+```yaml
+inputs:
+  input-file: fixtures/small_extent.geojson
+```
+
+This points to:
+
+```text
+tests/fixtures/small_extent.geojson
+```
+
+### Output file and folder inputs
+
+For inputs marked with `output: true` in `geoengine.yaml`, relative paths are resolved inside the per-case test output folder.
+
+```yaml
+inputs:
+  output-dir: outputs
+```
+
+For a case named `square-grid`, this points to:
+
+```text
+.geoengine-test/square-grid/outputs
+```
+
+This keeps test outputs isolated and repeatable.
+
+---
+
+## Manifest Assertions
+
+Each case in `tests/geoengine.test.yaml` can include `inputs`, extra raw `args`, and an `expect` block.
+
+```yaml
+version: 1
+cases:
+  - name: smoke
+    inputs:
+      input-file: fixtures/sample.geojson
+      output-dir: outputs
+    args: []
+    expect:
+      exit_code: 0
+      files:
+        - path: outputs/result.geojson
+          exists: true
+          min_size: 1
+      compare:
+        - actual: outputs/result.geojson
+          expected: expected/result.geojson
+          mode: geojson
+```
+
+### File expectations
+
+| Field | Description |
+|-------|-------------|
+| `path` | One file or folder to check. It can be an output input name, such as `output`, or a path relative to the case output folder. |
+| `glob` | Match files under the case output folder. Supports `*`, `?`, and `**`. |
+| `exists` | Defaults to `true`. Set to `false` when a path should not exist. |
+| `missing` | Set to `true` when a path should be absent. |
+| `min_size` / `max_size` | Check file size in bytes. |
+| `count` | With `glob`, assert the number of matches. |
+| `sha256` | Require an exact SHA-256 hash. Use only for deterministic bytes. |
+| `extension` | Require a file extension, such as `.geojson` or `.csv`. |
+
+### Comparisons
+
+| Field | Description |
+|-------|-------------|
+| `actual` | Output file path, resolved from the case output folder unless it names an input path. |
+| `expected` | Expected file path, resolved from `tests/`. |
+| `mode` | `bytes` or `exact` for byte comparison, `text` for text, `json` for JSON, `geojson` for GeoJSON. Defaults to `bytes`. |
+| `normalize_whitespace` | For `text` mode, compare collapsed whitespace instead of exact spacing. |
+| `tolerance.numbers` | Numeric tolerance for `json` or `geojson` comparisons. |
+| `tolerance.coordinates` | Alias for numeric tolerance in geospatial comparisons. |
+| `ignore_paths` | Dot-style JSON paths to ignore, such as `$.name` or `$.features.0.properties.id`. |
+
+JSON and GeoJSON comparisons are structural: object keys and array order must match unless a path is ignored, and numbers can differ within the configured tolerance.
+
+---
+
+## Start With the Worker Contract
+
+Before writing tests, inspect `geoengine.yaml` and answer:
+
+- Which inputs are required?
+- Which inputs are output paths?
+- Which branches are meaningful to test?
+- Which outputs are deterministic enough to compare?
+- Which metadata might vary between machines or library versions?
+
+A good test follows the worker contract. If the script writes to `output-dir` and uses `output-file` as a basename, the test should use those same inputs instead of assuming a hard-coded path inside the container.
+
+---
+
+## Smoke Tests vs Semantic Tests
+
+Smoke tests and semantic tests are both useful, but they are not the same.
+
+### Smoke test
+
+A smoke test proves that the worker runs and writes something plausible:
+
+```yaml
+expect:
+  exit_code: 0
+  files:
+    - path: outputs/result.geojson
+      exists: true
+      min_size: 1
+```
+
+This catches common failures:
+
+- The worker crashes
+- A dependency is missing
+- The output path is wrong
+- Nothing was written
+
+A smoke test is a good starting point, but it does not prove the output is correct.
+
+### Tight semantic test
+
+A semantic test checks the meaning of the output:
+
+```yaml
+expect:
+  exit_code: 0
+  files:
+    - path: outputs/result.geojson
+      exists: true
+      min_size: 1
+      extension: .geojson
+  compare:
+    - actual: outputs/result.geojson
+      expected: expected/result.geojson
+      mode: geojson
+      tolerance:
+        numbers: 0.000001
+      ignore_paths:
+        - $.name
+        - $.crs
+```
+
+This checks the generated data while allowing harmless metadata and floating-point differences.
+
+<Note>
+When the output is predictable, prefer semantic tests. Smoke-only tests should be the fallback floor, not the default finish line.
+</Note>
+
+---
+
+## Example: Testing a Grid Creator Worker
+
+Suppose your worker creates regular grids from an input vector extent.
+
+The relevant `geoengine.yaml` inputs might look like this:
+
+```yaml
+command:
+  program: python
+  script: grid_creation.py
+  inputs:
+    - name: input-file
+      type: file
+      required: true
+
+    - name: grid-type
+      type: enum
+      required: false
+      default: square
+      enum_values:
+        - square
+        - rectangle
+        - diamond
+
+    - name: cell-width
+      type: number
+      required: true
+
+    - name: cell-height
+      type: number
+      required: false
+
+    - name: output-file
+      type: string
+      required: false
+      default: regular_grid
+
+    - name: output-dir
+      type: folder
+      required: true
+      output: true
+
+    - name: auto-reproject
+      type: boolean
+      required: false
+      default: true
+
+    - name: add-id
+      type: boolean
+      required: false
+      default: true
+```
+
+Create a tiny fixture:
+
+```text
+tests/fixtures/small_extent.geojson
+```
+
+Then create `tests/geoengine.test.yaml`:
+
+```yaml
+version: 1
+cases:
+  - name: square-grid
+    inputs:
+      input-file: fixtures/small_extent.geojson
+      grid-type: square
+      cell-width: 0.001
+      output-file: square_grid
+      output-dir: outputs
+      auto-reproject: false
+      add-id: true
+    expect:
+      exit_code: 0
+      files:
+        - path: outputs/square_grid.geojson
+          exists: true
+          min_size: 1
+          extension: .geojson
+      compare:
+        - actual: outputs/square_grid.geojson
+          expected: expected/square_grid.geojson
+          mode: geojson
+          tolerance:
+            numbers: 0.000000001
+          ignore_paths:
+            - $.name
+            - $.crs
+            - $.features.0.properties.id
+            - $.features.1.properties.id
+            - $.features.2.properties.id
+            - $.features.3.properties.id
+
+  - name: rectangle-grid
+    inputs:
+      input-file: fixtures/small_extent.geojson
+      grid-type: rectangle
+      cell-width: 0.001
+      cell-height: 0.002
+      output-file: rectangle_grid
+      output-dir: outputs
+      auto-reproject: false
+      add-id: true
+    expect:
+      exit_code: 0
+      files:
+        - path: outputs/rectangle_grid.geojson
+          exists: true
+          min_size: 1
+          extension: .geojson
+      compare:
+        - actual: outputs/rectangle_grid.geojson
+          expected: expected/rectangle_grid.geojson
+          mode: geojson
+          tolerance:
+            numbers: 0.000000001
+          ignore_paths:
+            - $.name
+            - $.crs
+            - $.features.0.properties.id
+            - $.features.1.properties.id
+```
+
+This tests two important code paths:
+
+- A square grid with only `cell-width`
+- A rectangle grid with both `cell-width` and `cell-height`
+
+It is tighter than a smoke test because it compares generated GeoJSON against expected output. It is still not brittle because it ignores harmless writer metadata such as top-level `name`, `crs`, and generated feature `id` fields.
+
+---
+
+## Running Tests
+
+Before running tests, lint and apply the worker in development mode:
+
+```bash
+geoengine lint
+geoengine apply --dev
+```
+
+Then run all test cases:
+
+```bash
+geoengine test
+```
+
+Run one case by name:
+
+```bash
+geoengine test --case square-grid
+```
+
+Keep the generated `.geoengine-test/` output folders for inspection:
+
+```bash
+geoengine test --keep-workdir
+```
+
+Emit a JSON test report:
+
+```bash
+geoengine test --json
+```
+
+Show container logs for every case, even when the case passes:
+
+```bash
+geoengine test --verbose
+```
+
+Test a specific applied local tag:
+
+```bash
+geoengine test --tag codex-1.0.0
+```
+
+---
+
+## Recommended Development Loop
+
+Use this loop while building or changing a worker:
+
+```bash
+geoengine lint
+geoengine apply --dev
+geoengine test
+```
+
+If tests fail, fix the correct layer:
+
+| Failure | Usually check |
+|---------|---------------|
+| `geoengine lint` fails | `geoengine.yaml` structure or input definitions |
+| `geoengine apply --dev` fails | Dependencies, Docker build, script path, config |
+| `geoengine test` exits non-zero | Script logic, missing dependencies, bad test inputs |
+| Output file missing | Output path, `output: true`, script write location |
+| Comparison fails | Expected file, tolerance, output format, real behavior change |
+
+Repeat the loop until tests pass.
+
+Only then do a production apply:
+
+```bash
+geoengine apply
+```
+
+And, when ready, push:
+
+```bash
+geoengine push
+```
+
+---
+
+## Choosing the Right Assertion Strictness
+
+Start with the strongest check that matches the stability of the output.
+
+### Smoke test
+
+Use this for highly open-ended outputs, early scaffolding, or as a baseline case:
+
+```yaml
+expect:
+  exit_code: 0
+  files:
+    - path: output
+      exists: true
+      min_size: 1
+```
+
+This catches the most common problems: the worker failed, wrote nothing, or wrote to the wrong place. It does not prove the output is correct.
+
+### Tight semantic test
+
+Use this when the expected result can be described:
+
+```yaml
+expect:
+  files:
+    - path: outputs/result.geojson
+      exists: true
+      min_size: 1
+  compare:
+    - actual: outputs/result.geojson
+      expected: expected/result.geojson
+      mode: geojson
+      tolerance:
+        numbers: 0.000001
+      ignore_paths:
+        - $.name
+        - $.crs
+```
+
+This is usually the best option for geospatial outputs: it checks meaningful content while allowing harmless floating-point and metadata differences.
+
+### Exact hash test
+
+Use hashes only when output is truly stable:
+
+```yaml
+expect:
+  files:
+    - path: outputs/result.csv
+      sha256: "abc123..."
+```
+
+Avoid hash checks for files that include timestamps, unordered features, generated IDs, floating-point formatting, or metadata that may vary between library versions.
+
+---
+
+## Good Practices
+
+### Prefer tight semantic checks
+
+A good test should prove the worker produced the right result, not merely that it produced a file.
+
+For deterministic outputs, prefer checks like:
+
+- Expected feature count
+- Expected properties or columns
+- Expected geometry type
+- Expected filenames
+- Expected CRS behavior, when stable
+- Expected numeric values with tolerance
+
+For example, a grid worker should usually compare against an expected GeoJSON file with `mode: geojson`, rather than only checking that `output.geojson` exists.
+
+### Avoid brittle serialization details
+
+Some output fields depend on the writer library, driver version, or machine environment. Ignore these when they are not part of the worker contract.
+
+Common fields to ignore:
+
+```yaml
+ignore_paths:
+  - $.name
+  - $.crs
+  - $.features.0.properties.id
+```
+
+The goal is to test meaning, not harmless metadata.
+
+### Keep fixtures small
+
+Use the smallest fixture that exercises the behavior. A tiny GeoJSON polygon, a few CSV rows, or a small raster tile is usually better than a realistic production-sized file.
+
+Small fixtures make tests:
+
+- Faster
+- Easier to review
+- Easier to debug
+- Safer to commit
+
+### Test representative branches
+
+Do not write ten nearly identical smoke tests. Instead, choose cases that cover meaningful behavior changes.
+
+For example, a grid worker might test:
+
+- `square`
+- `rectangle`
+- `diamond`
+- Optional `add-id: false`
+- Auto-reprojection on/off, if that behavior matters
+
+### Use exact hashes sparingly
+
+Hashes are useful only when the entire file is deterministic. Avoid hashes for GeoJSON, rasters, reports, or files with timestamps unless you are certain the serialization is stable.
+
+Prefer structured comparison with tolerance when possible.
+
+### Commit test inputs and expected outputs
+
+Commit:
+
+```text
+tests/fixtures/
+tests/expected/
+tests/geoengine.test.yaml
+```
+
+Do not commit:
+
+```text
+.geoengine-test/
+```
+
+That folder is generated by test runs.
+
+---
+
+## Writing Useful Fixtures
+
+Keep fixtures small and intentional.
+
+Good fixtures are:
+
+- Tiny enough to commit to Git
+- Representative of real user input
+- Focused on one behavior
+- Stable across machines
+- Free of private or customer data
+
+Avoid fixtures that are:
+
+- Huge
+- Downloaded from the network during tests
+- Machine-specific
+- Licensed or sensitive
+- More complicated than the behavior being tested
+
+For geospatial workers, a tiny GeoJSON polygon or point collection is often enough for a meaningful test.
+
+---
+
+## Working With AI Agents
+
+If you are using an AI coding assistant with GeoEngine skills installed, ask it to create tests after the worker config is wired up.
+
+Example prompt:
+
+```text
+Create GeoEngine test cases for this worker using the GeoEngine testing guidance.
+Use small fixtures and prefer tight semantic tests where the output is predictable.
+Avoid brittle exact hashes unless the output serialization is deterministic.
+Then run geoengine lint, geoengine apply --dev, and geoengine test.
+If tests fail, fix the correct layer and repeat until they pass.
+```
+
+A good AI-generated test should include:
+
+- `tests/geoengine.test.yaml`
+- At least one small fixture
+- Expected outputs when the result is predictable
+- Assertions that match the worker's real outputs
+- No large generated output committed as a fixture unless it is intentional
+
+---
+
+## What to Commit
+
+For a normal worker repository, commit:
+
+```bash
+git add geoengine.yaml pixi.toml geoengine.lock tests/ *.py
+```
+
+For R workers, replace `*.py` with `*.R`.
+
+Do not commit:
+
+```text
+.geoengine-test/
+```
+
+That folder is runtime output from tests.
+
+---
+
+## Common Mistakes
+
+### The test passes locally but fails for a teammate
+
+Make sure `geoengine.lock` is committed so everyone is applying and testing the same worker ID.
+
+Also make sure fixtures use relative paths under `tests/`, not absolute paths from your machine.
+
+### The worker writes no output
+
+Check that the corresponding `geoengine.yaml` input is marked as an output:
+
+```yaml
+- name: output-dir
+  type: folder
+  output: true
+```
+
+If `output: true` is missing, GeoEngine treats the path as read-only input instead of a writable output mount.
+
+### The test is too loose
+
+If your test only checks that a file exists, ask whether the output is predictable enough to compare.
+
+For deterministic workers, add an expected output and use `mode: json`, `mode: geojson`, or normalized text comparison.
+
+### The test is too brittle
+
+If a comparison fails because of metadata, writer-specific fields, timestamps, generated IDs, or tiny floating-point differences, ignore or tolerate those fields instead of weakening the whole test.
+
+For example:
+
+```yaml
+tolerance:
+  numbers: 0.000001
+ignore_paths:
+  - $.name
+  - $.crs
+  - $.features.0.properties.id
+```
+
+### Tests force image rebuilds
+
+`tests/` and `.geoengine-test/` are ignored by GeoEngine's Docker build context. If changing tests appears to trigger rebuilds, update GeoEngine and run:
+
+```bash
+geoengine patch
+```
+
+---
+
+## Summary
+
+Use `geoengine test` to make worker development repeatable:
+
+```bash
+geoengine lint
+geoengine apply --dev
+geoengine test
+```
+
+A good worker test should be tight enough to catch wrong results and flexible enough to ignore harmless serialization differences. Smoke tests are useful, but when the output is predictable, prefer semantic comparisons with expected files and tolerances.

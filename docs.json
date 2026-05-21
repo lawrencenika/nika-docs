@@ -170,6 +170,7 @@
 							"guides/custom-geoprocess-deployment/step-by-step",
 							"guides/custom-geoprocess-deployment/ai-coder-worker",
 							"guides/custom-geoprocess-deployment/running-in-gis",
+                            "guides/custom-geoprocess-deployment/test-designing",
 							"guides/custom-geoprocess-deployment/maintenance",
 							"guides/custom-geoprocess-deployment/versioning",
 							"guides/custom-geoprocess-deployment/debugging",

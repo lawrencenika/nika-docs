@@ -3,7 +3,7 @@ title: "Collaborate on Workers"
 description: "Share a worker's source code with your team using GitHub so multiple developers can contribute and push updates"
 ---
 
-GeoEngine workers are just files — `geoengine.yaml`, `pixi.toml`, your script, and a `geoengine.lock`. Putting them in a Git repository lets your whole development team work on the same worker, review changes, and push new versions independently.
+GeoEngine workers are just files — `geoengine.yaml`, `pixi.toml`, your script, `geoengine.lock`, and usually a `tests/` folder. Putting them in a Git repository lets your whole development team work on the same worker, review changes, and push new versions independently.
 
 ---
 
@@ -32,13 +32,13 @@ Replace `<repo_link>` with the HTTPS or SSH URL from your GitHub repo (e.g. `htt
 Then add the rest of the worker files:
 
 ```bash
-git add geoengine.yaml pixi.toml geoengine.lock *.py   # or *.R for R workers
+git add geoengine.yaml pixi.toml geoengine.lock tests/ *.py   # or *.R for R workers
 git commit -m "add worker files"
 git push
 ```
 
 <Note>
-Commit `geoengine.lock` — it stores the worker UUID that ties local builds to the cloud registry. Without it, teammates who clone the repo will get a fresh UUID and create a separate worker instead of sharing yours.
+Commit `geoengine.lock` — it stores the worker ID that ties local builds to the cloud registry. Without it, teammates who clone the repo will get a fresh ID and create a separate worker instead of sharing yours.
 </Note>
 
 ---
@@ -50,10 +50,12 @@ Anyone on the team can clone the repo and apply the worker locally:
 ```bash
 git clone <repo_link>
 cd land-cover-classifier
+geoengine lint
 geoengine apply --dev
+geoengine test
 ```
 
-Because `geoengine.lock` is committed, everyone works against the same worker UUID. Local builds stay on each person's machine — nothing is shared until someone runs `geoengine push`.
+Because `geoengine.lock` is committed, everyone works against the same worker ID. Local builds stay on each person's machine — nothing is shared until someone runs `geoengine push`.
 
 ---
 
@@ -65,16 +67,19 @@ The normal development loop for each contributor:
 # Pull the latest changes
 git pull
 
-# Make your edits, then apply locally to test
+# Make your edits, then apply locally and run worker tests
+geoengine lint
 geoengine apply --dev
-geoengine run --input input-file=/path/to/test.tif
+geoengine test
 
-# When ready to release, bump the version in geoengine.yaml, then:
+# When ready to release, bump version/local_tag in geoengine.yaml, then:
+geoengine lint
+geoengine test
 geoengine apply        # production apply — builds versioned image
 geoengine push         # publish to the cloud
 
 # Commit and push the source changes
-git add geoengine.yaml pixi.toml *.py
+git add geoengine.yaml pixi.toml tests/ *.py
 git commit -m "feat: add confidence threshold input (v1.1.0)"
 git push
 ```
@@ -85,7 +90,7 @@ Any team member with access to the same Nika tenant can run `geoengine push` and
 
 ## Known Limitations
 
-**Versioning is on you.** GeoEngine enforces that each production apply uses a version that is greater than or equal to the highest version already recorded locally — but it does not enforce coordination between different machines. If two developers both bump to `1.1.0` in their local `geoengine.yaml` and try to push, GeoEngine will accept both applies locally. Agree on version numbers with your team before doing a production apply, and use the Git commit as the source of truth for what version is current.
+**Versioning is on you.** GeoEngine enforces that each production apply uses a version that is greater than or equal to the highest version already recorded locally — but it does not enforce coordination between different machines. If two developers both bump to `1.1.0` in their local `geoengine.yaml` and try to push, GeoEngine will accept both applies locally. Agree on version numbers and local tags with your team before doing a production apply, and use the Git commit as the source of truth for what version is current.
 
 **First push wins for a given version.** If two teammates both apply and push the same version (e.g. `1.1.0`), only the first push will succeed; subsequent pushes of the same version will be rejected. Coordinate releases, or use a simple rule: the person who merged the PR does the push.
 

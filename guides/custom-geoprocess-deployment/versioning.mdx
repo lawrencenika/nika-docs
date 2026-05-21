@@ -1,9 +1,20 @@
 ---
 title: "Version Workers"
-description: "Understand how GeoEngine versions workers, when to bump versions, and how to reproduce any past build exactly"
+description: "Understand how GeoEngine versions workers, the difference between versions and local tags, and how to reproduce any past build exactly"
 ---
 
-GeoEngine uses [Semantic Versioning](https://semver.org/) to track worker builds. Every production apply creates a permanent snapshot of the worker configuration, so any version can be reproduced and run at any time — even after the code has changed.
+GeoEngine uses [Semantic Versioning](https://semver.org/) for cloud-facing worker releases and a separate `local_tag` for local builds. Every production apply records a local tag and a config snapshot, so any past production build can be reproduced and run later — even after the code has changed.
+
+---
+
+## Versions vs Local Tags
+
+These two concepts are related but distinct:
+
+- **Version** — the semantic version string you set in `geoengine.yaml` (e.g. `1.2.0`). It follows `MAJOR.MINOR.PATCH` rules and is enforced by GeoEngine during production applies. This is the version sent to the cloud when you push.
+- **Local tag** — the local build label GeoEngine uses for Docker tags and saved snapshots. Set it with `local_tag` in `geoengine.yaml` when you want a named local build (for example `release-candidate`). If you omit it during a production apply, GeoEngine asks whether to use the `version` value as the local tag.
+
+You reference a specific past build using its local tag (for example `--tag 1.2.0` or `--tag release-candidate`), not necessarily the raw semantic version.
 
 ---
 
@@ -14,9 +25,10 @@ Worker versions follow the `MAJOR.MINOR.PATCH` format, set in `geoengine.yaml`:
 ```yaml
 name: my-worker
 version: "1.2.0"
+local_tag: "1.2.0"
 ```
 
-All three components are required. Examples of valid versions: `1.0.0`, `0.3.1`, `2.10.4`. A version like `1.0` or `1` is invalid and will cause `geoengine apply` to fail.
+All three version components are required. Examples of valid versions: `1.0.0`, `0.3.1`, `2.10.4`. A version like `1.0` or `1` is invalid and will cause a production `geoengine apply` to fail.
 
 As a general guide:
 - **PATCH** (`1.0.0` → `1.0.1`) — bug fixes, small script tweaks, no change to inputs or outputs
@@ -32,9 +44,9 @@ GeoEngine has two apply modes. Which one you use determines whether versioning i
 | | Dev (`--dev`) | Production (no flag) |
 |---|---|---|
 | Version check | Skipped | Enforced |
-| Image tagged as | `latest` only | `<version>` + `latest` |
-| Config snapshot saved | No | Yes |
-| Reproducible later | No | Yes — via `--ver` |
+| Image tagged as | `latest` only | `<worker-id>:<local_tag>` + `latest` |
+| Config snapshot saved | Mutable `latest` snapshot | Tagged snapshot + `latest` |
+| Reproducible later | No | Yes — via `--tag` |
 | Appears in GIS by version | No — `latest` only | Yes |
 
 ### During Development
@@ -45,7 +57,7 @@ Use `--dev` to iterate freely without worrying about version numbers:
 geoengine apply --dev
 ```
 
-The image is tagged as `latest` and no snapshot is saved. Running `geoengine apply --dev` again will overwrite `latest`, even if a prior production version exists.
+The image is tagged as `latest`. Running `geoengine apply --dev` again overwrites the mutable latest image and latest config, even if a prior production version exists.
 
 ### For Production Releases
 
@@ -58,23 +70,26 @@ geoengine apply
 GeoEngine will enforce that:
 1. The `version` field is present in `geoengine.yaml`
 2. The version is a valid semver string (`MAJOR.MINOR.PATCH`)
-3. The version is **greater than or equal to** the highest version currently recorded
+3. The version is **greater than or equal to** the highest version currently recorded locally
+4. The selected `local_tag` is not `latest` and does not already point to different content
 
 If any of these checks fail, the apply is rejected with an error.
 
+If `local_tag` is missing, GeoEngine prompts you to use the version string as the local tag. Accepting this is fine for normal releases; add an explicit `local_tag` when you need multiple local builds for the same version.
+
 ---
 
-## Running a Specific Version
+## Running a Specific Tag
 
-To run a previously-built version instead of `latest`:
+To run a previously-built local tag instead of `latest`:
 
 ```bash
-geoengine run --ver 1.0.0 --input input-file=/path/to/data.tif
+geoengine run --actor CLI --tag 1.0.0 --input input-file=/path/to/data.tif
 ```
 
-GeoEngine loads the snapshotted configuration for that version and runs the corresponding Docker image. This works regardless of what the current `geoengine.yaml` says — the snapshot is self-contained.
+GeoEngine loads the snapshotted configuration for that tag and runs the corresponding Docker image. This works regardless of what the current `geoengine.yaml` says — the snapshot is self-contained.
 
-If `--ver` is omitted, `geoengine run` always uses `latest`, which tracks the most recent apply (dev or production).
+If `--tag` is omitted, `geoengine run` always uses `latest`, which tracks the most recent apply (dev or production).
 
 ---
 
@@ -85,21 +100,21 @@ If `--ver` is omitted, `geoengine run` always uses `latest`, which tracks the mo
 - Running `geoengine apply --dev` after a production apply will overwrite `latest` with the dev state
 - Running `geoengine apply` (production) also updates `latest` to that version
 
-This means `geoengine run` (without `--ver`) and GIS plugin `latest` entries always reflect the last apply. **If you need a stable, pinned version in GIS, always use a production apply and run via version number.**
+This means `geoengine run` (without `--tag`) and GIS plugin `latest` entries always reflect the last apply. **If you need a stable, pinned version in GIS, always use a production apply and reference it by its local tag.**
 
 ---
 
-## Deleting a Version
+## Deleting a Tag
 
-To remove a specific version (its Docker image, mapping entry, and snapshot):
+To remove a specific local tag (its Docker image, mapping entry, and snapshot):
 
 ```bash
-geoengine delete --ver 1.0.0
+geoengine delete --tag 1.0.0
 ```
 
-The version check during the next `geoengine apply` always reads the live `map.json`, so deleting an older version does not affect the minimum allowed version for the next apply.
+The version check during the next `geoengine apply` always reads the live `map.json`, so deleting an older tag does not affect the minimum allowed version for the next apply.
 
-To remove a worker entirely (run from the worker directory, or pass `--uuid <worker-uuid>`):
+To remove a worker entirely, run from the worker directory or pass `--id <worker-id>`:
 
 ```bash
 geoengine delete
@@ -112,12 +127,12 @@ geoengine delete
 ```bash
 # --- Development phase ---
 # Iterate freely without bumping the version
-geoengine apply --dev    # tags as latest, no snapshot
-geoengine apply --dev    # overwrites latest, still no snapshot
+geoengine apply --dev    # updates mutable latest
+geoengine apply --dev    # overwrites latest again
 
 # --- Ready for release ---
 # Bump version in geoengine.yaml to 1.0.0, then:
-geoengine apply          # saves snapshot, tags as 1.0.0 + latest
+geoengine apply          # saves snapshot, creates local tag 1.0.0 + latest
 
 # --- Iteration after release ---
 geoengine apply --dev    # dev build overwrites latest
@@ -125,9 +140,8 @@ geoengine apply --dev    # keep iterating
 
 # --- Next release ---
 # Bump version to 1.1.0, then:
-geoengine apply          # saves snapshot for 1.1.0, latest = 1.1.0
+geoengine apply          # saves snapshot, creates local tag 1.1.0 + latest
 
-# --- Run a specific old version ---
-geoengine run --ver 1.0.0 --input input-file=/data.tif
+# --- Run a specific old build by its local tag ---
+geoengine run --actor CLI --tag 1.0.0 --input input-file=/data.tif
 ```
-

@@ -17,7 +17,7 @@ Traditional ArcGIS Python toolsets require complex parameter handling, custom wr
 
 With NikaGeoEngine, your script's environment lives entirely separate:
 - **No Wrapper Code**: GeoEngine dynamically reads your `geoengine.yaml` worker declaration and translates it to ArcGIS Pro Toolbox interfaces on the fly. No proxy services required.
-- **Isolated Execution**: Since the code runs via the GeoEngine CLI as a subprocess (inside a Docker container), it never conflicts with the host `arcpy` ecosystem. You can run deep learning workloads with different PyTorch builds effortlessly.
+- **Isolated Execution**: Since the code runs via the GeoEngine CLI as a subprocess (inside a Docker container), it never conflicts with the host `arcpy` ecosystem. ArcGIS Pro stamps local worker runs with `--actor "ArcGIS Pro"`, so CLI run history shows where each execution came from. You can run deep learning workloads with different PyTorch builds effortlessly.
 - **Version Control**: Access all historical, immutable versions of your algorithm directly from the toolbox dropdown in ArcGIS.
 - **Logs & Output**: Background logs smoothly stream out of the container to the ArcGIS Progress windows.
 

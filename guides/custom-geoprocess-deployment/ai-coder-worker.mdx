@@ -5,7 +5,7 @@ description: "Use AI coding assistants to create, configure, and iterate on GeoE
 
 Instead of manually editing configuration files, you can use AI coding assistants to create and modify GeoEngine workers from natural language prompts. This page provides ready-to-use prompts for popular AI coder tools.
 
-Follow the [manual steps]((/guides/custom-geoprocess-deployment/step-by-step)) first to understand the flow before trying the AI agent route.
+Follow the [manual steps](/guides/custom-geoprocess-deployment/step-by-step) first to understand the flow before trying the AI agent route.
 
 ---
 
@@ -26,10 +26,11 @@ import PlatformSelector from '/snippets/platform-selector.mdx';
 | [GitHub Copilot](https://github.com/features/copilot) | GitHub / OpenAI | Use in VS Code, JetBrains, or CLI |
 | [Codex](https://openai.com/codex/) | OpenAI | Run from terminal in your script directory |
 | [Antigravity IDE](https://antigravity.google) | Google | Open your script folder as workspace |
+| NIKA local agent tooling | Nika | Use inside your local NIKA workspace |
 
 <Tip>
 
-If you have yet to install the skills, please follow the guide [here](/guides/installation/#step-3-initialise-ai-agent-skills-(optional)) to get the skills to your agent.
+If you have yet to install the skills, follow [Installation & Setup](/guides/custom-geoprocess-deployment/installation#step-3-initialise-ai-agent-skills-optional) to get the skills into your agent.
 
 </Tip>
 
@@ -37,18 +38,25 @@ If you have yet to install the skills, please follow the guide [here](/guides/in
 
 ## GeoEngine AI Agent Skills
 
-GeoEngine ships with built-in **AI agent skills** that give your AI coder structured knowledge of the GeoEngine workflow. If you ran `geoengine patch --init` during [installation](/guides/custom-geoprocess-deployment/installation#step-3-initialise-ai-agent-skills-optional), the following skills are already available to your agent:
+GeoEngine ships with a built-in **AI agent skill** that gives your AI coder structured knowledge of the GeoEngine workflow. If you ran `geoengine setup skills` during [installation](/guides/custom-geoprocess-deployment/installation#step-3-initialise-ai-agent-skills-optional), the following top-level skill is available to your agent:
 
 | Skill | Description |
 |-------|-------------|
-| `use-geoengine` | Master routing skill — handles any GeoEngine request and routes to the correct sub-skill or CLI command |
-| `make-geoengine-worker` | End-to-end workflow: creates a new GeoEngine worker from scratch, including init, argparse, YAML, pixi.toml, and apply |
-| `write-geoengine-yaml` | Writes or updates the `geoengine.yaml` configuration file for a worker |
-| `write-argparse` | Adds CLI argument parsing to a script so GeoEngine can pass `--name value` flags at runtime |
-| `write-pixi-toml` | Writes or updates the `pixi.toml` dependency file for a worker |
+| `use-geoengine` | Master routing skill that handles GeoEngine requests and loads the right internal workflow, module, reference, or CLI command guide. |
+
+Inside `use-geoengine`, the agent can load focused resources only when needed:
+
+| Internal resource | What it helps with |
+|-------------------|--------------------|
+| `workflows/new-worker.md` | End-to-end worker creation: init, script/config/test edits, lint, dev apply, tests, and final apply. |
+| `modules/argparse.md` | Adding or repairing Python `argparse` and R `optparse` inputs so GeoEngine can pass `--name value` flags. |
+| `modules/geoengine-yaml.md` | Writing or updating the `geoengine.yaml` worker contract. |
+| `modules/pixi-toml.md` | Choosing extra conda-forge dependencies for `pixi.toml`. |
+| `modules/test-cases.md` | Creating or updating `tests/geoengine.test.yaml` with stable worker tests. |
+| `references/` | Detailed command, YAML, dependency, test, image, cloud, and maintenance guidance. |
 
 <Tip>
-With these skills installed, even short prompts like "Make this script a GeoEngine worker" will trigger the full automated workflow.
+With this skill installed, even short prompts like "Make this script a GeoEngine worker" can trigger the full automated workflow.
 </Tip>
 
 ---
@@ -77,8 +85,8 @@ For this example, we will assume you created a directory in `/home/<user>/Downlo
 
 Allow your AI coder access to the directory that contains your script:
 - **Claude Code / Codex** — select the script's directory as the workspace
-- **Cursor / GitHub Copilot** — open the script's directory  as a project in the IDE
-- **Antigravity** — open the script's directory  as the workspace in the IDE
+- **Cursor / GitHub Copilot** — open the script's directory as a project in the IDE
+- **Antigravity** — open the script's directory as the workspace in the IDE
 
 The AI coder needs to be able to read and write files in that directory to create and edit `geoengine.yaml`, `pixi.toml`, and your script.
 
@@ -102,7 +110,7 @@ Inputs:
 Outputs:
 - [name]: [type] — [description]
 
-[Optional: Enable the QGIS/ArcGIS Pro plugin.]
+[Optional: Mention whether you plan to run it from QGIS or ArcGIS Pro.]
 ```
 
 Available input/output types: `file`, `folder`, `string`, `number`, `boolean`, `enum`, `datetime`.
@@ -120,25 +128,27 @@ Inputs:
 - n-polygons: number - number of polygons to generate
 - n-points: number - number of points to generate
 - min-sides: number - minimum number of sides per polygon
-- max-sides: number - maxmimum number of sides per polygon
+- max-sides: number - maximum number of sides per polygon
 - seed: number - seed for reproducibility
 
 Outputs:
 - output-folder: folder — directory where the generated GeoJSON file will be saved
 ```
 
-Add in one more line at the end to specify the GIS plugin you want to enable the worker for (QGIS/ArcGIS Pro).
+Add one more line at the end if you plan to run the worker from QGIS or ArcGIS Pro. The agent can remind you to run `geoengine setup plugins`, but individual workers no longer need per-worker plugin flags in `geoengine.yaml`.
 
 After the agent is done, ensure the following:
 
 - The directory contains all the necessary artifacts.
-- Running `geoengine workers` shows the worker "sg-pgpt-gen", and that it is enabled for the correct plugin.
+- `tests/geoengine.test.yaml` exists and contains at least one realistic test case.
+- `geoengine lint`, `geoengine apply --dev`, and `geoengine test` pass.
+- Running `geoengine workers` shows the worker "sg-pgpt-gen".
 
 ---
 
 ## Step 4: Verifying in GIS Platform
 
-You can now test your worker following the [steps outlined](/guides/custom-geoprocess-deployment/step-by-step#step-7-—-gis-testing) in the guide. The AI agent
+You can now test your worker following the [steps outlined](/guides/custom-geoprocess-deployment/step-by-step#step-8-gis-testing) in the guide. The AI agent
 should have done a developmental apply, so you will only find the worker with a "latest" version.
 
 ---
@@ -148,6 +158,8 @@ should have done a developmental apply, so you will only find the worker with a 
 When you are happy with the worker, run a production apply so that the stable version of the script is saved. Run the following in a terminal that is opened to your worker directory.
 
 ```bash
+geoengine lint
+geoengine test
 geoengine apply
 ```
 
@@ -177,8 +189,8 @@ I have an existing GeoEngine worker in this directory.
 Make the worker take in a parameter of a GeoJSON file that acts as the bounding box, instead of using the hard-coded bounding box.
 ```
 
-When the AI is done, you can proceed to test using the "latest" version of the worker in your GIS plugin. Once you are happy with it, feel free to follow
-[these steps](/guides/step-by-step#step-9-—-push-to-the-cloud) to push the next version to the cloud.
+When the AI is done, run `geoengine test` again and then test the "latest" version of the worker in your GIS plugin. Once you are happy with it, feel free to follow
+[these steps](/guides/custom-geoprocess-deployment/step-by-step#step-10-push-to-the-cloud) to push the next version to the cloud.
 
 <Tip>
 
@@ -199,7 +211,7 @@ My GeoEngine worker failed to build. Here is the error output:
 
 [paste the error output from geoengine apply]
 
-Please diagnose the issue and fix it. Common causes include missing dependencies in pixi.toml, incorrect pixi.toml syntax, or script import errors.
+Please diagnose the issue and fix it. Common causes include missing dependencies in pixi.toml, incorrect pixi.toml syntax, or script import errors. After fixing it, run `geoengine lint`, `geoengine apply --dev`, and `geoengine test`.
 ```
 
 ### Prompt: Fix a Runtime Error
@@ -209,7 +221,7 @@ My GeoEngine worker builds successfully but fails when I run it. Here is the err
 
 [paste the error output from geoengine run or the GIS log panel]
 
-Please diagnose and fix the issue. Then run `geoengine apply --dev` to rebuild.
+Please diagnose and fix the issue. Then run `geoengine lint`, `geoengine apply --dev`, and `geoengine test`.
 ```
 
 ### Prompt: Inspect and Explain a Worker
@@ -229,5 +241,6 @@ Explain what this GeoEngine worker does. Read the geoengine.yaml, pixi.toml, and
 - **Be specific about inputs and outputs** — mention file types (`.tif`, `.geojson`, `.csv`), whether inputs are read-only or writable outputs, and any optional parameters so the AI sets up `geoengine.yaml` correctly
 - **Bounce with the agent** — AI agents are not perfect. It is unlikely that the agent will succeed on first try. Paste error logs into the prompt to get the agent to fix, before trying again
 - **Iterate with `--dev`** — always use `geoengine apply --dev` during development to skip version checks; run `geoengine apply` (without `--dev`) when ready for a production release
+- **Ask for tests** — have the agent create or update `tests/geoengine.test.yaml`, then keep `geoengine test` in the development loop
 - **Review generated files** — check that `geoengine.yaml` inputs match your script's argparse arguments
 - **Mention GIS plugins** — if you need QGIS or ArcGIS Pro support, include that in your prompt (e.g. "enable this for QGIS")

@@ -18,7 +18,7 @@ Historically, creating a QGIS Plugin or Processing tool from a python algorithm 
 
 NikaGeoEngine bypasses this barrier:
 
-- **CLI-Native Subprocessing**: QGIS plugins execute your workers as pure subprocesses via the GeoEngine CLI without any proxy service. You write plain Python/R, declare its dependencies gracefully across `pixi.toml` and Docker configurations, and GeoEngine handles mapping parameters transparently to the container.
+- **CLI-Native Subprocessing**: QGIS plugins execute your workers as pure subprocesses via the GeoEngine CLI without any proxy service. QGIS stamps local worker runs with `--actor QGIS`, so CLI run history shows where each execution came from. You write plain Python/R, declare its dependencies gracefully across `pixi.toml` and Docker configurations, and GeoEngine handles mapping parameters transparently to the container.
 - **Automatic Discoverability**: The plugin executes `geoengine workers` to index your available algorithms automatically. Your tool populates directly into the QGIS Processing Toolbox with zero GUI code required.
 - **Live Streams**: QGIS natively parses Docker container outputs, mounting output paths correctly back to the map workspace and streaming stderr output to visualize job progress.
 - **GDAL/Environment Independence**: The tool uses exactly the GDAL and library versions specified within its container, keeping the QGIS host environment perfectly clean.

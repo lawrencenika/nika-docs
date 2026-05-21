@@ -11,6 +11,7 @@ description: "Push your GeoEngine worker to the cloud so your whole team can run
 
 - GeoEngine installed and authenticated (`geoengine auth login`)
 - A production apply completed: `geoengine apply` (without `--dev`) — dev builds cannot be pushed
+- Recommended: local checks pass with `geoengine lint` and `geoengine test`
 
 ---
 
@@ -18,7 +19,14 @@ description: "Push your GeoEngine worker to the cloud so your whole team can run
 
 ### Step 1: Apply in Production Mode
 
-From your worker directory, bump the version in `geoengine.yaml` if needed, then run a production apply:
+From your worker directory, bump the version in `geoengine.yaml` if needed, then run the local checks:
+
+```bash
+geoengine lint
+geoengine test
+```
+
+Then run a production apply:
 
 ```bash
 geoengine apply
@@ -29,14 +37,14 @@ This builds a versioned image and saves a config snapshot. Dev builds (`--dev`) 
 ### Step 2: Push to the Cloud
 
 ```bash
-geoengine push [--uuid <worker-uuid>] [--ver <version>] [--tenant <tenant>]
+geoengine push [--id <worker-id>] [--tag <local-tag>] [--tenant <tenant>]
 ```
 
 | Flag | Description |
 |------|-------------|
-| `--uuid <worker-uuid>` | Worker to push. Defaults to the worker in the current directory (via `geoengine.lock`). |
-| `--ver <version>` | Version to push. Defaults to the highest numbered version available locally. |
-| `--tenant <tenant>` | Tenant to publish under. Defaults to your owned tenant. |
+| `--id <worker-id>` | Worker UUID to push. Defaults to the worker in the current directory via `geoengine.lock`. |
+| `--tag <local-tag>` | Local tag to push. Defaults to the most recently applied production `local_tag`. |
+| `--tenant <tenant>` | Tenant to publish under. Defaults to your owned tenant, or prompts when more than one tenant is available. |
 
 Run from your worker directory without any flags to push the latest production version:
 
@@ -44,7 +52,7 @@ Run from your worker directory without any flags to push the latest production v
 geoengine push
 ```
 
-GeoEngine will package the worker, upload the container image to the cloud registry, and register it in the selected workspace.
+GeoEngine confirms the local tag and semantic version, uploads the container image to the cloud registry, and registers it in the selected workspace.
 
 ### Step 3: Available to Your Team
 
@@ -55,5 +63,6 @@ After a successful push, team members will see the worker in their QGIS or ArcGI
 ## Notes
 
 - Only production images (from `geoengine apply` without `--dev`) can be pushed. If you've only run `geoengine apply --dev`, run `geoengine apply` first.
+- If `local_tag` is not set in `geoengine.yaml`, production apply prompts to use the semantic `version` as the local tag.
 - If you have access to multiple tenants, use `--tenant` to target a specific one.
-- Use `geoengine workers` to see which versions have already been pushed (`LATEST PUSHED` column).
+- Use `geoengine workers` to see the current applied tag for each worker (`LATEST TAG` column).

@@ -12,17 +12,8 @@ GeoEngine provides a set of CLI commands to inspect workers, read container logs
 Before re-applying a worker, use `geoengine diff` to see which tracked files have changed since the last apply:
 
 ```bash
-# Check all tracked files: geoengine.yaml, Dockerfile, and your script
+# Check tracked files: geoengine.yaml, Dockerfile, and build-relevant worker files
 geoengine diff
-
-# Check only the geoengine.yaml configuration
-geoengine diff --file config
-
-# Check only the Dockerfile
-geoengine diff --file dockerfile
-
-# Check only the worker script directory
-geoengine diff --file worker
 ```
 
 This is useful for confirming which changes will be picked up when you run `geoengine apply` next.
@@ -45,14 +36,10 @@ The output table includes the following columns:
 
 | Column | Description |
 |--------|-------------|
-| **UUID** | Worker UUID used by the CLI and Docker tags |
+| **ID** | Worker UUID used by the CLI and Docker tags |
 | **NAME** | Worker name |
-| **LATEST APPLIED** | Highest applied semver version plus the total number of available versions, e.g. `1.0.7 (7)` |
+| **LATEST TAG** | Most recently applied local tag plus the total number of applied tags, e.g. `claude-1.0.0 (3)` |
 | **LAST APPLIED** | Relative time since last apply (e.g. `3 min 42 s ago`) |
-| **LATEST PUSHED** | Highest pushed version for the displayed tenant plus that tenant's pushed-version count |
-| **TEAM** | Tenant name for the displayed push history |
-| **QGIS** | Whether the worker is registered in the QGIS plugin |
-| **ARCGIS** | Whether the worker is registered in the ArcGIS Pro plugin |
 
 If a worker is missing from this list after `geoengine apply`, run `geoengine patch` to repair the worker registry (see below).
 
@@ -66,16 +53,16 @@ Get detailed information about a single worker:
 # Show the latest applied version, config hash, and available versions list
 geoengine describe
 
-# Show info for a specific previously-built version
-geoengine describe --ver 1.2.3
+# Show info for a specific previously-built tag
+geoengine describe --tag claude-1.0.0
 ```
 
 The output includes:
 - **Name and description**
 - **Version** and **applied at** timestamp
 - **Config hash** — a SHA-256 of the applied config; useful to confirm two builds used the same configuration
-- **Available versions** — all versions currently on disk
-- **Plugin flags** — which GIS plugins were enabled when this version was applied
+- **Applied tags** — all local tags currently on disk for this worker
+- **Runtime image** — the base runtime image used when the tag was applied, when available
 
 ---
 
@@ -84,7 +71,7 @@ The output includes:
 Container logs stream to **stderr** automatically when you run a worker. To separate logs from the structured result, use `--json` mode:
 
 ```bash
-geoengine run --json --input input-file=/path/to/file.tif
+geoengine run --actor CLI --json --input input-file=/path/to/file.tif
 ```
 
 - **stderr** — container log output, streamed in real time
@@ -92,6 +79,7 @@ geoengine run --json --input input-file=/path/to/file.tif
 
 ```json
 {
+  "job_id": "01HX4V2Z9B2F4T8H6P9K3N7Q1M",
   "status": "completed",
   "exit_code": 0,
   "files": [
@@ -106,6 +94,31 @@ geoengine run --json --input input-file=/path/to/file.tif
 ```
 
 A non-zero `exit_code` means the container script exited with an error. Check stderr for the Python/R traceback.
+
+---
+
+## Inspect Run History
+
+Every `geoengine run` is saved locally by default, with metadata and compressed streamed logs under `~/.geoengine/runs/<worker_id>/<job_id>/`. Use the `job_id` from the JSON result to inspect the run later:
+
+```bash
+geoengine worker runs show <job-id> --json
+geoengine worker runs logs <job-id> --stream stderr --tail 100
+```
+
+Use `geoengine run --no-history` for sensitive or ephemeral runs that should not be written to local history.
+
+---
+
+## Debug Worker Tests
+
+If `geoengine test` fails, rerun the failing case with logs and keep the output folder:
+
+```bash
+geoengine test --case <case-name> --verbose --keep-workdir
+```
+
+Inspect `.geoengine-test/<case-name>/` to confirm what the worker actually wrote. If the output is correct but the comparison failed, update the expected file, tolerance, or ignored JSON paths in `tests/geoengine.test.yaml`.
 
 ---
 
@@ -149,14 +162,14 @@ Run this after upgrading GeoEngine, or whenever workers, plugins, or agent skill
 If a worker is in a broken state and needs to be removed:
 
 ```bash
-# Delete a worker entirely (shows a confirmation prompt)
-geoengine delete --uuid <worker-uuid>
+# Delete a worker entirely by ID (shows a confirmation prompt)
+geoengine delete --id <worker-id>
 
 # Delete the worker in the current directory
 geoengine delete
 
-# Delete a specific version only (removes image, mapping, and snapshot)
-geoengine delete --ver 1.2.3
+# Delete a specific tag only (removes image, mapping, and snapshot)
+geoengine delete --tag claude-1.0.0
 ```
 
 After deleting, re-apply the worker with `geoengine apply` to recreate it cleanly.
@@ -176,4 +189,3 @@ Run `geoengine patch` to reinstall any stale plugin files, then close and reopen
 
 ### Dependency changes not reflected after apply
 Run `geoengine apply --no-cache` to force a full Docker rebuild. Docker may be using a cached layer that predates your `pixi.toml` changes.
-

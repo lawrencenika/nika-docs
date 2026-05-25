@@ -1,0 +1,312 @@
+---
+title: "Delegate Python Functions to NIKA Cloud"
+description: "Use the NIKA Python SDK to submit notebook functions to managed cloud containers for isolated, long-running execution."
+---
+
+The NIKA Python SDK lets you mark a Python function as cloud-runnable, keep the normal local call path for debugging, and explicitly submit the same function to NIKA-managed compute when you need isolated execution.
+
+<Tip>
+For now, code cloud delegation is designed to run from NIKA cloud notebooks. Local terminals and external notebooks can still import the SDK for development, but remote submission is not a supported workflow outside NIKA notebooks yet.
+</Tip>
+
+## Prerequisites
+
+- A cloud NIKA notebook with a running machine
+- Access to the workspace or project where the delegated run should execute
+- Python code that can be serialized or imported by the remote worker
+- Any third-party packages declared in `requirements`
+- Inputs and outputs passed as serializable values, workspace file paths, dataset IDs, or other managed references
+
+The SDK package is named `nika-runner` and exposes the Python module `nika_runner`. The public SDK surface uses run-named APIs.
+
+```python
+from nika_runner import list_runs, load_run, run
+```
+
+## Available SDK Functions
+
+Use these entrypoints from `nika_runner`:
+
+| Function or method | What it does |
+|--------------------|--------------|
+| `run(compute=..., timeout=..., requirements=...)` | Decorates a Python function so it can still run locally and can also be submitted to NIKA cloud compute. |
+| `decorated_function(...)` | Calls the original Python function locally in the current notebook kernel. |
+| `decorated_function.local(...)` | Explicitly calls the original Python function locally. |
+| `decorated_function.submit(...)` | Submits one invocation to NIKA cloud compute and returns a `RunHandle`. |
+| `decorated_function.load(run_id)` | Returns a `RunHandle` for an existing run using the decorated function's client configuration. |
+| `load_run(run_id)` | Returns a `RunHandle` for an existing run. |
+| `list_runs(status=..., limit=..., parent_run_id=...)` | Returns recent `RunHandle` objects visible from the notebook. |
+| `run_handle.status()` | Fetches the current run status. |
+| `run_handle.logs(tail=...)` | Fetches logs, optionally limited to the most recent lines. |
+| `run_handle.result()` | Returns the Python result once the run has completed, and raises if the run is still active or failed. |
+| `run_handle.wait(timeout=..., poll_interval=...)` | Polls until the result is ready or the wait timeout is reached. |
+| `run_handle.cancel()` | Requests cancellation for a still-running run. |
+| `run_handle.children(status=..., limit=...)` | Lists recent child runs whose parent is the current run. |
+| `run_handle.parent()` | Loads the parent run when the current handle has parent metadata. |
+
+## Step 1: Decorate a Function
+
+Use `@run` to define the compute target, timeout, and dependency requirements for the remote invocation. Calling the function normally still runs it in the current notebook kernel.
+
+```python
+from pathlib import Path
+
+import geopandas as gpd
+from nika_runner import run
+
+
+@run(
+    compute="CPUx7",
+    timeout=2,
+    requirements=[
+        "geopandas>=0.14",
+        "pyogrio>=0.7",
+        "shapely>=2.0",
+    ],
+)
+def build_buffer_summary(
+    input_path: str,
+    output_path: str,
+    distance_m: float,
+) -> dict[str, object]:
+    source = gpd.read_file(input_path)
+    source_crs = source.crs
+
+    projected = source.to_crs(epsg=3857)
+    buffered = projected.copy()
+    buffered["geometry"] = projected.geometry.buffer(distance_m)
+    buffered = buffered.to_crs(source_crs)
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    buffered.to_file(output_path, driver="GeoJSON")
+
+    return {
+        "input_features": int(len(source)),
+        "output_features": int(len(buffered)),
+        "output_path": output_path,
+    }
+```
+
+Use direct execution first when you are still checking the logic:
+
+```python
+preview = build_buffer_summary.local(
+    "/workspace/data/site-boundary.geojson",
+    "/workspace/outputs/site-boundary-buffered.geojson",
+    50,
+)
+
+preview
+```
+
+`build_buffer_summary(...)` and `build_buffer_summary.local(...)` both run in the notebook kernel. Nothing is submitted to cloud delegation until you call `.submit(...)`.
+
+## Step 2: Submit to Cloud Compute
+
+Call `.submit(...)` to serialize the invocation and send it to the NIKA cloud runner available from the notebook.
+
+```python
+run = build_buffer_summary.submit(
+    "/workspace/data/site-boundary.geojson",
+    "/workspace/outputs/site-boundary-buffered.geojson",
+    50,
+)
+
+run.run_id
+```
+
+The returned `RunHandle` is a lightweight reference to the remote run. It can poll status, fetch logs, wait for a result, or request cancellation.
+
+```python
+print(run.status())
+print(run.logs(tail=200))
+
+result = run.wait(timeout=3600, poll_interval=5)
+result
+```
+
+If you call `run.result()` while the run is still `pending`, `initializing`, `running`, or `cancelling`, the SDK raises `RunNotCompleteError`. Use `run.wait(...)` when the notebook should block until the result is ready. The `timeout` argument on `run.wait(...)` is in seconds; the `timeout` argument on `@run(...)` is in hours.
+
+## Step 3: Choose Compute and Runtime Options
+
+The decorator currently accepts these options:
+
+| Option | Description |
+|--------|-------------|
+| `compute` | Machine type requested for the delegated run. Supported presets include `CPUx3`, `CPUx7`, `CPUx20`, `CPUx42`, `T4x1`, `T4x2`, `T4x4`, and `H100x1`. |
+| `timeout` | Positive integer timeout in hours. The SDK sends this as `timeout_hours`. |
+| `requirements` | Optional list of Python package requirement strings, such as `["pandas>=2.0", "rasterio==1.3.10"]`. Requirements are validated before submission. |
+
+The remote platform may reject compute types that are not enabled for your workspace. Start with the smallest machine that matches the memory or GPU profile of the task, then scale up only when the logs or runtime behavior show that the run needs it.
+
+## Step 4: Reconnect to Existing Runs
+
+Use `load_run(...)` when you already have a run ID from a previous cell, browser refresh, or shared notebook note.
+
+```python
+from nika_runner import load_run
+
+run = load_run("nr-6d9e736b188d47fcbb715a953935eaa8")
+
+print(run.status())
+print(run.logs(tail=100))
+```
+
+If you are working from the decorated function object, use `.load(...)` to reuse the same client configuration:
+
+```python
+run = build_buffer_summary.load("nr-6d9e736b188d47fcbb715a953935eaa8")
+print(run.status())
+```
+
+Use `list_runs(...)` to retrieve handles for recent runs visible from the notebook.
+
+```python
+from nika_runner import list_runs
+
+for run in list_runs(status="running", limit=20):
+    print(run.run_id, run.status())
+```
+
+Allowed status filters are `pending`, `initializing`, `running`, `cancelling`, `succeeded`, `failed`, and `cancelled`. The `limit` must be between `1` and `200`.
+
+You can also filter child runs client-side with `parent_run_id`:
+
+```python
+children = list_runs(parent_run_id=run.run_id)
+for child in children:
+    print(child.run_id, child.parent_run_id, child.status())
+```
+
+## Step 5: Track Child Runs
+
+When code inside a delegated run submits more work, the SDK can link the nested submission back to the run that started it. Notebook submissions do not set a parent and remain root runs.
+
+Every returned `RunHandle` exposes `parent_run_id`, which is `None` for root runs. `list_runs(parent_run_id=...)` retrieves recent runs and filters them locally.
+
+You can use handle helpers when you are navigating a run tree:
+
+```python
+children = run.children(status="running", limit=20)
+
+for child in children:
+    print(child.run_id, child.parent_run_id)
+
+parent = children[0].parent() if children else None
+```
+
+## Step 6: Cancel a Running Run
+
+If a delegated run is no longer needed, call `cancel()` on its handle.
+
+```python
+status = run.cancel()
+status
+```
+
+Cancellation is asynchronous. `run.cancel()` commonly returns `cancelling`; poll `run.status()` or call `run.wait(...)` to observe the final `cancelled`, `succeeded`, or `failed` state.
+
+## How Delegation Works
+
+When you call `.submit(...)`, the SDK builds an invocation envelope and submits it to NIKA cloud compute:
+
+1. The decorated function is converted into a function bundle.
+2. Positional and keyword arguments are serialized with `cloudpickle`.
+3. Runtime options are attached as `compute`, `timeout_hours`, and optional `requirements`.
+4. If the submitting process is already inside a delegated run, the SDK includes parent-run metadata.
+5. NIKA returns `run_id`, and the remote runner starts an isolated worker, executes the function, stores logs, and makes the result available to the handle.
+
+The status lifecycle is `pending` → `initializing` → `running`, then one of `succeeded`, `failed`, or `cancelled`. A short-lived `cancelling` status appears after `run.cancel()` while the operator tears down the worker. Unknown future statuses are treated defensively as running by the SDK.
+
+When a result is ready, the runner can return either an inline pickled `result` payload or a `result_url`. For large or stored results, the SDK fetches the signed `result_url`, decodes the `cloudpickle` bytes, and returns the Python object from `run.result()` or `run.wait(...)`.
+
+The SDK uses two bundling strategies:
+
+| Bundle kind | When it is used | Operational impact |
+|-------------|-----------------|--------------------|
+| `module_ref` | The function lives in an importable Python module. | The envelope contains the module name, qualified function name, source hash, runtime metadata, and arguments. This is the more reproducible path because the worker imports code from an installed package or image. |
+| `cloudpickle` | The function is defined in a notebook cell, `__main__`, a REPL, or a nested scope. | The function object is serialized with `cloudpickle`, including referenced globals and closure variables. This is the normal notebook experience, but it depends on compatible Python and cloudpickle versions between the notebook and worker. |
+
+Most cloud notebook usage will use `cloudpickle` because functions are usually defined in notebook cells. Keep those functions focused: pass large datasets by path or ID, not by capturing a large dataframe in a closure.
+
+## Serialization Guidelines
+
+Delegated functions should have clear boundaries. The SDK can serialize ordinary Python values, but remote execution is more reliable when the function receives references to data instead of live objects from the notebook session.
+
+Prefer:
+
+- Strings, numbers, booleans, lists, dictionaries, and dataclasses
+- Workspace file paths such as `/workspace/data/input.geojson`
+- Dataset IDs, table names, object storage URLs, or other managed references
+- Return values that are small enough to serialize comfortably
+- Output files written to explicit workspace paths
+
+Avoid capturing:
+
+- Open file handles
+- Database connections
+- Sockets or clients with active network state
+- GPU tensors or model objects already loaded in notebook memory
+- Large pandas or GeoPandas dataframes in closure variables
+- Secrets embedded in source code or closures
+
+If a result is large, write it to a workspace file and return metadata:
+
+```python
+return {
+    "status": "ok",
+    "output_path": output_path,
+    "feature_count": int(len(buffered)),
+}
+```
+
+## Troubleshooting
+
+### `AuthenticationError` or `ConfigurationError`
+
+The SDK cannot use the notebook's cloud delegation context. Make sure the code is running inside a cloud NIKA notebook. Local Python processes are not a supported delegation environment at the moment.
+
+### `RunNotCompleteError`
+
+The run has not reached a terminal state yet. Check `run.status()` and `run.logs(tail=200)`, or use:
+
+```python
+result = run.wait(timeout=3600, poll_interval=5)
+```
+
+### Remote Dependency Errors
+
+Add the missing package to `requirements` and pin versions when reproducibility matters.
+
+```python
+@run(
+    compute="CPUx7",
+    timeout=2,
+    requirements=["rasterio==1.3.10", "geopandas>=0.14"],
+)
+def process_raster(path: str) -> dict[str, object]:
+    ...
+```
+
+### Cloudpickle Runtime Mismatch
+
+Notebook-defined functions are serialized as Python code objects. If the worker uses a different Python minor version than the notebook kernel, unpickling can fail. Use the cloud notebook runtime selected by NIKA, keep functions simple, or move production code into an importable module so the SDK can use `module_ref`.
+
+## Best Practices
+
+- Test the function locally in the notebook with `.local(...)` before submitting.
+- Keep delegated functions deterministic: pass every input explicitly and write outputs to known paths.
+- Pin critical dependencies in `requirements`.
+- Use `logs(tail=...)` for progress reporting instead of returning large debug payloads.
+- Return compact metadata and store large outputs as files.
+- Use `load_run(...)` to reconnect instead of re-submitting the same expensive run.
+- Treat notebook `cloudpickle` delegation as an exploratory workflow; move stable production routines into importable modules when they need stronger reproducibility.
+- Do not place credentials, private endpoints, or long-lived secrets in function closures. Pass secret references or managed paths instead.
+
+## Next Steps
+
+Now that you can delegate Python functions to cloud compute:
+
+1. Learn how to [run code in NIKA notebooks](/guides/data-analysis/run-code-in-notebook)
+2. Review [supported Python libraries](/guides/data-analysis/supported-python-libraries)
+3. Use [custom geoprocess deployment](/guides/custom-geoprocess-deployment/step-by-step) when you need a versioned worker available from GIS tools

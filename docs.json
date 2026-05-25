@@ -127,6 +127,13 @@
 						]
 					},
 					{
+						"group": "Code Cloud Delegation",
+						"icon": "cloud",
+						"pages": [
+							"guides/code-cloud-delegation/python-sdk"
+						]
+					},
+					{
 						"group": "Database Management",
 						"icon": "database",
 						"pages": [

@@ -24,7 +24,7 @@
 				"groups": [
 					{
 						"group": "Get Started",
-						"pages": ["index", "pricing"]
+						"pages": ["index"]
 					},
 					{
 						"group": "NIKA Desktop",
@@ -114,7 +114,7 @@
 						]
 					},
 					{
-						"group": "Data Analysis",
+						"group": "Geospatial AI & ML Basics",
 						"icon": "code",
 						"pages": [
 							"guides/data-analysis/create-your-first-notebook",
@@ -127,7 +127,7 @@
 						]
 					},
 					{
-						"group": "Code Cloud Delegation",
+						"group": "Distributed ML & ETL",
 						"icon": "cloud",
 						"pages": [
 							"guides/code-cloud-delegation/python-sdk"
@@ -252,8 +252,7 @@
 				},
 				{
 					"anchor": "Pricing",
-					"href": "/pricing",
-					"icon": "credit-card"
+					"href": "https://www.nikaplanet.com/pricing"
 				},
 				{
 					"anchor": "Support",
@@ -275,7 +274,7 @@
 			},
 			{
 				"label": "Pricing",
-				"href": "/pricing"
+				"href": "https://www.nikaplanet.com/pricing"
 			},
 			{
 				"label": "Support",

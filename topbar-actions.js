@@ -1,6 +1,8 @@
 (function () {
   if (document.getElementById('nika-topbar-actions-style')) return;
 
+  var pricingUrl = 'https://www.nikaplanet.com/pricing';
+
   var style = document.createElement('style');
   style.id = 'nika-topbar-actions-style';
   style.textContent = [
@@ -61,4 +63,25 @@
   ].join('\n');
 
   document.head.appendChild(style);
+
+  function configurePricingLinks() {
+    document.querySelectorAll('a[href="/pricing"], a[href="' + pricingUrl + '"]').forEach(function (link) {
+      link.href = pricingUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+
+      if (link.dataset.nikaPricingClick === '1') return;
+
+      link.dataset.nikaPricingClick = '1';
+      link.addEventListener('click', function (event) {
+        event.preventDefault();
+        window.open(pricingUrl, '_blank', 'noopener,noreferrer');
+      });
+    });
+  }
+
+  configurePricingLinks();
+
+  var pricingObserver = new MutationObserver(configurePricingLinks);
+  pricingObserver.observe(document.documentElement, { childList: true, subtree: true });
 })();

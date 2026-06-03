@@ -41,6 +41,7 @@
 							"nika-planet/nika-map",
 							"nika-planet/nika-dbms",
 							"nika-planet/nika-flow",
+							"nika-planet/nika-workers",
 							"nika-planet/nika-labeler",
 							"nika-planet/nika-studio",
 							"nika-planet/nika-dashboard"

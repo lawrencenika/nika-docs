@@ -35,6 +35,7 @@ NikaNotebook is a collaborative Python notebook environment designed specificall
 - **CPU-Only VMs**: High CPU-to-RAM ratio configurations (CPUx3: 3 cores/24GB, CPUx7: 7 cores/53GB, CPUx21: 20 cores/156GB, CPUx42: 42 cores/326GB) optimized for memory-heavy geospatial processing and large dataset analysis
 - **GPU-Enabled VMs**: NVIDIA Tesla T4 configurations (T4x1: 6 cores/24GB/16GB GPU, T4x2: 14 cores/50GB/32GB GPU, T4x4: 30 cores/100GB/64GB GPU) designed for machine learning and AI workloads
 - **Custom Configurations**: Even larger VMs with more RAM or H100 GPUs available upon request for enterprise-scale processing
+  ![NikaNotebook Interface](/nika-planet/nika-notebook-2.jpg)
 
 ### Remote Cloud Execution
 
@@ -46,7 +47,22 @@ Run compute-heavy functions on dedicated VMs. Decorate any Python function with 
 
 **[Python SDK reference →](/guides/code-cloud-delegation/python-sdk)**
 
-![NikaNotebook Interface](/nika-planet/nika-notebook-2.jpg)
+<Note>
+  **Output retention:** Outputs from any run will only be kept for a maximum of
+  **180 days**. For reliability, write large files to `/data` (your persistent
+  workspace storage) instead of returning them as run outputs.
+</Note>
+
+### Monitoring Runs
+
+Every run you submit with `@run(...).submit()` is tracked in the workspace, so you can follow its progress and read its logs in the UI.
+
+- **Active Runs**: a section at the top of the Virtual Machine side panel that lists runs still in progress, each with a status dot, name, and elapsed time. It refreshes automatically; **See all runs** opens the full list.
+- **All Runs**: every run submitted in the workspace, grouped by time and filterable by status (Pending, Initializing, Running, Succeeded, Failed, Cancelled). Search by name or run ID, and expand a fan-out run to see its children.
+  ![All Runs panel](/nika-planet/nika-notebook-3.png)
+
+- **Run Detail**: opens from any run. A fan-out **run graph** shows the run tree (a parent run and its child runs), and **Overview**, **Children**, and **Logs** tabs cover the run's status, configuration (name, run ID, timeout, resource, submitted and started times), child runs, and logs.
+  ![Run Detail panel](/nika-planet/nika-notebook-4.png)
 
 ## Python Notebook Examples in NikaNotebook
 

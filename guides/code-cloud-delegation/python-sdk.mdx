@@ -17,31 +17,31 @@ For now, code cloud delegation is designed to run from NIKA cloud notebooks. Loc
 - Any third-party packages declared in `requirements`
 - Inputs and outputs passed as serializable values, workspace file paths, dataset IDs, or other managed references
 
-The SDK package is named `nika-runner` and exposes the Python module `nika_runner`. The public SDK surface uses run-named APIs.
+The SDK package is named `nika_py` and exposes the Python module `nika_py`. The public SDK surface uses run-named APIs.
 
 ```python
-from nika_runner import list_runs, load_run, run
+from nika_py import list_runs, load_run, run
 ```
 
 ## Available SDK Functions
 
-Use these entrypoints from `nika_runner`:
+Use these entrypoints from `nika_py`:
 
 | Function or method | What it does |
 |--------------------|--------------|
-| `run(compute=..., timeout=..., requirements=...)` | Decorates a Python function so it can still run locally and can also be submitted to NIKA cloud compute. |
+| `run(compute=..., timeout=..., requirements=..., name=...)` | Decorates a Python function so it can still run locally and can also be submitted to NIKA cloud compute. |
 | `decorated_function(...)` | Calls the original Python function locally in the current notebook kernel. |
 | `decorated_function.local(...)` | Explicitly calls the original Python function locally. |
 | `decorated_function.submit(...)` | Submits one invocation to NIKA cloud compute and returns a `RunHandle`. |
 | `decorated_function.load(run_id)` | Returns a `RunHandle` for an existing run using the decorated function's client configuration. |
 | `load_run(run_id)` | Returns a `RunHandle` for an existing run. |
-| `list_runs(status=..., limit=..., parent_run_id=...)` | Returns recent `RunHandle` objects visible from the notebook. |
+| `list_runs(status=..., name=..., limit=..., cursor=..., parent_run_id=...)` | Returns a `RunPage` with one page of `RunHandle` objects plus `next_cursor` for pagination. |
 | `run_handle.status()` | Fetches the current run status. |
 | `run_handle.logs(tail=...)` | Fetches logs, optionally limited to the most recent lines. |
 | `run_handle.result()` | Returns the Python result once the run has completed, and raises if the run is still active or failed. |
 | `run_handle.wait(timeout=..., poll_interval=...)` | Polls until the result is ready or the wait timeout is reached. |
-| `run_handle.cancel()` | Requests cancellation for a still-running run. |
-| `run_handle.children(status=..., limit=...)` | Lists recent child runs whose parent is the current run. |
+| `run_handle.cancel(poll_interval=...)` | Requests cancellation for a still-running run and returns a `RunCancellation` awaitable. |
+| `run_handle.children(status=..., name=..., limit=...)` | Lists recent child runs whose parent is the current run. |
 | `run_handle.parent()` | Loads the parent run when the current handle has parent metadata. |
 
 ## Step 1: Decorate a Function
@@ -52,12 +52,13 @@ Use `@run` to define the compute target, timeout, and dependency requirements fo
 from pathlib import Path
 
 import geopandas as gpd
-from nika_runner import run
+from nika_py import run
 
 
 @run(
     compute="CPUx7",
     timeout=2,
+    name="site-buffer-summary",
     requirements=[
         "geopandas>=0.14",
         "pyogrio>=0.7",
@@ -136,17 +137,20 @@ The decorator currently accepts these options:
 | `compute` | Machine type requested for the delegated run. Supported presets include `CPUx3`, `CPUx7`, `CPUx20`, `CPUx42`, `T4x1`, `T4x2`, `T4x4`, and `H100x1`. |
 | `timeout` | Positive integer timeout in hours. The SDK sends this as `timeout_hours`. |
 | `requirements` | Optional list of Python package requirement strings, such as `["pandas>=2.0", "rasterio==1.3.10"]`. Requirements are validated before submission. |
+| `name` | Optional run label used for exact-match filtering with `list_runs(name=...)`. |
 
 The remote platform may reject compute types that are not enabled for your workspace. Start with the smallest machine that matches the memory or GPU profile of the task, then scale up only when the logs or runtime behavior show that the run needs it.
+
+Run names are optional, can be up to 63 characters, and must match `^[a-zA-Z0-9]([-a-zA-Z0-9_.]*[a-zA-Z0-9])?$`. Use them for stable labels such as `site-buffer-summary`, `nightly-index`, or `experiment-1`.
 
 ## Step 4: Reconnect to Existing Runs
 
 Use `load_run(...)` when you already have a run ID from a previous cell, browser refresh, or shared notebook note.
 
 ```python
-from nika_runner import load_run
+from nika_py import load_run
 
-run = load_run("nr-6d9e736b188d47fcbb715a953935eaa8")
+run = load_run("nr--20260612143005-6d9e736b188d47fc")
 
 print(run.status())
 print(run.logs(tail=100))
@@ -155,26 +159,32 @@ print(run.logs(tail=100))
 If you are working from the decorated function object, use `.load(...)` to reuse the same client configuration:
 
 ```python
-run = build_buffer_summary.load("nr-6d9e736b188d47fcbb715a953935eaa8")
+run = build_buffer_summary.load("nr--20260612143005-6d9e736b188d47fc")
 print(run.status())
 ```
 
-Use `list_runs(...)` to retrieve handles for recent runs visible from the notebook.
+Use `list_runs(...)` to retrieve one page of runs visible from the notebook. The returned `RunPage` contains `runs` and `next_cursor`.
 
 ```python
-from nika_runner import list_runs
+from nika_py import list_runs
 
-for run in list_runs(status="running", limit=20):
+page = list_runs(status="running", limit=20)
+for run in page.runs:
     print(run.run_id, run.status())
+
+while page.next_cursor is not None:
+    page = list_runs(status="running", limit=20, cursor=page.next_cursor)
+    for run in page.runs:
+        print(run.run_id, run.status())
 ```
 
-Allowed status filters are `pending`, `initializing`, `running`, `cancelling`, `succeeded`, `failed`, and `cancelled`. The `limit` must be between `1` and `200`.
+Allowed status filters are `pending`, `initializing`, `running`, `cancelling`, `succeeded`, `failed`, and `cancelled`. The `name` filter is an exact match on the run name, `limit` must be between `1` and `200`, and `cursor` should only be set from a previous page's `next_cursor`.
 
 You can also filter child runs client-side with `parent_run_id`:
 
 ```python
-children = list_runs(parent_run_id=run.run_id)
-for child in children:
+children_page = list_runs(parent_run_id=run.run_id)
+for child in children_page.runs:
     print(child.run_id, child.parent_run_id, child.status())
 ```
 
@@ -182,7 +192,7 @@ for child in children:
 
 When code inside a delegated run submits more work, the SDK can link the nested submission back to the run that started it. Notebook submissions do not set a parent and remain root runs.
 
-Every returned `RunHandle` exposes `parent_run_id`, which is `None` for root runs. `list_runs(parent_run_id=...)` retrieves recent runs and filters them locally.
+Every returned `RunHandle` exposes `parent_run_id`, which is `None` for root runs. Handles returned from `load_run(...)` and `list_runs(...)` also carry snapshot metadata when the gateway provides it, including `name`, `machine_type`, `timeout_hours`, `last_status`, `created_at`, `started_at`, and `finished_at`. `list_runs(parent_run_id=...)` retrieves one page of recent runs and filters that page locally.
 
 You can use handle helpers when you are navigating a run tree:
 
@@ -200,11 +210,13 @@ parent = children[0].parent() if children else None
 If a delegated run is no longer needed, call `cancel()` on its handle.
 
 ```python
-status = run.cancel()
-status
+cancellation = run.cancel()
+print(cancellation.last_status)
+
+await cancellation
 ```
 
-Cancellation is asynchronous. `run.cancel()` commonly returns `cancelling`; poll `run.status()` or call `run.wait(...)` to observe the final `cancelled`, `succeeded`, or `failed` state.
+Cancellation is asynchronous. Calling `run.cancel()` sends the cancellation request immediately and returns a `RunCancellation` object. The object exposes `last_status` and `done`; when awaited, it polls until the backend reports `cancelled`. If the run reaches `succeeded` or `failed` before cancellation completes, awaiting the cancellation raises `RemoteRunError`.
 
 ## How Delegation Works
 
@@ -212,9 +224,9 @@ When you call `.submit(...)`, the SDK builds an invocation envelope and submits 
 
 1. The decorated function is converted into a function bundle.
 2. Positional and keyword arguments are serialized with `cloudpickle`.
-3. Runtime options are attached as `compute`, `timeout_hours`, and optional `requirements`.
+3. Runtime options are attached as `compute`, `timeout_hours`, optional `requirements`, and optional `name`.
 4. If the submitting process is already inside a delegated run, the SDK includes parent-run metadata.
-5. NIKA returns `run_id`, and the remote runner starts an isolated worker, executes the function, stores logs, and makes the result available to the handle.
+5. NIKA returns `run_id`, and the remote runner starts an isolated worker, executes the function, stores logs, and makes the result available to the handle. New runs use the `nr--...` run ID format, while older `nr-<32 hex>` IDs remain valid for loading, status checks, logs, results, cancellation, and parent-run metadata.
 
 The status lifecycle is `pending` → `initializing` → `running`, then one of `succeeded`, `failed`, or `cancelled`. A short-lived `cancelling` status appears after `run.cancel()` while the operator tears down the worker. Unknown future statuses are treated defensively as running by the SDK.
 

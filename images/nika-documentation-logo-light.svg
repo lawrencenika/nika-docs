@@ -1,4 +1,4 @@
-<svg width="181" height="28" viewBox="0 0 181 28" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
+<svg width="174" height="28" viewBox="0 0 174 28" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
   <title id="title">NIKA Documentation</title>
   <text
     x="0"
@@ -9,5 +9,5 @@
     font-weight="400"
     letter-spacing="0.06em"
   >NIKA Documentation</text>
-  <circle cx="175" cy="14" r="2.5" fill="#eba941"/>
+  <circle cx="169" cy="12" r="2.5" fill="#eba941"/>
 </svg>

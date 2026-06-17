@@ -1,5 +1,5 @@
 (function () {
-  // CSS custom properties for the GeoVault chat UI.
+  // CSS custom properties for the NIKA Memory Core chat UI.
   // Dark mode  : light/white backgrounds stand out against a dark page.
   // Light mode : darker/more saturated tones stand out against a light page.
   var DARK = {

@@ -13,7 +13,7 @@ This is a **Mintlify** documentation site for NIKA (The Spatial Computing Co.) a
 - `AGENTS.md` — this file
 - `newsletter/` — email and LinkedIn newsletter drafts (gitignored, not part of the Mintlify build)
 - `nika-planet/changelog.mdx` — the product changelog, in Mintlify `<Update>` format
-- `nika-desktop/geovault.mdx` — spatial knowledge base feature docs
+- `nika-desktop/memory-core.mdx` — NIKA Memory Core (spatial knowledge base) feature docs
 
 ---
 
@@ -110,9 +110,9 @@ For changelog images, the base URL is `https://docs.nikaplanet.com/` — prepend
 <span class="tag tag-fix">Fix</span>        <!-- yellow -->
 ```
 
-### GeoVault / knowledge base programme
-- **Do not use the name "GeoVault" in email body copy.** Refer to it as "the knowledge base" or "a queryable, location-aware knowledge base".
-- Link to the docs page: `https://docs.nikaplanet.com/nika-desktop/geovault`
+### NIKA Memory Core / knowledge base programme
+- **Do not use the product name "NIKA Memory Core" in email body copy.** Refer to it as "the knowledge base" or "a queryable, location-aware knowledge base".
+- Link to the docs page: `https://docs.nikaplanet.com/nika-desktop/memory-core`
 - Programme details: 30 organisation slots; first 5 teams get direct setup support and priority access.
 - CTA label: **"Secure the slot →"**, link: `https://cal.com/lawrence-nika/nika-expert`
 

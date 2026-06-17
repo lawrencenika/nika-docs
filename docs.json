@@ -2,6 +2,13 @@
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "linden",
 	"name": "Nika",
+	"redirects": [
+		{
+			"source": "/nika-desktop/geovault",
+			"destination": "/nika-desktop/memory-core",
+			"permanent": true
+		}
+	],
 	"seo": {
 		"indexing": "navigable"
 	},
@@ -31,7 +38,13 @@
 					},
 					{
 						"group": "NIKA Desktop",
-						"pages": ["nika-desktop/overview", "nika-desktop/geovault"]
+						"pages": [
+							"nika-desktop/overview",
+							"nika-desktop/autonomous-analysis",
+							"nika-desktop/data-and-conversion",
+							"nika-desktop/visualizations",
+							"nika-desktop/memory-core"
+						]
 					},
 					{
 						"group": "NIKA Planet (Cloud GIS Platform)",
@@ -267,8 +280,8 @@
 		}
 	},
 	"logo": {
-		"light": "/images/nika-geospatial-logo-light.svg",
-		"dark": "/images/nika-geospatial-logo-dark.svg"
+		"light": "/images/nika-documentation-logo-light.svg",
+		"dark": "/images/nika-documentation-logo-dark.svg"
 	},
 	"navbar": {
 		"links": [
@@ -299,7 +312,7 @@
 		"scripts": [
 			"/nika-background-theme.js",
 			"/floating-cta.js",
-			"/geovault-chat-theme.js",
+			"/memory-core-chat-theme.js",
 			"/topbar-actions.js"
 		]
 	},

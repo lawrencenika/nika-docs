@@ -1,0 +1,49 @@
+---
+title: "Data & Conversion"
+icon: "database"
+description: "Connect your files and external or satellite data sources, then inspect and convert across 100+ geospatial formats — all from chat."
+---
+
+## Bring Your Own Data
+
+NIKA Desktop meets your data where it already lives. Point the agent at the files and systems your team uses every day, and it reads them in place — no migration, no reformatting, no manual tagging.
+
+<Frame caption="NIKA inspects your files and converts between formats on request, without leaving the conversation.">
+  {/* PLACEHOLDER IMAGE — temporarily reusing the existing desktop screenshot.
+      Replace images/nika-desktop/data-conversion.jpg with a fresh capture of NIKA
+      handling data: e.g. inspecting a file's metadata or running a format
+      conversion, with the result shown in chat. See the screenshot checklist in chat. */}
+  <img src="/images/nika-desktop/data-conversion.jpg" alt="NIKA Desktop connecting to files and converting between geospatial formats from the chat" />
+</Frame>
+
+<Columns cols={2}>
+  <Card title="Your files" icon="folder-open">
+    Reports, PDFs, drawings, field photos, spreadsheets, and raw geospatial datasets — drop them in and the agent works directly with them.
+  </Card>
+  <Card title="External & satellite data" icon="satellite">
+    Pull in the external and satellite data sources your industry already relies on to enrich the analysis with up-to-date context.
+  </Card>
+</Columns>
+
+## Data Inspection
+
+NIKA includes built-in tools for inspecting geospatial data without leaving the chat.
+
+- **Vector metadata** — read layers, coordinate reference systems, and attribute schemas from any supported vector format
+- **Raster metadata** — read dimensions, band counts, CRS, and statistics from any supported raster format
+
+## Format Conversion (100+ Formats)
+
+Convert between formats with a single request to the agent — no GIS desktop software required.
+
+| Category | Formats |
+|----------|---------|
+| **Raster** | COG, GeoTIFF, JPEG2000, ECW, MrSID, PNG, JPEG |
+| **Vector** | GeoJSON, Shapefile, GeoPackage, FlatGeoBuf, GeoParquet, KML, KMZ, CSV, DXF |
+| **Vector Tiles** | PMTiles, MBTiles |
+| **3D** | LAS, LAZ, Cesium 3D Tiles, COPC, STL, OBJ, GLB, glTF |
+| **Styles** | SLD, QGIS QML |
+
+<Tip>
+  Conversions happen inside the [autonomous tool loop](/nika-desktop/autonomous-analysis) — so a single request like *"convert these shapefiles to GeoParquet and map the result"* is handled end to end, with the output ready to [visualize](/nika-desktop/visualizations) immediately.
+</Tip>

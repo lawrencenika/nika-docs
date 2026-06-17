@@ -1,53 +1,66 @@
 ---
 title: "Overview"
-description: "NIKA is an AI-powered desktop agent for geospatial analysis, data conversion, and spatial knowledge management."
+description: "NIKA Desktop is an autonomous AI location analyst — it reads your files, runs the geospatial analysis, and hands back interactive maps, dashboards, and reports."
 ---
 
 ![NIKA Desktop Agent](/nika-desktop/nika-desktop-app.jpg)
 
-## Overview
+## Your Autonomous Location Analyst
 
-NIKA — **<u>N</u>exus <u>I</u>nteractive <u>K</u>artographic <u>A</u>gent** — is a desktop application that brings AI agents directly into your geospatial workflows. NIKA provides a chat-driven interface where AI can read and inspect your data, run geospatial tools, convert between 100+ formats, build interactive visualizations, and manage multi-step tasks — all from a single conversation.
+NIKA — **<u>N</u>exus <u>I</u>nteractive <u>K</u>artographic <u>A</u>gent** — is a desktop application that puts an autonomous AI data analyst at the centre of your geospatial work. Point it at your files and the data sources your industry already uses; it reads them, searches external and satellite data, runs the spatial analysis on its own, and hands back the report, dashboard, or interactive map. For decision-makers without a GIS background, it's the entry point to location analysis — and it all happens in a single, chat-driven conversation.
 
-## Spatial LLM Knowledge Base
+<Frame caption="NIKA Desktop runs a multi-step analysis and renders an interactive map artifact directly in the conversation.">
+  {/* PLACEHOLDER IMAGE — temporarily reusing the existing desktop screenshot.
+      Replace images/nika-desktop/analyst-spotlight.jpg with a fresh capture of a
+      NIKA Desktop analysis run: tool calls executing on the left, an interactive
+      map artifact open on the right. See the screenshot checklist in chat. */}
+  <img src="/images/nika-desktop/analyst-spotlight.jpg" alt="NIKA Desktop autonomous location analyst — chat-driven geospatial analysis rendering an interactive map" />
+</Frame>
+
+## What NIKA Does
+
+<Columns cols={2}>
+  <Card
+    title="Autonomous analysis"
+    icon="wand-magic-sparkles"
+    href="/nika-desktop/autonomous-analysis"
+  >
+    Works in an agentic tool loop — reads your files, runs geospatial operations, inspects the results, and iterates until the task is done, streaming every tool call in real time so you can watch the analysis happen.
+  </Card>
+  <Card
+    title="Connect files & data sources"
+    icon="database"
+    href="/nika-desktop/data-and-conversion"
+  >
+    Bring your own reports, PDFs, drawings, field photos, and spreadsheets, pull in external and satellite data, and inspect or convert across 100+ geospatial formats.
+  </Card>
+  <Card
+    title="Live maps, dashboards & reports"
+    icon="chart-column"
+    href="/nika-desktop/visualizations"
+  >
+    Interactive maps, charts, dashboards, 3D viewers, and shareable reports — all generated directly in the conversation as the agent works.
+  </Card>
+  <Card
+    title="NIKA Memory Core"
+    icon="brain"
+    href="/nika-desktop/memory-core"
+  >
+    Your organization's enterprise brain: ingest your documents once, then anyone can query decades of institutional knowledge in plain language, grounded in your own data.
+  </Card>
+</Columns>
+
+## Location-Aware by Design
+
+NIKA is a superset of general chat agents like ChatGPT, Claude, and Gemini. It does everything they do with text — then goes further, understanding real coordinates and tying every result back to real-world assets, places, and geometries, not just words on a page. That is what lets a plain-language question return a sourced answer *and* a map of exactly where it applies.
+
+## Your Organization's Knowledge, On Tap
 
 Enterprises accumulate vast amounts of geospatial data over years — environmental reports, survey PDFs, regulatory filings, satellite imagery metadata, field notes, and engineering documents — scattered across drives, databases, and inboxes. The institutional knowledge locked inside these files often lives only in the heads of senior staff.
 
-NIKA's **GeoVault** changes that. Ingest your organization's documents and NIKA transforms them into a spatially-aware knowledge base that any team member can query through natural language. Questions that previously required decades of experience to answer — *"Have we surveyed for protected species near this river corridor before?"* or *"What soil conditions were reported across our northern sites?"* — are now accessible to everyone on the team, instantly.
+**NIKA Memory Core** changes that. Ingest your organization's documents and NIKA transforms them into a spatially-aware knowledge base that any team member can query through natural language. Questions that previously required decades of experience to answer — *"Have we surveyed for protected species near this river corridor before?"* or *"What soil conditions were reported across our northern sites?"* — are now accessible to everyone on the team, instantly.
 
-<a href="/nika-desktop/geovault">Learn more about the GeoVault →</a>
-
-## Geospatial Tools
-
-NIKA includes built-in tools for inspecting and converting geospatial data without leaving the chat.
-
-### Data Inspection
-- **Vector metadata** — read layers, coordinate reference systems, and attribute schemas from any supported vector format
-- **Raster metadata** — read dimensions, band counts, CRS, and statistics from any supported raster format
-
-### Format Conversion (100+ Formats)
-
-Convert between formats with a single request to the agent:
-
-| Category | Formats |
-|----------|---------|
-| **Raster** | COG, GeoTIFF, JPEG2000, ECW, MrSID, PNG, JPEG |
-| **Vector** | GeoJSON, Shapefile, GeoPackage, FlatGeoBuf, GeoParquet, KML, KMZ, CSV, DXF |
-| **Vector Tiles** | PMTiles, MBTiles |
-| **3D** | LAS, LAZ, Cesium 3D Tiles, COPC, STL, OBJ, GLB, glTF |
-| **Styles** | SLD, QGIS QML |
-
-## Interactive Visualizations
-
-The agent can generate rich visualizations directly in the conversation:
-
-- **Charts** — AI generates interactive chart specifications from your data
-- **Dashboards** — compose multiple charts into a drag-and-drop dashboard canvas
-- **Maps** — interactive maps with raster, vector, and GeoJSON layer management
-- **3D Viewer** — visualize 3D scans, point clouds, and terrain models
-- **Surveys** — design and preview field survey forms directly in the agent
-- **Web Apps** — generate and preview self-contained web applications
-- **Diagrams** — automatic diagram rendering for architecture, flowcharts, and workflows
+<a href="/nika-desktop/memory-core">Learn more about NIKA Memory Core →</a>
 
 ## Extensibility
 
@@ -70,7 +83,5 @@ NIKA's chat interface connects to multiple LLM providers, so you can choose the 
 | **OpenAI** | GPT-4.1, GPT-4.1 Mini, o3, o4-mini |
 | **Google Gemini** | Gemini 2.5 Pro, Gemini 2.5 Flash |
 | **Ollama (Local)** | Llama 3.3, Mistral, Mixtral, CodeLlama, Qwen 2.5 |
-
-The agent operates in an **agentic tool loop** — it autonomously reads files, executes geospatial operations, inspects results, and iterates until the task is complete. Streaming responses show tool execution in real time so you always know what the agent is doing.
 
 Multiple chat sessions are persisted to disk, so you can pick up any prior conversation exactly where you left off.

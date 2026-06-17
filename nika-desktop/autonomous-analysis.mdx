@@ -1,0 +1,61 @@
+---
+title: "Autonomous Analysis"
+icon: "wand-magic-sparkles"
+description: "How NIKA plans, runs tools, inspects results, and iterates on its own until your geospatial task is complete."
+---
+
+## An Analyst, Not a Chatbot
+
+Most AI tools answer a question and stop. NIKA Desktop works the way a human analyst does: it takes a goal, breaks it into steps, runs the tools needed to make progress, looks at what came back, and keeps going until the job is actually done. You describe the outcome you want in plain language — NIKA figures out and executes the path to get there.
+
+<Frame caption="NIKA streams every tool call as it works, so you can follow the analysis step by step.">
+  {/* PLACEHOLDER IMAGE — temporarily reusing the existing desktop screenshot.
+      Replace images/nika-desktop/autonomous-analysis.jpg with a fresh capture of
+      NIKA mid-run: the chat showing a sequence of tool calls executing (reading a
+      file, running an operation, inspecting output) before the written answer.
+      See the screenshot checklist in chat. */}
+  <img src="/images/nika-desktop/autonomous-analysis.jpg" alt="NIKA Desktop running an autonomous, multi-step geospatial analysis with streaming tool calls" />
+</Frame>
+
+## The Agentic Tool Loop
+
+NIKA operates in an **agentic tool loop** — it autonomously reads files, executes geospatial operations, inspects the results, and iterates until the task is complete.
+
+<Steps>
+  <Step title="Understand the goal">
+    NIKA interprets your request in plain language and decides which data and operations the task requires — no menus, no scripting.
+  </Step>
+  <Step title="Read & inspect your data">
+    It opens your files and inspects them — layers, coordinate reference systems, attribute schemas, raster bands and statistics — to ground the analysis in what's actually there.
+  </Step>
+  <Step title="Run the operations">
+    NIKA calls the geospatial tools needed to make progress, from format conversion to spatial operations, and pulls in external or satellite data when the task calls for it.
+  </Step>
+  <Step title="Inspect the results & iterate">
+    It reads the output of each step, checks whether it answers the question, and adjusts its plan — re-running or trying a different approach until the result holds up.
+  </Step>
+  <Step title="Deliver the artifact">
+    When the work is done, NIKA hands back the answer along with the artifact you need — a map, dashboard, chart, or report — rendered directly in the conversation.
+  </Step>
+</Steps>
+
+## Built for Real Work
+
+<Columns cols={2}>
+  <Card title="Streaming tool calls" icon="bolt">
+    Every tool the agent runs streams in real time, so you always know exactly what NIKA is doing and can verify each step of its reasoning.
+  </Card>
+  <Card title="Multi-step task management" icon="list-check">
+    NIKA keeps track of long, multi-stage tasks on its own — chaining operations together and carrying context from one step to the next without losing the thread.
+  </Card>
+  <Card title="Location-aware reasoning" icon="location-dot">
+    Unlike a generic agent, NIKA understands real coordinates and ties every intermediate result back to a real-world place, asset, or geometry.
+  </Card>
+  <Card title="Persistent sessions" icon="clock-rotate-left">
+    Conversations are saved to disk, so you can pick any prior analysis back up exactly where you left off — including the steps the agent already ran.
+  </Card>
+</Columns>
+
+## Grounded in Your Knowledge
+
+Autonomous analysis gets sharper when the agent can draw on what your organization already knows. Connect [NIKA Memory Core](/nika-desktop/memory-core) and NIKA grounds its answers in your own reports, surveys, and records — so the analysis reflects your institutional knowledge, not just public data.

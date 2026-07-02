@@ -17,10 +17,10 @@ For now, code cloud delegation is designed to run from NIKA cloud notebooks. Loc
 - Any third-party packages declared in `requirements`
 - Inputs and outputs passed as serializable values, workspace file paths, dataset IDs, or other managed references
 
-The SDK package is named `nika_py` and exposes the Python module `nika_py`. The public SDK surface uses run-named APIs.
+The SDK package is named `nika_py` and exposes the Python module `nika_py`. The public SDK surface uses run and run-configuration APIs.
 
 ```python
-from nika_py import list_runs, load_run, run
+from nika_py import RunConfig, list_runs, load_run, run
 ```
 
 ## Available SDK Functions
@@ -29,10 +29,11 @@ Use these entrypoints from `nika_py`:
 
 | Function or method | What it does |
 |--------------------|--------------|
-| `run(compute=..., timeout=..., requirements=..., name=...)` | Decorates a Python function so it can still run locally and can also be submitted to NIKA cloud compute. |
+| `run(compute=..., timeout=..., requirements=...)` | Decorates a Python function so it can still run locally and can also be submitted to NIKA cloud compute. |
+| `RunConfig(name=...)` | Defines per-submission configuration for one delegated run. |
 | `decorated_function(...)` | Calls the original Python function locally in the current notebook kernel. |
 | `decorated_function.local(...)` | Explicitly calls the original Python function locally. |
-| `decorated_function.submit(...)` | Submits one invocation to NIKA cloud compute and returns a `RunHandle`. |
+| `decorated_function.submit(..., config=RunConfig(...))` | Submits one invocation to NIKA cloud compute and returns a `RunHandle`. |
 | `decorated_function.load(run_id)` | Returns a `RunHandle` for an existing run using the decorated function's client configuration. |
 | `load_run(run_id)` | Returns a `RunHandle` for an existing run. |
 | `list_runs(status=..., name=..., limit=..., cursor=..., parent_run_id=...)` | Returns a `RunPage` with one page of `RunHandle` objects plus `next_cursor` for pagination. |
@@ -58,7 +59,6 @@ from nika_py import run
 @run(
     compute="CPUx7",
     timeout=2,
-    name="site-buffer-summary",
     requirements=[
         "geopandas>=0.14",
         "pyogrio>=0.7",
@@ -107,10 +107,13 @@ preview
 Call `.submit(...)` to serialize the invocation and send it to the NIKA cloud runner available from the notebook.
 
 ```python
+from nika_py import RunConfig
+
 run = build_buffer_summary.submit(
     "/workspace/data/site-boundary.geojson",
     "/workspace/outputs/site-boundary-buffered.geojson",
     50,
+    config=RunConfig(name="site-buffer-summary"),
 )
 
 run.run_id
@@ -137,11 +140,18 @@ The decorator currently accepts these options:
 | `compute` | Machine type requested for the delegated run. Supported presets include `CPUx3`, `CPUx7`, `CPUx20`, `CPUx42`, `T4x1`, `T4x2`, `T4x4`, and `H100x1`. |
 | `timeout` | Positive integer timeout in hours. The SDK sends this as `timeout_hours`. |
 | `requirements` | Optional list of Python package requirement strings, such as `["pandas>=2.0", "rasterio==1.3.10"]`. Requirements are validated before submission. |
-| `name` | Optional run label used for exact-match filtering with `list_runs(name=...)`. |
 
 The remote platform may reject compute types that are not enabled for your workspace. Start with the smallest machine that matches the memory or GPU profile of the task, then scale up only when the logs or runtime behavior show that the run needs it.
 
+Per-run configuration is passed to `.submit(...)` with `RunConfig`:
+
+| Config field | Description |
+|--------------|-------------|
+| `name` | Optional run label used for exact-match filtering with `list_runs(name=...)`. |
+
 Run names are optional, can be up to 63 characters, and must match `^[a-zA-Z0-9]([-a-zA-Z0-9_.]*[a-zA-Z0-9])?$`. Use them for stable labels such as `site-buffer-summary`, `nightly-index`, or `experiment-1`.
+
+Because `.submit(..., config=RunConfig(...))` reserves the `config` keyword for SDK configuration, a function decorated with `@run` cannot define a parameter named `config`.
 
 ## Step 4: Reconnect to Existing Runs
 
@@ -224,7 +234,7 @@ When you call `.submit(...)`, the SDK builds an invocation envelope and submits 
 
 1. The decorated function is converted into a function bundle.
 2. Positional and keyword arguments are serialized with `cloudpickle`.
-3. Runtime options are attached as `compute`, `timeout_hours`, optional `requirements`, and optional `name`.
+3. Runtime options are attached as `compute`, `timeout_hours`, optional `requirements`, and optional per-run `name` from `RunConfig`.
 4. If the submitting process is already inside a delegated run, the SDK includes parent-run metadata.
 5. NIKA returns `run_id`, and the remote runner starts an isolated worker, executes the function, stores logs, and makes the result available to the handle. New runs use the `nr--...` run ID format, while older `nr-<32 hex>` IDs remain valid for loading, status checks, logs, results, cancellation, and parent-run metadata.
 

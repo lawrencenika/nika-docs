@@ -61,8 +61,13 @@ Every run you submit with `@run(...).submit()` is tracked in the workspace, so y
 - **All Runs**: every run submitted in the workspace, grouped by time and filterable by status (Pending, Initializing, Running, Succeeded, Failed, Cancelled). Search by name or run ID, and expand a fan-out run to see its children.
   ![All Runs panel](/nika-planet/nika-notebook-3.png)
 
-- **Run Detail**: opens from any run. A fan-out **run graph** shows the run tree (a parent run and its child runs), and **Overview**, **Children**, and **Logs** tabs cover the run's status, configuration (name, run ID, timeout, resource, submitted and started times), child runs, and logs.
+- **Run Detail**: opens from any run. A fan-out **run graph** shows the run tree (a parent run and its child runs), and **Overview**, **Children**, **Logs**, and **Metrics** tabs cover the run's status, configuration (name, run ID, timeout, resource, submitted and started times), child runs, logs, and resource usage.
   ![Run Detail panel](/nika-planet/nika-notebook-4.png)
+
+- **Metrics tab**: for completed runs, see CPU, memory, and (when the machine has one) GPU utilisation, VRAM, and power draw sampled across the run. Peak headline cards summarise the run at a glance, and each chart carries a fit verdict — _Well-utilised_, _Right-sized_, _Over-provisioned_, _Near limit_, _OOM risk_ — so it's obvious whether the machine size matched the workload.
+  - **Focus stats on a time window**: drag on any chart to highlight a range. Averages, peaks and verdicts recompute for just that window — useful for excluding warm-up, setup, or a spike you want to inspect. Click elsewhere on the chart or press <kbd>Esc</kbd> to clear the selection and return to full-run stats.
+
+![NikaNotebook - Run Metrics](/nika-planet/nika-notebook-5.png)
 
 ## Python Notebook Examples in NikaNotebook
 

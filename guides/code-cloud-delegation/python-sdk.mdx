@@ -119,6 +119,19 @@ run = build_buffer_summary.submit(
 run.run_id
 ```
 
+You can also choose to fan out multiple runs with custom names.
+
+```python
+runs = [build_buffer_summary.submit(
+    "/workspace/data/site-boundary.geojson",
+    "/workspace/outputs/site-boundary-buffered.geojson",
+    50,
+    config=RunConfig(name=f"site-buffer-summary-{i}"),
+) for i in range(5)]
+
+print([run.run_id for run in runs])
+```
+
 The returned `RunHandle` is a lightweight reference to the remote run. It can poll status, fetch logs, wait for a result, or request cancellation.
 
 ```python

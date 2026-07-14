@@ -1,0 +1,73 @@
+---
+title: "Authoring Model"
+description: "The OnlyMap manifest: elements, expression accessors, data sources, widgets, interactions, and the validation loop."
+icon: "code"
+---
+
+## The Manifest
+
+A handful of elements, one rule: **attributes are kebab-case versions of deck.gl props** (`radius-units` → `radiusUnits`), and `get-*` attributes are data-driven accessors.
+
+- **`<om-map>`** — the root. `center`, `zoom`, `pitch`, `bearing`; `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"` — and switches live. Add `validate` for an on-page error panel while authoring.
+- **`<om-layer>`** — any registered deck.gl layer type by name. `id` is required; `label`/`color` feed the legend.
+- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `zoom-controls`, `undo-redo`, `scale-bar`, `filter`, `vega-lite`, `draw`, `player` — or your own HTML plus a `<script type="om/widget">` block.
+- **`<om-overlay>`** — rich HTML anchored to a coordinate, the current selection, or a feature's own geometry. `{{field}}` interpolates the picked feature, HTML-escaped by default.
+- **`<om-behavior>`** — declarative interactions: `on="click|hover|drag|load|data-loaded"` → a named action.
+- **`<om-story>` / `<om-step>`** — a storyboard: steps fire actions on a timeline, with play/pause/scrub via the `player` widget.
+- **`<om-fallback>`** — what renders where scripts never run (chat-app and email file previews); hidden automatically once the map boots.
+
+Always write explicit closing tags (`<om-layer …></om-layer>` — never self-close a custom element), and give every layer a stable `id`.
+
+## Accessors Without JavaScript
+
+`get-*` attributes take a small, safe expression language. `$field` reads a datum field regardless of data shape — flat JSON, GeoJSON properties, or Arrow columns:
+
+```html
+get-position="[$lon, $lat]"
+get-radius="$population * 0.001"
+get-fill-color="$value > 100 ? [255,0,0] : [0,128,255]"
+get-fill-color="scale($depth, sequential, ['#ffffcc','#800026'], domain=[0,700])"
+```
+
+Built-ins include `scale()` (an explicit `domain=` is required), `colorRamp()`, `clamp()`, `lerp()`, and `Math.*`. The compiler is an AST whitelist, not an eval — untrusted, agent-written expressions are safe by construction. Genuinely arbitrary JavaScript requires an explicit `js` opt-in on the layer.
+
+## Data Sources
+
+| Source | Manifest |
+|---|---|
+| JSON / GeoJSON | `data="./points.json"` |
+| Inline rows | `<script type="application/json">` child |
+| CSV / TSV | `data="./quakes.csv"` — parsed to typed columns |
+| Apache Arrow / GeoArrow | `data="./big.arrow"` — points stay columnar; zstd IPC supported |
+| Shapefile | `data="./countries.shp"` — `.dbf` attributes joined automatically |
+| KML | `data="./tour.kml"` |
+| WebSocket stream | `data="wss://feed" key="id" flush="250ms"` — upsert-by-key live entities |
+| Polled REST snapshot | `data="/api/fleet.json" refresh="5s"` |
+| Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
+
+Custom formats and stream decoders plug in via `OmMap.registerFormat` and `OmMap.registerSource`. Authenticated endpoints use `OmMap.configureData({ headers, credentials, fetch })` — credentials never belong in markup.
+
+## Interactions and State
+
+Built-in actions share one payload contract across every trigger surface (behaviors, widget `data-emit` buttons, `ctx.emit`, story steps): `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `undo`, `redo`, and more — plus `OmMap.registerAction` for your own.
+
+GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`), updates live from the `filter` widget, and widget statistics stay coherent with what the map renders. Because the manifest is the state, all of this is undoable out of the box.
+
+## Validate, Then Trust
+
+The authoring loop the library is built around:
+
+1. Write the manifest (or edit the live DOM — changes reconcile automatically).
+2. `OmMap.validate(html)` → structured errors, each with a `fix` string.
+3. `OmMap.snapshotIR(html)` → resolved layer descriptors for snapshot tests.
+4. `mountForTest(html)` → headless behavioral tests: synthetic picks ride the same selection path real GPU picks take.
+
+```ts
+const h = await mountForTest(pageHtml);
+await h.pick({ layer: "quakes", featureId: "q-101" });
+expect(h.map.querySelector("#detail")!.shadowRoot!.textContent).toContain("M 6.1");
+```
+
+## React Projects
+
+In React, don't render `om-*` elements from JSX — use the first-party adapter instead: `import { OmMap, OmLayer, OmWidget, OmOverlay, useOmMap } from "@nika-js/onlymap/react"`. Props are camelCase deck.gl props, accessors are plain functions, and interactions are `onClick`/`onHover` handlers — React owns state, and the adapter drives the same rendering core with no DOM contention.

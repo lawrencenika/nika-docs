@@ -1,0 +1,58 @@
+---
+title: "Licensing & Telemetry"
+description: "Free for non-commercial use with attribution; commercial licensing lifts the free-plan limits. What telemetry collects, and how to turn it off."
+icon: "scale-balanced"
+---
+
+## Licensing
+
+OnlyMap JS is proprietary software that is **free for non-commercial use with attribution** — personal projects, education, academic research, and evaluation. Commercial use (for-profit products and internal tools, revenue-generating services, paid consulting, government work) requires a commercial license. The authoritative terms are in the package's `LICENSE.md`.
+
+### The Free Plan
+
+Without a license key, maps run on the free plan:
+
+- **Up to 5 layers** per map and **25,000 rows per layer** (20 MB per data fetch).
+- A small **"OnlyMap by NIKA. Free for non-commercial use."** badge renders on the map. Keeping it visible is a condition of the free non-commercial grant.
+- Exceeding a limit never breaks the map — the offending layer simply doesn't render, and the validation stream names the exact limit and how to lift it.
+- Limits apply identically everywhere, including localhost, so development behavior always matches production.
+
+### License Keys
+
+A license key lifts all limits and removes the badge:
+
+```html
+<om-map license-key="om_live_…">
+```
+
+```ts
+OmMap.configureLicense("om_live_…");
+```
+
+Keys are **publishable and origin-restricted** — they are bound to your domains and safe to include in page source, like a map-provider API key. They verify offline (no network round-trip), so they work in CI and air-gapped environments. Licensing inquiries: [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
+
+## Telemetry
+
+The library reports **one deployment-scoped usage snapshot per map, per page load** (layer types and counts, widget types, renderer, library version, page hostname) and **errors caused by the library's own code** — never your page scripts — to a NIKA-operated first-party endpoint. The full payload schema is publicly documented in the package's `docs/telemetry.md`.
+
+What is **never** collected: page paths or URLs, your data or its contents, coordinates, cookies, or any persistent visitor identifier. Test suites stay silent — `headless` maps never report.
+
+### Opting Out
+
+```ts
+OmMap.configureTelemetry({ disabled: true });   // global — usage snapshots AND error reports
+```
+
+```html
+<om-map telemetry="off">                        <!-- per map -->
+```
+
+### `map-id`
+
+An optional authored attribute that identifies the **map artifact** (not the visitor) so usage can distinguish one popular dashboard from many different maps:
+
+```html
+<om-map map-id="0f2c6a1e-88f7-4c3e-9d41-7b1f3f9f2ab7">
+```
+
+It is author-controlled page metadata — nothing is stored on the visitor's device. Delete or change it at any time; it is never required.

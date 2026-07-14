@@ -34,7 +34,9 @@
 				"groups": [
 					{
 						"group": "Get Started",
-						"pages": ["index"]
+						"pages": [
+							"index"
+						]
 					},
 					{
 						"group": "NIKA Desktop",
@@ -79,6 +81,14 @@
 							"nika-geoengine/arcgis",
 							"nika-geoengine/qgis",
 							"nika-geoengine/releases"
+						]
+					},
+					{
+						"group": "OnlyMap JS (Map Library)",
+						"pages": [
+							"onlymap/overview",
+							"onlymap/authoring",
+							"onlymap/licensing-and-telemetry"
 						]
 					}
 				]
@@ -184,7 +194,9 @@
 					{
 						"group": "Field Survey",
 						"icon": "map-pin",
-						"pages": ["guides/field-survey/ai-audio-gps"]
+						"pages": [
+							"guides/field-survey/ai-audio-gps"
+						]
 					},
 					{
 						"group": "Custom Geoprocess Deployment",
@@ -194,7 +206,7 @@
 							"guides/custom-geoprocess-deployment/step-by-step",
 							"guides/custom-geoprocess-deployment/ai-coder-worker",
 							"guides/custom-geoprocess-deployment/running-in-gis",
-                            "guides/custom-geoprocess-deployment/test-designing",
+							"guides/custom-geoprocess-deployment/test-designing",
 							"guides/custom-geoprocess-deployment/maintenance",
 							"guides/custom-geoprocess-deployment/versioning",
 							"guides/custom-geoprocess-deployment/debugging",
@@ -237,7 +249,9 @@
 					},
 					{
 						"group": "Coastal & Marine",
-						"pages": ["industrial-solutions/mean-sea-level-coastal-regions"]
+						"pages": [
+							"industrial-solutions/mean-sea-level-coastal-regions"
+						]
 					},
 					{
 						"group": "Transportation & Infrastructure",
@@ -255,7 +269,9 @@
 					},
 					{
 						"group": "Mining & Natural Resources",
-						"pages": ["industrial-solutions/mineral-vegetation-index-sentinel2"]
+						"pages": [
+							"industrial-solutions/mineral-vegetation-index-sentinel2"
+						]
 					}
 				]
 			}
@@ -317,7 +333,16 @@
 		]
 	},
 	"contextual": {
-		"options": ["copy", "view", "chatgpt", "claude", "perplexity", "mcp", "cursor", "vscode"]
+		"options": [
+			"copy",
+			"view",
+			"chatgpt",
+			"claude",
+			"perplexity",
+			"mcp",
+			"cursor",
+			"vscode"
+		]
 	},
 	"footer": {
 		"socials": {

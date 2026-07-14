@@ -1,0 +1,77 @@
+---
+title: "Overview"
+description: "OnlyMap JS is NIKA's declarative map library: interactive WebGL maps written as HTML custom elements, powered by deck.gl — no build step required."
+icon: "map"
+---
+
+## Overview
+
+OnlyMap JS (`@nika-js/onlymap`) turns a handful of HTML custom elements into a full interactive WebGL map. You declare layers, widgets, popups, interactions, and even guided tours as markup; the library owns rendering, data loading, live updates, picking, and validation. There is no imperative deck.gl setup, no shader code, and no build step — a single HTML file is a complete map application.
+
+It is also designed to be written **by AI agents**: HTML is a reliable generation target, the package ships an agent skill and an `llms.txt`, and `OmMap.validate()` returns structured errors with actionable fixes — a real authoring feedback loop.
+
+```html
+<om-map center="[-122.42, 37.77]" zoom="11" basemap="positron">
+  <om-layer id="quakes" type="ScatterplotLayer"
+            data="./quakes.json"
+            label="Earthquakes" color="#e63946"
+            get-position="[$lon, $lat]"
+            get-radius="scale($mag, sqrt, [2, 20], domain=[0, 8])"
+            pickable></om-layer>
+  <om-widget type="legend" position="top-right"></om-widget>
+</om-map>
+```
+
+## Install
+
+```bash
+npm install @nika-js/onlymap
+```
+
+```js
+import "@nika-js/onlymap";
+import "@nika-js/onlymap/onlymapjs.css";
+```
+
+Or with no build step at all, straight from a CDN:
+
+```html
+<script type="module" src="https://esm.sh/@nika-js/onlymap"></script>
+```
+
+Two optional setup commands complete the toolchain:
+
+- **`npx @nika-js/onlymap init`** — wires VS Code IntelliSense for every `om-*` element and attribute, plus `!`-prefixed manifest snippets (`!starter`, `!map`, …).
+- **`npx -y skills add NikaGeospatial/onlymapjs --skill onlymapjs`** — installs the OnlyMap authoring skill into coding agents (Claude Code, Cursor, Codex), so they write correct manifests on the first pass.
+
+## Key Features
+
+### Declarative Everything
+- **33 deck.gl layer types by name**: Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more — plus a built-in `PopupLayer` for WebGL labels and badges at scale.
+- **Live manifest**: the markup *is* the state. Change an attribute — from a widget, a behavior, a script, or devtools — and the map reconciles automatically.
+- **Built-in undo/redo**: layer toggles, filter changes, basemap switches, element edits, and drawn sketches are all undoable (`<om-widget type="undo-redo">`, or just Cmd/Ctrl-Z).
+
+### Data That Stays Fresh
+- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML — heavy parsers lazy-load on first use.
+- **Live sources**: WebSocket streams with upsert-by-key and burst coalescing, and polled REST snapshots via `refresh="5s"`.
+- **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of markup by design.
+
+### Application UI Without an App Framework
+- **Widgets**: legend, layer switcher, basemap switcher, zoom controls, undo/redo, scale bar, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Overlays and behaviors**: rich HTML popups anchored to map coordinates or picked features, and declarative `on="click|hover|drag|load"` interactions — no event-handler code.
+- **Map stories**: guided tours as `<om-story>` steps that fire the same actions behaviors use, with a player widget and deterministic scrubbing.
+
+### Built for Verification
+- **`OmMap.validate(html)`** returns structured errors, each with a concrete fix; a live on-page error panel is one attribute away (`validate`).
+- **Headless test harness**: `mountForTest` runs full behavioral tests (picks, widgets, overlays, real projection math) in jsdom/happy-dom with no WebGL.
+- **React adapter**: `@nika-js/onlymap/react` provides `<OmMap>`, `<OmLayer>`, `<OmWidget>`, `<OmOverlay>`, and a typed `useOmMap()` hook over the same core — React owns state, the library never fights the virtual DOM.
+
+## Roadmap
+
+Globe projection, Mapbox GL basemaps, depth-interleaved 3D compositing, vertex editing for drawn geometries, SSE transport, multi-field filters, and stories/draw as React components are designed but not yet shipped. The README's "Not implemented yet" section is kept honest release by release.
+
+## Resources
+
+- **npm**: [`@nika-js/onlymap`](https://www.npmjs.com/package/@nika-js/onlymap)
+- **GitHub (docs, examples, llms.txt)**: [NikaGeospatial/onlymapjs](https://github.com/NikaGeospatial/onlymapjs)
+- **Product page**: [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap)

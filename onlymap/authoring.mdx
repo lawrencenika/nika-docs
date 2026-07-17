@@ -8,9 +8,9 @@ icon: "code"
 
 A handful of elements, one rule: **attributes are kebab-case versions of deck.gl props** (`radius-units` → `radiusUnits`), and `get-*` attributes are data-driven accessors.
 
-- **`<om-map>`** — the root. `center`, `zoom`, `pitch`, `bearing`; `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"` — and switches live. Add `validate` for an on-page error panel while authoring.
-- **`<om-layer>`** — any registered deck.gl layer type by name. `id` is required; `label`/`color` feed the legend.
-- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `zoom-controls`, `undo-redo`, `scale-bar`, `filter`, `vega-lite`, `draw`, `player` — or your own HTML plus a `<script type="om/widget">` block.
+- **`<om-map>`** — the root. `center`, `zoom`, `pitch`, `bearing`; `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"` — and switches live. The whole 3D scene is attributes too: `terrain="terrarium"` (or a DEM tile URL) raises elevation, `lighting="daylight|studio|flat|custom"` plus `lighting-*` overrides light it. Add `validate` for an on-page error panel while authoring.
+- **`<om-layer>`** — any registered deck.gl layer type by name. `id` is required; `label`/`color` feed the legend. Under active terrain, geographic layers drape onto the surface by default (`terrain="drape|offset|off"` per layer).
+- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `filter`, `vega-lite`, `draw`, `player` — or your own HTML plus a `<script type="om/widget">` block. All built-ins are themeable via `--om-widget-*` CSS custom properties from plain page CSS.
 - **`<om-overlay>`** — rich HTML anchored to a coordinate, the current selection, or a feature's own geometry. `{{field}}` interpolates the picked feature, HTML-escaped by default.
 - **`<om-behavior>`** — declarative interactions: `on="click|hover|drag|load|data-loaded"` → a named action.
 - **`<om-story>` / `<om-step>`** — a storyboard: steps fire actions on a timeline, with play/pause/scrub via the `player` widget.
@@ -44,14 +44,32 @@ Built-ins include `scale()` (an explicit `domain=` is required), `colorRamp()`, 
 | WebSocket stream | `data="wss://feed" key="id" flush="250ms"` — upsert-by-key live entities |
 | Polled REST snapshot | `data="/api/fleet.json" refresh="5s"` |
 | Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
+| GeoTIFF / COG raster | `<om-layer type="COGLayer" src="./dem.tif" min="0" max="1900" colormap="viridis">` |
 
 Custom formats and stream decoders plug in via `OmMap.registerFormat` and `OmMap.registerSource`. Authenticated endpoints use `OmMap.configureData({ headers, credentials, fetch })` — credentials never belong in markup.
 
+Rasters are the one deliberate exception to the `data` attribute: a GeoTIFF is streamed as tiles by the layer's own reader (HTTP Range requests against a Cloud-Optimized GeoTIFF), not parsed into rows — hence `src`. Set `min`/`max` explicitly for float or 16-bit data (the default stretch is 0–255); single-band sources take a bundled `colormap` (`viridis`, `terrain`, `rdbu`, …), 3+-band sources composite as RGB with no attributes at all. Restretching and recoloring are GPU uniform updates — tiles are never refetched — and the legend renders the colormap ramp automatically.
+
 ## Interactions and State
 
-Built-in actions share one payload contract across every trigger surface (behaviors, widget `data-emit` buttons, `ctx.emit`, story steps): `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `undo`, `redo`, and more — plus `OmMap.registerAction` for your own.
+Built-in actions share one payload contract across every trigger surface (behaviors, widget `data-emit` buttons, `ctx.emit`, story steps): `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `set-lighting`, `set-terrain`, `undo`, `redo`, and more — plus `OmMap.registerAction` for your own.
 
-GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`), updates live from the `filter` widget, and widget statistics stay coherent with what the map renders. Because the manifest is the state, all of this is undoable out of the box.
+GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`), updates live from the `filter` widget, and widget statistics stay coherent with what the map renders. Because the manifest is the state, all of this is undoable out of the box — and because scene state (basemap, lighting, terrain) is attributes on `<om-map>`, story steps can change it and scrubbing restores it deterministically.
+
+## Legends That Read the Styling
+
+The legend widget derives each layer's entry from its actual symbology — write the canonical expression shapes and the legend describes itself:
+
+- `scale($f, sequential|diverging, […], domain=[a,b])` → a gradient ramp with the domain ends labeled.
+- `scale($f, threshold, […], domain=[b1, b2])` → discrete class rows (`< b1`, `b1 – b2`, `≥ b2`).
+- `$type == 'a' ? '#c1' : $type == 'b' ? '#c2' : '#fallback'` → a category palette with an "other" row.
+- A `COGLayer` with `colormap` + `min`/`max` → the colormap ramp over the rescale window.
+
+Anything else falls back to the layer's single `color` swatch. Legends update live when styling changes — an agent rewriting a color expression refreshes the legend in the same frame as the map.
+
+## Exports
+
+`map.snapshot()` (also on the React controller) resolves to a PNG data URL — or a `Blob` with `{ type: "blob" }` — of the composited basemap + WebGL canvas at device pixels. DOM widgets and overlays are not part of the capture, and provider attribution must be re-rendered by your export pipeline.
 
 ## Validate, Then Trust
 

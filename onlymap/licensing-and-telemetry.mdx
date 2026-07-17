@@ -31,6 +31,10 @@ OmMap.configureLicense("om_live_…");
 
 Keys are **publishable and origin-restricted** — they are bound to your domains and safe to include in page source, like a map-provider API key. They verify offline (no network round-trip), so they work in CI and air-gapped environments. Licensing inquiries: [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
 
+### Third-Party Software
+
+The published bundle includes open-source components (deck.gl, MapLibre GL, Apache Arrow, the GeoTIFF/raster stack, and others), each under its own permissive license (MIT, ISC, BSD, Apache-2.0). The complete inventory with full license texts ships in the package as `THIRD-PARTY-LICENSES.md` and is generated from the dependency tree on every release — those components' licenses are unaffected by OnlyMap's own terms.
+
 ## Telemetry
 
 The library reports **one deployment-scoped usage snapshot per map, per page load** (layer types and counts, widget types, renderer, library version, page hostname) and **errors caused by the library's own code** — never your page scripts — to a NIKA-operated first-party endpoint. The full payload schema is publicly documented in the package's `docs/telemetry.md`.

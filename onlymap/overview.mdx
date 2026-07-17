@@ -47,24 +47,33 @@ Two optional setup commands complete the toolchain:
 ## Key Features
 
 ### Declarative Everything
-- **33 deck.gl layer types by name**: Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more — plus a built-in `PopupLayer` for WebGL labels and badges at scale.
+- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, …) plus a built-in `PopupLayer` for WebGL labels at scale and a native `COGLayer` for GeoTIFF rasters.
 - **Live manifest**: the markup *is* the state. Change an attribute — from a widget, a behavior, a script, or devtools — and the map reconciles automatically.
 - **Built-in undo/redo**: layer toggles, filter changes, basemap switches, element edits, and drawn sketches are all undoable (`<om-widget type="undo-redo">`, or just Cmd/Ctrl-Z).
 
+### A Full 3D Scene, Still Just Attributes <sup>new in 0.3</sup>
+- **Terrain**: `terrain="terrarium"` raises real elevation with zero configuration (keyless AWS tiles); geographic layers drape onto the surface automatically. Bring your own DEM tile URL or register presets.
+- **Scene lighting**: `lighting="daylight|studio|flat|custom"` plus fine-grained `lighting-*` overrides — or `lighting-sun-date` to compute the sun's position from a real date and the map's location. A native `lighting` widget exposes it all as presets and sliders.
+- **Snapshots**: `map.snapshot()` captures the composited basemap + WebGL canvas to a PNG data URL or Blob — the seam for print/export pipelines.
+
 ### Data That Stays Fresh
 - **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML — heavy parsers lazy-load on first use.
+- **GeoTIFF / Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request; min/max restretch and colormap swaps are GPU uniforms (no refetch), nodata renders transparent.
 - **Live sources**: WebSocket streams with upsert-by-key and burst coalescing, and polled REST snapshots via `refresh="5s"`.
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of markup by design.
 
 ### Application UI Without an App Framework
-- **Widgets**: legend, layer switcher, basemap switcher, zoom controls, undo/redo, scale bar, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Widgets**: legend, layer switcher, basemap switcher, lighting controls, zoom controls, undo/redo, scale bar, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Symbology-aware legends** <sup>new in 0.3</sup>: the legend reads each layer's actual color styling — continuous `scale()` ramps render as gradient bars with domain labels, threshold scales as discrete class ranges, categorical expressions as swatch palettes, raster colormaps as their ramp. No legend configuration, ever.
+- **Themeable from plain CSS**: every built-in widget reads `--om-widget-*` custom properties (`om-map { --om-widget-bg: #111827; --om-widget-fg: #f9fafb; }`) — dark-mode your map UI with one rule, no JS.
 - **Overlays and behaviors**: rich HTML popups anchored to map coordinates or picked features, and declarative `on="click|hover|drag|load"` interactions — no event-handler code.
-- **Map stories**: guided tours as `<om-story>` steps that fire the same actions behaviors use, with a player widget and deterministic scrubbing.
+- **Map stories**: guided tours as `<om-story>` steps that fire the same actions behaviors use — including basemap, lighting, and terrain changes — with a player widget and deterministic scrubbing.
 
 ### Built for Verification
 - **`OmMap.validate(html)`** returns structured errors, each with a concrete fix; a live on-page error panel is one attribute away (`validate`).
 - **Headless test harness**: `mountForTest` runs full behavioral tests (picks, widgets, overlays, real projection math) in jsdom/happy-dom with no WebGL.
 - **React adapter**: `@nika-js/onlymap/react` provides `<OmMap>`, `<OmLayer>`, `<OmWidget>`, `<OmOverlay>`, and a typed `useOmMap()` hook over the same core — React owns state, the library never fights the virtual DOM.
+- **Custom layer classes**: `@nika-js/onlymap/deck` re-exports the bundled deck.gl class surface, so `OmMap.registerLayer` extensions share the renderer's own class hierarchy — desktop apps register domain layers (local-file rasters, catalog sources) as first-class manifest types.
 
 ## Roadmap
 

@@ -31,206 +31,212 @@
 		"tabs": [
 			{
 				"tab": "Product/Features",
-				"groups": [
+				"anchors": [
 					{
-						"group": "Get Started",
-						"pages": [
-							"index"
-						]
+						"anchor": "Welcome",
+						"icon": "house",
+						"href": "/"
 					},
 					{
-						"group": "NIKA Desktop",
-						"pages": [
-							"nika-desktop/overview",
-							"nika-desktop/autonomous-analysis",
-							"nika-desktop/data-and-conversion",
-							"nika-desktop/visualizations",
-							"nika-desktop/memory-core"
-						]
-					},
-					{
-						"group": "NIKA Planet (Cloud GIS Platform)",
-						"pages": [
-							"nika-planet/overview",
-							"nika-planet/changelog",
-							"nika-planet/nika-workspace",
-							"nika-planet/nika-notebook",
-							"nika-planet/nika-hub",
-							"nika-planet/nika-map",
-							"nika-planet/nika-dbms",
-							"nika-planet/nika-flow",
-							"nika-planet/nika-workers",
-							"nika-planet/nika-labeler",
-							"nika-planet/nika-studio",
-							"nika-planet/nika-dashboard"
-						]
-					},
-					{
-						"group": "NIKA Mobile",
-						"pages": [
-							"nika-mobile/overview",
-							"nika-mobile/nika-mobile-chat",
-							"nika-mobile/nika-mobile-team-maps",
-							"nika-mobile/nika-mobile-survey"
-						]
-					},
-					{
-						"group": "NIKA GeoEngine (Deployment CLI)",
-						"pages": [
-							"nika-geoengine/overview",
-							"nika-geoengine/arcgis",
-							"nika-geoengine/qgis",
-							"nika-geoengine/releases"
-						]
-					},
-					{
-						"group": "OnlyMap JS (Map Library)",
-						"pages": [
-							"onlymap/overview",
-							"onlymap/authoring",
-							"onlymap/licensing-and-telemetry"
+						"anchor": "Product Features",
+						"groups": [
+							{
+								"group": "NIKA Desktop",
+								"pages": [
+									"nika-desktop/overview",
+									"nika-desktop/autonomous-analysis",
+									"nika-desktop/data-and-conversion",
+									"nika-desktop/visualizations",
+									"nika-desktop/memory-core"
+								]
+							},
+							{
+								"group": "NIKA Planet (Cloud GIS Platform)",
+								"pages": [
+									"nika-planet/overview",
+									"nika-planet/changelog",
+									{
+										"group": "NikaWorkspace",
+										"root": "nika-planet/nika-workspace",
+										"expanded": false,
+										"pages": [
+											"guides/tutorials/getting-started-with-nikaworkspace",
+											"guides/access-control/invite-to-team",
+											"guides/access-control/invite-to-workspace",
+											"guides/manage-file-lake-per-workspace/upload-files-and-folders",
+											"guides/manage-file-lake-per-workspace/organize-files-and-folders",
+											"guides/manage-file-lake-per-workspace/download-files-and-folders",
+											"guides/manage-file-lake-per-workspace/monitor-file-storage",
+											"guides/best-practices/best-practices",
+											"guides/best-practices/performance",
+											"guides/best-practices/security"
+										]
+									},
+									{
+										"group": "NikaNotebook",
+										"root": "nika-planet/nika-notebook",
+										"expanded": false,
+										"pages": [
+											"guides/tutorials/geospatial-analysis",
+											"guides/data-analysis/create-your-first-notebook",
+											"guides/data-analysis/start-machine",
+											"guides/data-analysis/run-code-in-notebook",
+											"guides/data-analysis/ai-coding-in-notebook",
+											"guides/data-analysis/gdal-cuda-installation",
+											"guides/data-analysis/supported-python-libraries",
+											"guides/data-analysis/publish-notebook",
+											"guides/code-cloud-delegation/python-sdk"
+										]
+									},
+									"nika-planet/nika-hub",
+									{
+										"group": "NikaMap",
+										"root": "nika-planet/nika-map",
+										"expanded": false,
+										"pages": [
+											"guides/tutorials/map-visualization",
+											"guides/become-map-expert/create-your-first-map",
+											"guides/become-map-expert/add-layers-to-map",
+											"guides/become-map-expert/vector-styling",
+											"guides/become-map-expert/raster-styling",
+											"guides/become-map-expert/modify-legend",
+											"guides/become-map-expert/collaborative-mapping",
+											"guides/become-map-expert/change-base-map",
+											"guides/become-map-expert/sync-multiple-maps",
+											"guides/become-map-expert/set-initial-view",
+											"guides/become-map-expert/publish-map"
+										]
+									},
+									{
+										"group": "NikaDBMS",
+										"root": "nika-planet/nika-dbms",
+										"expanded": false,
+										"pages": [
+											"guides/database-management/create-managed-duckdb",
+											"guides/database-management/connect-postgres",
+											"guides/database-management/connect-motherduck",
+											"guides/database-management/query-managed-duckdb"
+										]
+									},
+									{
+										"group": "NikaFlow",
+										"root": "nika-planet/nika-flow",
+										"expanded": false,
+										"pages": [
+											"guides/data-conversion-pipeline/create-new-flow",
+											"guides/data-conversion-pipeline/edit-conversion-flow",
+											"guides/data-conversion-pipeline/execute-and-verify-pipeline"
+										]
+									},
+									"nika-planet/nika-workers",
+									{
+										"group": "NikaLabeler",
+										"root": "nika-planet/nika-labeler",
+										"expanded": false,
+										"pages": [
+											"guides/image-labeling/create-labeling-job",
+											"guides/image-labeling/assign-labeling-job",
+											"guides/image-labeling/edit-labeling-classes",
+											"guides/image-labeling/import-export-formats",
+											"guides/image-labeling/label-on-images",
+											"guides/image-labeling/review-existing-annotations"
+										]
+									},
+									{
+										"group": "NikaStudio",
+										"root": "nika-planet/nika-studio",
+										"expanded": false,
+										"pages": [
+											"guides/tutorials/building-first-app"
+										]
+									},
+									"nika-planet/nika-dashboard"
+								]
+							},
+							{
+								"group": "NIKA Mobile",
+								"pages": [
+									"nika-mobile/overview",
+									"nika-mobile/nika-mobile-chat",
+									"nika-mobile/nika-mobile-team-maps",
+									{
+										"group": "Field Survey",
+										"root": "nika-mobile/nika-mobile-survey",
+										"expanded": false,
+										"pages": [
+											"guides/field-survey/ai-audio-gps"
+										]
+									}
+								]
+							}
 						]
 					}
 				]
 			},
 			{
-				"tab": "Step-by-Step Guides",
-				"groups": [
+				"tab": "Developer Platform",
+				"anchors": [
 					{
-						"group": "Tutorials",
-						"icon": "rocket",
-						"pages": [
-							"guides/tutorials/getting-started-with-nikaworkspace",
-							"guides/tutorials/building-first-app",
-							"guides/tutorials/geospatial-analysis",
-							"guides/tutorials/map-visualization"
-						]
+						"anchor": "Welcome",
+						"icon": "house",
+						"href": "/developer-platform/overview"
 					},
 					{
-						"group": "Access Control",
-						"icon": "shield",
-						"pages": [
-							"guides/access-control/invite-to-team",
-							"guides/access-control/invite-to-workspace"
-						]
-					},
-					{
-						"group": "File Storage",
-						"icon": "folder",
-						"pages": [
-							"guides/manage-file-lake-per-workspace/upload-files-and-folders",
-							"guides/manage-file-lake-per-workspace/organize-files-and-folders",
-							"guides/manage-file-lake-per-workspace/download-files-and-folders",
-							"guides/manage-file-lake-per-workspace/monitor-file-storage"
-						]
-					},
-					{
-						"group": "Map Visualization",
-						"icon": "map",
-						"pages": [
-							"guides/become-map-expert/create-your-first-map",
-							"guides/become-map-expert/add-layers-to-map",
-							"guides/become-map-expert/vector-styling",
-							"guides/become-map-expert/raster-styling",
-							"guides/become-map-expert/modify-legend",
-							"guides/become-map-expert/collaborative-mapping",
-							"guides/become-map-expert/change-base-map",
-							"guides/become-map-expert/sync-multiple-maps",
-							"guides/become-map-expert/set-initial-view",
-							"guides/become-map-expert/publish-map"
-						]
-					},
-					{
-						"group": "Geospatial AI & ML Basics",
-						"icon": "code",
-						"pages": [
-							"guides/data-analysis/create-your-first-notebook",
-							"guides/data-analysis/start-machine",
-							"guides/data-analysis/run-code-in-notebook",
-							"guides/data-analysis/ai-coding-in-notebook",
-							"guides/data-analysis/gdal-cuda-installation",
-							"guides/data-analysis/supported-python-libraries",
-							"guides/data-analysis/publish-notebook"
-						]
-					},
-					{
-						"group": "Distributed ML & ETL",
-						"icon": "cloud",
-						"pages": [
-							"guides/code-cloud-delegation/python-sdk"
-						]
-					},
-					{
-						"group": "Database Management",
-						"icon": "database",
-						"pages": [
-							"guides/database-management/create-managed-duckdb",
-							"guides/database-management/connect-postgres",
-							"guides/database-management/connect-motherduck",
-							"guides/database-management/query-managed-duckdb"
-						]
-					},
-					{
-						"group": "Data Conversion Pipeline",
-						"icon": "water",
-						"pages": [
-							"guides/data-conversion-pipeline/create-new-flow",
-							"guides/data-conversion-pipeline/edit-conversion-flow",
-							"guides/data-conversion-pipeline/execute-and-verify-pipeline"
-						]
-					},
-					{
-						"group": "Image Labeling",
-						"icon": "tag",
-						"pages": [
-							"guides/image-labeling/create-labeling-job",
-							"guides/image-labeling/assign-labeling-job",
-							"guides/image-labeling/edit-labeling-classes",
-							"guides/image-labeling/import-export-formats",
-							"guides/image-labeling/label-on-images",
-							"guides/image-labeling/review-existing-annotations"
-						]
-					},
-					{
-						"group": "Field Survey",
-						"icon": "map-pin",
-						"pages": [
-							"guides/field-survey/ai-audio-gps"
-						]
-					},
-					{
-						"group": "Custom Geoprocess Deployment",
-						"icon": "cube",
-						"pages": [
-							"guides/custom-geoprocess-deployment/installation",
-							"guides/custom-geoprocess-deployment/step-by-step",
-							"guides/custom-geoprocess-deployment/ai-coder-worker",
-							"guides/custom-geoprocess-deployment/running-in-gis",
-							"guides/custom-geoprocess-deployment/test-designing",
-							"guides/custom-geoprocess-deployment/maintenance",
-							"guides/custom-geoprocess-deployment/versioning",
-							"guides/custom-geoprocess-deployment/debugging",
-							"guides/custom-geoprocess-deployment/cloud-push",
-							"guides/custom-geoprocess-deployment/worker-collaboration",
-							"guides/custom-geoprocess-deployment/cli-reference"
-						]
-					},
-					{
-						"group": "Custom Geoprocess Usage",
-						"icon": "plug",
-						"pages": [
-							"guides/custom-geoprocess-usage/setup-plugin-in-gis",
-							"guides/custom-geoprocess-usage/submitting-a-job",
-							"guides/custom-geoprocess-usage/access-job-outputs"
-						]
-					},
-					{
-						"group": "Best Practices",
-						"icon": "check",
-						"pages": [
-							"guides/best-practices/best-practices",
-							"guides/best-practices/performance",
-							"guides/best-practices/security"
+						"anchor": "Developer Tools",
+						"groups": [
+							{
+								"group": "OnlyMap JS",
+								"icon": "map",
+								"pages": [
+									"onlymap/overview",
+									"onlymap/authoring",
+									"onlymap/licensing-and-telemetry"
+								]
+							},
+							{
+								"group": "NIKA GeoEngine",
+								"icon": "cube",
+								"pages": [
+									"nika-geoengine/overview",
+									{
+										"group": "Start Here",
+										"pages": [
+											"guides/custom-geoprocess-deployment/installation",
+											"guides/custom-geoprocess-deployment/step-by-step",
+											"guides/custom-geoprocess-deployment/ai-coder-worker"
+										]
+									},
+									{
+										"group": "Build & Release",
+										"pages": [
+											"guides/custom-geoprocess-deployment/test-designing",
+											"guides/custom-geoprocess-deployment/versioning",
+											"guides/custom-geoprocess-deployment/cloud-push",
+											"guides/custom-geoprocess-deployment/worker-collaboration"
+										]
+									},
+									{
+										"group": "Run in GIS",
+										"pages": [
+											"guides/custom-geoprocess-deployment/running-in-gis",
+											"guides/custom-geoprocess-usage/setup-plugin-in-gis",
+											"guides/custom-geoprocess-usage/submitting-a-job",
+											"guides/custom-geoprocess-usage/access-job-outputs",
+											"nika-geoengine/qgis",
+											"nika-geoengine/arcgis"
+										]
+									},
+									{
+										"group": "Maintain & Reference",
+										"pages": [
+											"guides/custom-geoprocess-deployment/debugging",
+											"guides/custom-geoprocess-deployment/maintenance",
+											"guides/custom-geoprocess-deployment/cli-reference",
+											"nika-geoengine/releases"
+										]
+									}
+								]
+							}
 						]
 					}
 				]
@@ -279,11 +285,6 @@
 		"global": {
 			"anchors": [
 				{
-					"anchor": "About Us",
-					"href": "https://nikaplanet.com",
-					"icon": "globe"
-				},
-				{
 					"anchor": "Pricing",
 					"href": "https://www.nikaplanet.com/pricing"
 				},
@@ -301,10 +302,6 @@
 	},
 	"navbar": {
 		"links": [
-			{
-				"label": "About Us",
-				"href": "https://nikaplanet.com"
-			},
 			{
 				"label": "Pricing",
 				"href": "https://www.nikaplanet.com/pricing"

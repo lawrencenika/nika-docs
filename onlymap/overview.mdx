@@ -6,9 +6,9 @@ icon: "map"
 
 ## Overview
 
-OnlyMap JS (`@nika-js/onlymap`) turns a handful of HTML custom elements into a full interactive WebGL map. You declare layers, widgets, popups, interactions, and even guided tours as markup; the library owns rendering, data loading, live updates, picking, and validation. There is no imperative deck.gl setup, no shader code, and no build step — a single HTML file is a complete map application.
+OnlyMap JS (`@nika-js/onlymap`) builds an interactive WebGL map from a small set of HTML custom elements. You write the layers, widgets, popups, interactions, and guided tours as markup. The library does the rendering, the data loading, the live updates, the picking, and the validation. You do not write deck.gl setup code, shader code, or a build step. One HTML file is a complete map application.
 
-It is also designed to be written **by AI agents**: HTML is a reliable generation target, the package ships an agent skill and an `llms.txt`, and `OmMap.validate()` returns structured errors with actionable fixes — a real authoring feedback loop.
+OnlyMap JS is also made for AI agents to write. HTML is a reliable output format for a model. The package includes an agent skill and an `llms.txt` file. `OmMap.validate()` returns structured errors, and each error has a fix. Together these give an agent a real authoring loop.
 
 ```html
 <om-map center="[-122.42, 37.77]" zoom="11" basemap="positron">
@@ -24,67 +24,71 @@ It is also designed to be written **by AI agents**: HTML is a reliable generatio
 
 ## Install
 
+Install the package from npm:
+
 ```bash
 npm install @nika-js/onlymap
 ```
+
+Import the library and its stylesheet:
 
 ```js
 import "@nika-js/onlymap";
 import "@nika-js/onlymap/onlymapjs.css";
 ```
 
-Or with no build step at all, straight from a CDN:
+You can also load it from a CDN with no build step:
 
 ```html
 <script type="module" src="https://esm.sh/@nika-js/onlymap"></script>
 ```
 
-Two optional setup commands complete the toolchain:
+Two optional commands complete the setup:
 
-- **`npx @nika-js/onlymap init`** — wires VS Code IntelliSense for every `om-*` element and attribute, plus `!`-prefixed manifest snippets (`!starter`, `!map`, …).
-- **`npx -y skills add NikaGeospatial/onlymapjs --skill onlymapjs`** — installs the OnlyMap authoring skill into coding agents (Claude Code, Cursor, Codex), so they write correct manifests on the first pass.
+- **`npx @nika-js/onlymap init`** — adds VS Code IntelliSense for every `om-*` element and attribute. It also adds `!`-prefix snippets (`!starter`, `!map`, …).
+- **`npx -y skills add NikaGeospatial/onlymapjs --skill onlymapjs`** — installs the OnlyMap authoring skill into coding agents (Claude Code, Cursor, Codex). The agents then write correct manifests on the first try.
 
 ## Key Features
 
 ### Declarative Everything
-- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, …) plus a built-in `PopupLayer` for WebGL labels at scale and a native `COGLayer` for GeoTIFF rasters.
-- **Live manifest**: the markup *is* the state. Change an attribute — from a widget, a behavior, a script, or devtools — and the map reconciles automatically.
-- **Built-in undo/redo**: layer toggles, filter changes, basemap switches, element edits, and drawn sketches are all undoable (`<om-widget type="undo-redo">`, or just Cmd/Ctrl-Z).
+- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, and a native `COGLayer` for GeoTIFF rasters.
+- **Live manifest**: the markup is the state. When you change an attribute — from a widget, a behavior, a script, or devtools — the map updates automatically.
+- **Built-in undo and redo**: you can undo a layer toggle, a filter change, a basemap switch, an element edit, or a drawn sketch. Use `<om-widget type="undo-redo">` or Cmd/Ctrl-Z.
 
 ### A Full 3D Scene, Still Just Attributes <sup>new in 0.3</sup>
-- **Terrain**: `terrain="terrarium"` raises real elevation with zero configuration (keyless AWS tiles); geographic layers drape onto the surface automatically. Bring your own DEM tile URL or register presets.
-- **Scene lighting**: `lighting="daylight|studio|flat|custom"` plus fine-grained `lighting-*` overrides — or `lighting-sun-date` to compute the sun's position from a real date and the map's location. A native `lighting` widget exposes it all as presets and sliders.
-- **Snapshots**: `map.snapshot()` captures the composited basemap + WebGL canvas to a PNG data URL or Blob — the seam for print/export pipelines.
+- **Terrain**: `terrain="terrarium"` adds real elevation with no configuration (keyless AWS tiles). Geographic layers drape onto the surface automatically. You can also give your own DEM tile URL or register presets.
+- **Scene lighting**: set `lighting="daylight|studio|flat|custom"`, with `lighting-*` attributes for fine control. `lighting-sun-date` computes the sun position from a date and the map location. A `lighting` widget shows these as presets and sliders.
+- **Snapshots**: `map.snapshot()` captures the basemap and the WebGL canvas together, as a PNG data URL or a Blob. Use it for print and export pipelines.
 
 ### Data That Stays Fresh
-- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML — heavy parsers lazy-load on first use.
-- **GeoTIFF / Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request; min/max restretch and colormap swaps are GPU uniforms (no refetch), nodata renders transparent.
-- **Live sources**: WebSocket streams with upsert-by-key and burst coalescing, and polled REST snapshots via `refresh="5s"`.
-- **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of markup by design.
+- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, and KML. Large parsers load on first use.
+- **GeoTIFF and Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request. The min/max restretch and the colormap are GPU uniforms, so the tiles are not fetched again. Nodata pixels are transparent.
+- **Live sources**: WebSocket streams with upsert-by-key and burst coalescing. Polled REST snapshots with `refresh="5s"`.
+- **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of the markup.
 
 ### Application UI Without an App Framework
-- **Widgets**: legend, layer switcher, basemap switcher, lighting controls, zoom controls, undo/redo, scale bar, attribution, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Widgets**: legend, layer switcher, basemap switcher, lighting controls, zoom controls, undo/redo, scale bar, attribution, GPU filter sliders, live Vega-Lite charts, and a drawing toolbar. You can also write custom widgets with a typed context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
 - **Managed, adaptive layout** <sup>new in 0.4</sup>: `position` puts a widget in one of 8 logical slots (`top-start` … `bottom-end`), and the library sets the pixel position. Widgets in the same slot stack with a shared gap, and small controls next to each other join into one group. The map attribution and the license badge sit in the bottom slots as normal members, so they do not cover a widget. On narrow maps (640px or less by default; change it with `--om-widget-fold-breakpoint`) the widgets fold into drawers, and a slot dims when an open popup covers it. `<om-map widgets-hidden>` hides all your widgets but keeps them in the page, and `position="manual"` turns off management for one widget.
-- **Symbology-aware legends** <sup>new in 0.3</sup>: the legend reads each layer's actual color styling — continuous `scale()` ramps render as gradient bars with domain labels, threshold scales as discrete class ranges, categorical expressions as swatch palettes, raster colormaps as their ramp. No legend configuration, ever.
-- **Themeable from plain CSS**: every built-in widget reads `--om-widget-*` custom properties (`om-map { --om-widget-bg: #111827; --om-widget-fg: #f9fafb; }`) — dark-mode your map UI with one rule, no JS.
-- **Overlays and behaviors**: rich HTML popups anchored to map coordinates or picked features, and declarative `on="click|hover|drag|load"` interactions — no event-handler code.
-- **Map stories**: guided tours as `<om-story>` steps that fire the same actions behaviors use — including basemap, lighting, and terrain changes — with a player widget and deterministic scrubbing.
+- **Symbology-aware legends** <sup>new in 0.3</sup>: the legend uses each layer's real color styling. A continuous `scale()` ramp becomes a gradient bar with domain labels. A threshold scale becomes discrete class ranges. A categorical expression becomes a swatch palette. A raster colormap becomes its ramp. You do not configure the legend.
+- **Themeable from plain CSS**: each built-in widget reads `--om-widget-*` custom properties (`om-map { --om-widget-bg: #111827; --om-widget-fg: #f9fafb; }`). You can set a dark theme with one CSS rule and no JavaScript.
+- **Overlays and behaviors**: HTML popups anchor to map coordinates or to a picked feature. Declarative `on="click|hover|drag|load"` interactions need no event-handler code.
+- **Map stories**: an `<om-story>` has steps that fire the same actions as behaviors, including basemap, lighting, and terrain changes. A player widget plays the steps, and you can scrub to any step.
 
 ### Built for Verification
-- **`OmMap.validate(html)`** returns structured errors, each with a concrete fix; a live on-page error panel is one attribute away (`validate`).
-- **Headless test harness**: `mountForTest` runs full behavioral tests (picks, widgets, overlays, real projection math) in jsdom/happy-dom with no WebGL.
-- **Layout, checked like types** <sup>new in 0.4</sup>: `npx @nika-js/onlymap check-layout <manifest.html>` audits a page's real rendered widget layout in headless Chromium across a viewport-width sweep — no widgets overlap, each is hit-testable and in its slot, same-slot edges are flush — emitting structured `{severity, element, message, fix}` diagnostics and exiting 0/1. The same audit is importable as `auditLayout(page)` for your own Playwright suite.
-- **React adapter**: `@nika-js/onlymap/react` provides `<OmMap>`, `<OmLayer>`, `<OmWidget>`, `<OmOverlay>`, and a typed `useOmMap()` hook over the same core — React owns state, the library never fights the virtual DOM.
-- **Custom layer classes**: `@nika-js/onlymap/deck` re-exports the bundled deck.gl class surface, so `OmMap.registerLayer` extensions share the renderer's own class hierarchy — desktop apps register domain layers (local-file rasters, catalog sources) as first-class manifest types.
+- **`OmMap.validate(html)`** returns structured errors, and each error has a fix. Add the `validate` attribute for a live error panel on the page.
+- **Headless test harness**: `mountForTest` runs full behavioral tests (picks, widgets, overlays, real projection math) in jsdom or happy-dom, with no WebGL.
+- **Layout audit** <sup>new in 0.4</sup>: `npx @nika-js/onlymap check-layout <manifest.html>` checks the real widget layout in headless Chromium at several viewport widths. It confirms that no widgets overlap, that each widget is hit-testable and in its slot, and that same-slot edges align. It prints structured `{severity, element, message, fix}` diagnostics and exits 0 or 1. You can also import `auditLayout(page)` into your own Playwright suite.
+- **React adapter**: `@nika-js/onlymap/react` gives `<OmMap>`, `<OmLayer>`, `<OmWidget>`, `<OmOverlay>`, and a typed `useOmMap()` hook over the same core. React keeps the state, and the adapter does not conflict with the virtual DOM.
+- **Custom layer classes**: `@nika-js/onlymap/deck` re-exports the bundled deck.gl classes. `OmMap.registerLayer` extensions use the renderer's own class hierarchy. A desktop app can register domain layers (local-file rasters, catalog sources) as first-class manifest types.
 
 ### Framework & Programmatic Integration <sup>new in 0.4</sup>
-- **`MapController`**: a framework-grade programmatic front-end — typed `LayerDescriptor`s drive the same reconcile core with no DOM manifest, plus camera methods, `emit`, `injectPick`, `snapshot`, and `onViewChange`/`onMapPoint`/`onTilesetLoad` callbacks.
-- **External-store contract**: `getStore(token)` exposes per-token `{subscribe, getSnapshot}` stores (`viewport`, `selection`, `layers`, `data:<id>`) with cached immutable snapshots and `origin` tagging — directly consumable by React's `useSyncExternalStore`, MobX, Redux, or Zustand.
-- **Consumer events**: beyond `om-view-changed` (camera settled), `om-map-point` surfaces every click/hover map coordinate (the hook for custom capture tools the draw widget doesn't cover) and `om-tileset-load` surfaces a `Tile3DLayer`'s live `Tileset3D` for tools like region export.
+- **`MapController`**: a programmatic front-end for frameworks. Typed `LayerDescriptor`s drive the same reconcile core, with no DOM manifest. It adds camera methods, `emit`, `injectPick`, `snapshot`, and `onViewChange`/`onMapPoint`/`onTilesetLoad` callbacks.
+- **External-store contract**: `getStore(token)` gives a `{subscribe, getSnapshot}` store for each token (`viewport`, `selection`, `layers`, `data:<id>`). The snapshots are cached, immutable, and tagged with an `origin`. You can use them directly with React's `useSyncExternalStore`, MobX, Redux, or Zustand.
+- **Consumer events**: `om-view-changed` fires when the camera settles. `om-map-point` fires on each click or hover with the map coordinate — use it for custom capture tools that the draw widget does not cover. `om-tileset-load` gives a `Tile3DLayer`'s live `Tileset3D`, for tools such as region export.
 
 ## Roadmap
 
-Mapbox GL basemaps, depth-interleaved 3D compositing, globe projection, SSE transport, multi-field filters, `dblclick` behaviors, the `transform` data pipeline, the typed fluent builder, and stories/draw as React components are designed but not yet shipped. The README's "Not implemented yet" section is kept honest release by release.
+These features are designed but not shipped yet: Mapbox GL basemaps, depth-interleaved 3D compositing, globe projection, SSE transport, multi-field filters, `dblclick` behaviors, the `transform` data pipeline, the typed fluent builder, and stories and draw as React components. The README lists the current state in its "Not implemented yet" section at each release.
 
 ## Resources
 

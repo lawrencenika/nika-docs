@@ -6,16 +6,16 @@ icon: "scale-balanced"
 
 ## Licensing
 
-OnlyMap JS is proprietary software that is **free for non-commercial use with attribution** — personal projects, education, academic research, and evaluation. Commercial use (for-profit products and internal tools, revenue-generating services, paid consulting, government work) requires a commercial license. The authoritative terms are in the package's `LICENSE.md`.
+OnlyMap JS is proprietary software. It is **free for non-commercial use with attribution** — personal projects, education, academic research, and evaluation. Commercial use needs a commercial license. Commercial use includes for-profit products, internal tools, revenue-generating services, paid consulting, and government work. The full terms are in the package's `LICENSE.md`.
 
 ### The Free Plan
 
-Without a license key, maps run on the free plan:
+Without a license key, a map runs on the free plan:
 
-- **Up to 5 layers** per map and **25,000 rows per layer** (20 MB per data fetch).
-- A small **"OnlyMap by NIKA. Free for non-commercial use."** badge renders on the map. Keeping it visible is a condition of the free non-commercial grant.
-- Exceeding a limit never breaks the map — the offending layer simply doesn't render, and the validation stream names the exact limit and how to lift it.
-- Limits apply identically everywhere, including localhost, so development behavior always matches production.
+- Up to **5 layers** per map, and **25,000 rows per layer** (20 MB per data fetch).
+- A small badge shows on the map: **"OnlyMap by NIKA. Free for non-commercial use."** You must keep the badge visible. This is a condition of the free non-commercial grant.
+- A limit never breaks the map. The layer over the limit does not render, and the validation stream names the exact limit and how to lift it.
+- The limits are the same everywhere, including localhost. Development behavior always matches production.
 
 ### License Keys
 
@@ -29,17 +29,17 @@ A license key lifts all limits and removes the badge:
 OmMap.configureLicense("om_live_…");
 ```
 
-Keys are **publishable and origin-restricted** — they are bound to your domains and safe to include in page source, like a map-provider API key. They verify offline (no network round-trip), so they work in CI and air-gapped environments. Licensing inquiries: [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
+A key is **publishable and origin-restricted**. It is bound to your domains, so it is safe to put in the page source, like a map-provider API key. It verifies offline, with no network round-trip, so it works in CI and in air-gapped environments. For licensing questions, see [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
 
 ### Third-Party Software
 
-The published bundle includes open-source components (deck.gl, MapLibre GL, Apache Arrow, the GeoTIFF/raster stack, and others), each under its own permissive license (MIT, ISC, BSD, Apache-2.0). The complete inventory with full license texts ships in the package as `THIRD-PARTY-LICENSES.md` and is generated from the dependency tree on every release — those components' licenses are unaffected by OnlyMap's own terms.
+The published bundle includes open-source components (deck.gl, MapLibre GL, Apache Arrow, the GeoTIFF/raster stack, and others). Each component keeps its own permissive license (MIT, ISC, BSD, Apache-2.0). The full list, with the license texts, ships in the package as `THIRD-PARTY-LICENSES.md`. The library generates this list from the dependency tree at each release. OnlyMap's own terms do not change those licenses.
 
 ## Telemetry
 
-The library reports **one deployment-scoped usage snapshot per map, per page load** (layer types and counts, widget types, renderer, library version, page hostname) and **errors caused by the library's own code** — never your page scripts — to a NIKA-operated first-party endpoint. The full payload schema is publicly documented in the package's `docs/telemetry.md`.
+The library reports **one deployment-scoped usage snapshot per map, per page load**. The snapshot holds the layer types and counts, the widget types, the renderer, the library version, and the page hostname. The library also reports **errors from its own code** — never from your page scripts. Both go to a NIKA-operated first-party endpoint. The full payload schema is in the package's `docs/telemetry.md`.
 
-What is **never** collected: page paths or URLs, your data or its contents, coordinates, cookies, or any persistent visitor identifier. Test suites stay silent — `headless` maps never report.
+The library **never** collects page paths or URLs, your data or its contents, coordinates, cookies, or any persistent visitor identifier. A test suite stays silent, because a `headless` map never reports.
 
 ### Opting Out
 
@@ -53,10 +53,10 @@ OmMap.configureTelemetry({ disabled: true });   // global — usage snapshots AN
 
 ### `map-id`
 
-An optional authored attribute that identifies the **map artifact** (not the visitor) so usage can distinguish one popular dashboard from many different maps:
+`map-id` is an optional attribute. It identifies the **map artifact**, not the visitor. Usage can then tell one popular dashboard from many different maps:
 
 ```html
 <om-map map-id="0f2c6a1e-88f7-4c3e-9d41-7b1f3f9f2ab7">
 ```
 
-It is author-controlled page metadata — nothing is stored on the visitor's device. Delete or change it at any time; it is never required.
+It is author-controlled page metadata. Nothing is stored on the visitor's device. You can change or delete it at any time. It is never required.

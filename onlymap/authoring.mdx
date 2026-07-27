@@ -6,17 +6,17 @@ icon: "code"
 
 ## The Manifest
 
-A handful of elements, one rule: **attributes are kebab-case versions of deck.gl props** (`radius-units` → `radiusUnits`), and `get-*` attributes are data-driven accessors.
+A small set of elements follows one rule. An attribute is the kebab-case form of a deck.gl prop (`radius-units` → `radiusUnits`). A `get-*` attribute is a data-driven accessor.
 
-- **`<om-map>`** — the root. `center`, `zoom`, `pitch`, `bearing`; `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"` — and switches live. The whole 3D scene is attributes too: `terrain="terrarium"` (or a DEM tile URL) raises elevation, `lighting="daylight|studio|flat|custom"` plus `lighting-*` overrides light it. Add `validate` for an on-page error panel while authoring.
-- **`<om-layer>`** — any registered deck.gl layer type by name. `id` is required; `label`/`color` feed the legend. Under active terrain, geographic layers drape onto the surface by default (`terrain="drape|offset|off"` per layer).
-- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `attribution`, `filter`, `vega-lite`, `draw`, `player`, `widgets-toggle` — or your own HTML plus a `<script type="om/widget">` block. All built-ins are themeable via `--om-widget-*` CSS custom properties from plain page CSS. Placement is **managed** (see below).
-- **`<om-overlay>`** — rich HTML anchored to a coordinate, the current selection, or a feature's own geometry. `{{field}}` interpolates the picked feature, HTML-escaped by default.
-- **`<om-behavior>`** — declarative interactions: `on="click|hover|drag|load|data-loaded"` → a named action.
-- **`<om-story>` / `<om-step>`** — a storyboard: steps fire actions on a timeline, with play/pause/scrub via the `player` widget.
-- **`<om-fallback>`** — what renders where scripts never run (chat-app and email file previews); hidden automatically once the map boots.
+- **`<om-map>`** — the root element. It takes `center`, `zoom`, `pitch`, and `bearing`. `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"`, and it switches live. The 3D scene is also attributes: `terrain="terrarium"` (or a DEM tile URL) adds elevation, and `lighting="daylight|studio|flat|custom"` with `lighting-*` attributes lights it. Add `validate` for an error panel on the page while you author.
+- **`<om-layer>`** — any registered deck.gl layer type, by name. `id` is required. `label` and `color` feed the legend. Under active terrain, a geographic layer drapes onto the surface by default (set `terrain="drape|offset|off"` per layer).
+- **`<om-widget>`** — a UI panel: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `attribution`, `filter`, `vega-lite`, `draw`, `player`, `widgets-toggle` — or your own HTML with a `<script type="om/widget">` block. You can theme every built-in widget with `--om-widget-*` CSS custom properties from plain page CSS. The library manages placement (see below).
+- **`<om-overlay>`** — HTML anchored to a coordinate, the current selection, or a feature's geometry. `{{field}}` inserts a value from the picked feature, HTML-escaped by default.
+- **`<om-behavior>`** — a declarative interaction: `on="click|hover|drag|load|data-loaded"` runs a named action.
+- **`<om-story>` / `<om-step>`** — a storyboard. Each step fires actions on a timeline. The `player` widget plays, pauses, and scrubs it.
+- **`<om-fallback>`** — content that shows where scripts do not run (chat-app and email file previews). The library hides it after the map starts.
 
-Always write explicit closing tags (`<om-layer …></om-layer>` — never self-close a custom element), and give every layer a stable `id`.
+Always write explicit closing tags (`<om-layer …></om-layer>`). Do not self-close a custom element. Give every layer a stable `id`.
 
 ## Widget Placement & Adaptive Layout
 
@@ -34,7 +34,7 @@ You can also set colors (`--om-widget-bg`, `-fg`, `-muted`, `-border`, `-hover-b
 
 ## Accessors Without JavaScript
 
-`get-*` attributes take a small, safe expression language. `$field` reads a datum field regardless of data shape — flat JSON, GeoJSON properties, or Arrow columns:
+A `get-*` attribute takes a small, safe expression language. `$field` reads a field from a datum, for any data shape — flat JSON, GeoJSON properties, or Arrow columns:
 
 ```html
 get-position="[$lon, $lat]"
@@ -43,7 +43,7 @@ get-fill-color="$value > 100 ? [255,0,0] : [0,128,255]"
 get-fill-color="scale($depth, sequential, ['#ffffcc','#800026'], domain=[0,700])"
 ```
 
-Built-ins include `scale()` (an explicit `domain=` is required), `colorRamp()`, `clamp()`, `lerp()`, and `Math.*`. The compiler is an AST whitelist, not an eval — untrusted, agent-written expressions are safe by construction. Genuinely arbitrary JavaScript requires an explicit `js` opt-in on the layer.
+The built-in functions include `scale()` (it needs an explicit `domain=`), `colorRamp()`, `clamp()`, `lerp()`, and `Math.*`. The compiler is an AST whitelist, not an eval, so untrusted, agent-written expressions are safe by design. To use arbitrary JavaScript, you must add an explicit `js` opt-in on the layer.
 
 ## Data Sources
 
@@ -60,42 +60,48 @@ Built-ins include `scale()` (an explicit `domain=` is required), `colorRamp()`, 
 | Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
 | GeoTIFF / COG raster | `<om-layer type="COGLayer" src="./dem.tif" min="0" max="1900" colormap="viridis">` |
 
-Custom formats and stream decoders plug in via `OmMap.registerFormat` and `OmMap.registerSource`. Authenticated endpoints use `OmMap.configureData({ headers, credentials, fetch })` — credentials never belong in markup.
+You can add custom formats and stream decoders with `OmMap.registerFormat` and `OmMap.registerSource`. For an authenticated endpoint, use `OmMap.configureData({ headers, credentials, fetch })`. Credentials do not belong in the markup.
 
-Rasters are the one deliberate exception to the `data` attribute: a GeoTIFF is streamed as tiles by the layer's own reader (HTTP Range requests against a Cloud-Optimized GeoTIFF), not parsed into rows — hence `src`. Set `min`/`max` explicitly for float or 16-bit data (the default stretch is 0–255); single-band sources take a bundled `colormap` (`viridis`, `terrain`, `rdbu`, …), 3+-band sources composite as RGB with no attributes at all. Restretching and recoloring are GPU uniform updates — tiles are never refetched — and the legend renders the colormap ramp automatically.
+A raster is the one exception to the `data` attribute. The layer's own reader streams a GeoTIFF as tiles, with HTTP Range requests against a Cloud-Optimized GeoTIFF. It does not parse the raster into rows, so you use `src`. Set `min` and `max` for float or 16-bit data; the default stretch is 0–255. A single-band source takes a bundled `colormap` (`viridis`, `terrain`, `rdbu`, …). A source with 3 or more bands composites as RGB, with no attributes. A restretch or a recolor is a GPU uniform update, so the tiles are not fetched again. The legend shows the colormap ramp automatically.
 
 ## Interactions and State
 
-Built-in actions share one payload contract across every trigger surface (behaviors, widget `data-emit` buttons, `ctx.emit`, story steps): `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `set-lighting`, `set-terrain`, `undo`, `redo`, and more — plus `OmMap.registerAction` for your own.
+Every built-in action uses one payload contract, across every trigger: behaviors, widget `data-emit` buttons, `ctx.emit`, and story steps. The actions include `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `set-lighting`, `set-terrain`, `undo`, and `redo`. Add your own with `OmMap.registerAction`.
 
-GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`), updates live from the `filter` widget, and widget statistics stay coherent with what the map renders. Because the manifest is the state, all of this is undoable out of the box — and because scene state (basemap, lighting, terrain) is attributes on `<om-map>`, story steps can change it and scrubbing restores it deterministically.
+GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`). It updates live from the `filter` widget, and the widget statistics match what the map renders. The manifest is the state, so all of this is undoable. Scene state (basemap, lighting, terrain) is attributes on `<om-map>`, so a story step can change it, and a scrub restores it exactly.
 
-For host applications wiring their own logic, `<om-map>` emits DOM events: `om-view-changed` when the camera settles (`detail` carries the camera plus an `origin` of `"user"` or `"programmatic"` for echo-suppression), `om-map-point` on every click/hover with the map coordinate (`detail = {coordinate, kind}` — including empty-map clicks picks discard, the hook for custom capture tools the draw widget doesn't cover), and `om-tileset-load` surfacing a `Tile3DLayer`'s live deck `Tileset3D` (`detail = {layerId, tileset}`) for tools like region export. Prefer state mirroring over events? `getStore(token)` gives per-token `{subscribe, getSnapshot}` stores for `viewport`, `selection`, `layers`, and `data:<id>` — drop-in for `useSyncExternalStore`, MobX, Redux, or Zustand.
+To wire your own logic, read the DOM events on `<om-map>`:
+
+- `om-view-changed` fires when the camera settles. `detail` carries the camera and an `origin` of `"user"` or `"programmatic"`. Use `origin` to suppress echoes during state sync.
+- `om-map-point` fires on each click or hover. `detail = {coordinate, kind}`, and it includes empty-map clicks that a pick discards. Use it for a custom capture tool that the draw widget does not cover.
+- `om-tileset-load` gives a `Tile3DLayer`'s live deck `Tileset3D`. `detail = {layerId, tileset}`. Use it for a tool such as region export.
+
+To mirror state instead of reading events, use `getStore(token)`. It gives a `{subscribe, getSnapshot}` store for each token: `viewport`, `selection`, `layers`, and `data:<id>`. The store works directly with `useSyncExternalStore`, MobX, Redux, or Zustand.
 
 ## Legends That Read the Styling
 
-The legend widget derives each layer's entry from its actual symbology — write the canonical expression shapes and the legend describes itself:
+The legend widget builds each entry from the layer's real symbology. Write the standard expression shapes, and the legend describes itself:
 
 - `scale($f, sequential|diverging, […], domain=[a,b])` → a gradient ramp with the domain ends labeled.
 - `scale($f, threshold, […], domain=[b1, b2])` → discrete class rows (`< b1`, `b1 – b2`, `≥ b2`).
 - `$type == 'a' ? '#c1' : $type == 'b' ? '#c2' : '#fallback'` → a category palette with an "other" row.
-- A `COGLayer` with `colormap` + `min`/`max` → the colormap ramp over the rescale window.
+- A `COGLayer` with `colormap` and `min`/`max` → the colormap ramp over the rescale window.
 
-Anything else falls back to the layer's single `color` swatch. Legends update live when styling changes — an agent rewriting a color expression refreshes the legend in the same frame as the map.
+For anything else, the legend shows the layer's single `color` swatch. The legend updates live when the styling changes. When an agent rewrites a color expression, the legend and the map refresh in the same frame.
 
 ## Exports
 
-`map.snapshot()` (also on the React controller) resolves to a PNG data URL — or a `Blob` with `{ type: "blob" }` — of the composited basemap + WebGL canvas at device pixels. DOM widgets and overlays are not part of the capture, and provider attribution must be re-rendered by your export pipeline.
+`map.snapshot()` (also on the React controller) returns a PNG data URL. Pass `{ type: "blob" }` to get a `Blob` instead. It captures the basemap and the WebGL canvas together, at device pixels. It does not capture DOM widgets or overlays. Your export pipeline must render the provider attribution itself.
 
 ## Validate, Then Trust
 
-The authoring loop the library is built around:
+Use this authoring loop:
 
-1. Write the manifest (or edit the live DOM — changes reconcile automatically).
-2. `OmMap.validate(html)` → structured errors, each with a `fix` string.
-3. `OmMap.snapshotIR(html)` → resolved layer descriptors for snapshot tests.
-4. `mountForTest(html)` → headless behavioral tests: synthetic picks ride the same selection path real GPU picks take.
-5. `npx @nika-js/onlymap check-layout <manifest.html>` → audits the real rendered widget layout in headless Chromium across a viewport-width sweep (no overlaps, everything hit-testable and in its slot), exiting 0/1 — or import `auditLayout(page)` into your own Playwright suite.
+1. Write the manifest, or edit the live DOM. Changes reconcile automatically.
+2. `OmMap.validate(html)` returns structured errors, each with a `fix` string.
+3. `OmMap.snapshotIR(html)` returns resolved layer descriptors for snapshot tests.
+4. `mountForTest(html)` runs headless behavioral tests. A synthetic pick uses the same selection path as a real GPU pick.
+5. `npx @nika-js/onlymap check-layout <manifest.html>` checks the real widget layout in headless Chromium at several viewport widths. It confirms no overlaps, and that each widget is hit-testable and in its slot. It exits 0 or 1. You can also import `auditLayout(page)` into your own Playwright suite.
 
 ```ts
 const h = await mountForTest(pageHtml);
@@ -105,4 +111,4 @@ expect(h.map.querySelector("#detail")!.shadowRoot!.textContent).toContain("M 6.1
 
 ## React Projects
 
-In React, don't render `om-*` elements from JSX — use the first-party adapter instead: `import { OmMap, OmLayer, OmWidget, OmOverlay, useOmMap } from "@nika-js/onlymap/react"`. Props are camelCase deck.gl props, accessors are plain functions, and interactions are `onClick`/`onHover` handlers — React owns state, and the adapter drives the same rendering core with no DOM contention.
+In React, do not render `om-*` elements from JSX. Use the first-party adapter: `import { OmMap, OmLayer, OmWidget, OmOverlay, useOmMap } from "@nika-js/onlymap/react"`. Props are camelCase deck.gl props. Accessors are plain functions. Interactions are `onClick` and `onHover` handlers. React keeps the state, and the adapter drives the same rendering core with no DOM conflict.

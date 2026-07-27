@@ -10,13 +10,27 @@ A handful of elements, one rule: **attributes are kebab-case versions of deck.gl
 
 - **`<om-map>`** — the root. `center`, `zoom`, `pitch`, `bearing`; `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"` — and switches live. The whole 3D scene is attributes too: `terrain="terrarium"` (or a DEM tile URL) raises elevation, `lighting="daylight|studio|flat|custom"` plus `lighting-*` overrides light it. Add `validate` for an on-page error panel while authoring.
 - **`<om-layer>`** — any registered deck.gl layer type by name. `id` is required; `label`/`color` feed the legend. Under active terrain, geographic layers drape onto the surface by default (`terrain="drape|offset|off"` per layer).
-- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `filter`, `vega-lite`, `draw`, `player` — or your own HTML plus a `<script type="om/widget">` block. All built-ins are themeable via `--om-widget-*` CSS custom properties from plain page CSS.
+- **`<om-widget>`** — UI panels: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `attribution`, `filter`, `vega-lite`, `draw`, `player`, `widgets-toggle` — or your own HTML plus a `<script type="om/widget">` block. All built-ins are themeable via `--om-widget-*` CSS custom properties from plain page CSS. Placement is **managed** (see below).
 - **`<om-overlay>`** — rich HTML anchored to a coordinate, the current selection, or a feature's own geometry. `{{field}}` interpolates the picked feature, HTML-escaped by default.
 - **`<om-behavior>`** — declarative interactions: `on="click|hover|drag|load|data-loaded"` → a named action.
 - **`<om-story>` / `<om-step>`** — a storyboard: steps fire actions on a timeline, with play/pause/scrub via the `player` widget.
 - **`<om-fallback>`** — what renders where scripts never run (chat-app and email file previews); hidden automatically once the map boots.
 
 Always write explicit closing tags (`<om-layer …></om-layer>` — never self-close a custom element), and give every layer a stable `id`.
+
+## Widget Placement & Adaptive Layout
+
+`position` takes one of 8 logical, RTL-aware slots — `top-start`, `top-center`, `top-end`, `center-start`, `center-end`, `bottom-start`, `bottom-center`, `bottom-end` (legacy corner names like `top-right` alias). The library owns the geometry, so you never hand-position chrome:
+
+- **Same-slot widgets stack** with flush edges and a shared gap; `order` sets their in-slot sequence.
+- **Adjacent compact controls auto-cluster** (`zoom-controls`, `undo-redo`, `widgets-toggle`) into one control group — opt out with `cluster="false"`.
+- **Provider attribution and the license badge are in-flow members** of `bottom-end` and `bottom-start`, so neither ever covers a widget — and exactly one attribution renders (a licensing requirement the layout enforces).
+- **Responsive folding**: at map widths ≤640px, managed widgets move into accessible top/end/bottom/start drawers. `fold="never"` keeps an essential control always visible, `widgets-fold="off"` disables folding, and `--om-widget-fold-breakpoint` changes the threshold.
+- **Collision dimming**: a slot dims automatically while an open popup covers it (`widgets-dim="off"` to disable) — except slots holding required chrome.
+- **Hide all, non-destructively**: `<om-map widgets-hidden>`, the `set-widgets-visible` action, or a `widgets-toggle` widget hide every authored widget without unmounting them; attribution and the badge stay.
+- **Opt out entirely** with `position="manual"` — a plain block you style yourself, even outside the map container.
+
+Beyond colors (`--om-widget-bg`, `-fg`, `-muted`, `-border`, `-hover-bg`, `-accent`), layout tokens (`--om-widget-inset-x/-y`, `--om-widget-gap-x/-y`, `--om-widget-opacity`, `--om-widget-radius`) tune spacing, or use the no-CSS sugar `<om-map widget-style="gap:10 opacity:0.9">`.
 
 ## Accessors Without JavaScript
 
@@ -56,6 +70,8 @@ Built-in actions share one payload contract across every trigger surface (behavi
 
 GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`), updates live from the `filter` widget, and widget statistics stay coherent with what the map renders. Because the manifest is the state, all of this is undoable out of the box — and because scene state (basemap, lighting, terrain) is attributes on `<om-map>`, story steps can change it and scrubbing restores it deterministically.
 
+For host applications wiring their own logic, `<om-map>` emits DOM events: `om-view-changed` when the camera settles (`detail` carries the camera plus an `origin` of `"user"` or `"programmatic"` for echo-suppression), `om-map-point` on every click/hover with the map coordinate (`detail = {coordinate, kind}` — including empty-map clicks picks discard, the hook for custom capture tools the draw widget doesn't cover), and `om-tileset-load` surfacing a `Tile3DLayer`'s live deck `Tileset3D` (`detail = {layerId, tileset}`) for tools like region export. Prefer state mirroring over events? `getStore(token)` gives per-token `{subscribe, getSnapshot}` stores for `viewport`, `selection`, `layers`, and `data:<id>` — drop-in for `useSyncExternalStore`, MobX, Redux, or Zustand.
+
 ## Legends That Read the Styling
 
 The legend widget derives each layer's entry from its actual symbology — write the canonical expression shapes and the legend describes itself:
@@ -79,6 +95,7 @@ The authoring loop the library is built around:
 2. `OmMap.validate(html)` → structured errors, each with a `fix` string.
 3. `OmMap.snapshotIR(html)` → resolved layer descriptors for snapshot tests.
 4. `mountForTest(html)` → headless behavioral tests: synthetic picks ride the same selection path real GPU picks take.
+5. `npx @nika-js/onlymap check-layout <manifest.html>` → audits the real rendered widget layout in headless Chromium across a viewport-width sweep (no overlaps, everything hit-testable and in its slot), exiting 0/1 — or import `auditLayout(page)` into your own Playwright suite.
 
 ```ts
 const h = await mountForTest(pageHtml);

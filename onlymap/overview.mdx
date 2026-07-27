@@ -63,7 +63,8 @@ Two optional setup commands complete the toolchain:
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of markup by design.
 
 ### Application UI Without an App Framework
-- **Widgets**: legend, layer switcher, basemap switcher, lighting controls, zoom controls, undo/redo, scale bar, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Widgets**: legend, layer switcher, basemap switcher, lighting controls, zoom controls, undo/redo, scale bar, attribution, GPU filter sliders, live Vega-Lite charts, a drawing toolbar — or custom widgets with a typed runtime context (`ctx.data`, `ctx.stats`, `ctx.viewport`, `ctx.emit`).
+- **Managed, adaptive layout** <sup>new in 0.4</sup>: `position` places a widget in one of 8 logical, RTL-aware slots (`top-start` … `bottom-end`) — same-slot widgets stack with flush edges and a shared gap, adjacent compact controls auto-cluster into one group, and provider attribution and the license badge are in-flow slot members so neither covers a widget. On narrow maps (≤640px by default, `--om-widget-fold-breakpoint` to change) managed widgets fold into accessible drawers; a slot dims while an open popup covers it. `<om-map widgets-hidden>` hides all authored chrome without destroying it (required attribution and the badge never hide), and `position="manual"` opts a widget out of management entirely.
 - **Symbology-aware legends** <sup>new in 0.3</sup>: the legend reads each layer's actual color styling — continuous `scale()` ramps render as gradient bars with domain labels, threshold scales as discrete class ranges, categorical expressions as swatch palettes, raster colormaps as their ramp. No legend configuration, ever.
 - **Themeable from plain CSS**: every built-in widget reads `--om-widget-*` custom properties (`om-map { --om-widget-bg: #111827; --om-widget-fg: #f9fafb; }`) — dark-mode your map UI with one rule, no JS.
 - **Overlays and behaviors**: rich HTML popups anchored to map coordinates or picked features, and declarative `on="click|hover|drag|load"` interactions — no event-handler code.
@@ -72,12 +73,18 @@ Two optional setup commands complete the toolchain:
 ### Built for Verification
 - **`OmMap.validate(html)`** returns structured errors, each with a concrete fix; a live on-page error panel is one attribute away (`validate`).
 - **Headless test harness**: `mountForTest` runs full behavioral tests (picks, widgets, overlays, real projection math) in jsdom/happy-dom with no WebGL.
+- **Layout, checked like types** <sup>new in 0.4</sup>: `npx @nika-js/onlymap check-layout <manifest.html>` audits a page's real rendered widget layout in headless Chromium across a viewport-width sweep — no widgets overlap, each is hit-testable and in its slot, same-slot edges are flush — emitting structured `{severity, element, message, fix}` diagnostics and exiting 0/1. The same audit is importable as `auditLayout(page)` for your own Playwright suite.
 - **React adapter**: `@nika-js/onlymap/react` provides `<OmMap>`, `<OmLayer>`, `<OmWidget>`, `<OmOverlay>`, and a typed `useOmMap()` hook over the same core — React owns state, the library never fights the virtual DOM.
 - **Custom layer classes**: `@nika-js/onlymap/deck` re-exports the bundled deck.gl class surface, so `OmMap.registerLayer` extensions share the renderer's own class hierarchy — desktop apps register domain layers (local-file rasters, catalog sources) as first-class manifest types.
 
+### Framework & Programmatic Integration <sup>new in 0.4</sup>
+- **`MapController`**: a framework-grade programmatic front-end — typed `LayerDescriptor`s drive the same reconcile core with no DOM manifest, plus camera methods, `emit`, `injectPick`, `snapshot`, and `onViewChange`/`onMapPoint`/`onTilesetLoad` callbacks.
+- **External-store contract**: `getStore(token)` exposes per-token `{subscribe, getSnapshot}` stores (`viewport`, `selection`, `layers`, `data:<id>`) with cached immutable snapshots and `origin` tagging — directly consumable by React's `useSyncExternalStore`, MobX, Redux, or Zustand.
+- **Consumer events**: beyond `om-view-changed` (camera settled), `om-map-point` surfaces every click/hover map coordinate (the hook for custom capture tools the draw widget doesn't cover) and `om-tileset-load` surfaces a `Tile3DLayer`'s live `Tileset3D` for tools like region export.
+
 ## Roadmap
 
-Globe projection, Mapbox GL basemaps, depth-interleaved 3D compositing, vertex editing for drawn geometries, SSE transport, multi-field filters, and stories/draw as React components are designed but not yet shipped. The README's "Not implemented yet" section is kept honest release by release.
+Mapbox GL basemaps, depth-interleaved 3D compositing, globe projection, SSE transport, multi-field filters, `dblclick` behaviors, the `transform` data pipeline, the typed fluent builder, and stories/draw as React components are designed but not yet shipped. The README's "Not implemented yet" section is kept honest release by release.
 
 ## Resources
 

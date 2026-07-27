@@ -20,17 +20,17 @@ Always write explicit closing tags (`<om-layer …></om-layer>` — never self-c
 
 ## Widget Placement & Adaptive Layout
 
-`position` takes one of 8 logical, RTL-aware slots — `top-start`, `top-center`, `top-end`, `center-start`, `center-end`, `bottom-start`, `bottom-center`, `bottom-end` (legacy corner names like `top-right` alias). The library owns the geometry, so you never hand-position chrome:
+`position` puts a widget in one of 8 logical slots: `top-start`, `top-center`, `top-end`, `center-start`, `center-end`, `bottom-start`, `bottom-center`, `bottom-end`. The slots flip left-to-right for right-to-left languages. Old corner names such as `top-right` still map to these slots. The library sets the pixel position for you. You do not position the widgets and map controls by hand.
 
-- **Same-slot widgets stack** with flush edges and a shared gap; `order` sets their in-slot sequence.
-- **Adjacent compact controls auto-cluster** (`zoom-controls`, `undo-redo`, `widgets-toggle`) into one control group — opt out with `cluster="false"`.
-- **Provider attribution and the license badge are in-flow members** of `bottom-end` and `bottom-start`, so neither ever covers a widget — and exactly one attribution renders (a licensing requirement the layout enforces).
-- **Responsive folding**: at map widths ≤640px, managed widgets move into accessible top/end/bottom/start drawers. `fold="never"` keeps an essential control always visible, `widgets-fold="off"` disables folding, and `--om-widget-fold-breakpoint` changes the threshold.
-- **Collision dimming**: a slot dims automatically while an open popup covers it (`widgets-dim="off"` to disable) — except slots holding required chrome.
-- **Hide all, non-destructively**: `<om-map widgets-hidden>`, the `set-widgets-visible` action, or a `widgets-toggle` widget hide every authored widget without unmounting them; attribution and the badge stay.
-- **Opt out entirely** with `position="manual"` — a plain block you style yourself, even outside the map container.
+- **Widgets in the same slot stack together** with a shared gap. The `order` attribute sets their sequence in the slot.
+- **Small controls next to each other join into one group** (`zoom-controls`, `undo-redo`, `widgets-toggle`). Set `cluster="false"` to keep a control separate.
+- **The map attribution goes in `bottom-end`** and the license badge in `bottom-start`. They are part of the slot flow, so they do not cover a widget. The map always shows one attribution, because the license needs it.
+- **Folding on narrow maps**: when the map is 640px wide or less, the widgets move into a drawer on each side. Set `fold="never"` to keep a control always visible. Set `widgets-fold="off"` to stop the folding. Change the width limit with `--om-widget-fold-breakpoint`.
+- **Dimming under popups**: a slot becomes dim when an open popup covers it. Set `widgets-dim="off"` to stop this. Slots with the attribution or the badge do not dim.
+- **Hide all widgets**: `<om-map widgets-hidden>`, the `set-widgets-visible` action, or a `widgets-toggle` widget hide your widgets but keep them in the page. The attribution and the badge stay visible.
+- **Turn off management**: set `position="manual"`. The widget becomes a plain block that you style yourself. You can put it outside the map.
 
-Beyond colors (`--om-widget-bg`, `-fg`, `-muted`, `-border`, `-hover-bg`, `-accent`), layout tokens (`--om-widget-inset-x/-y`, `--om-widget-gap-x/-y`, `--om-widget-opacity`, `--om-widget-radius`) tune spacing, or use the no-CSS sugar `<om-map widget-style="gap:10 opacity:0.9">`.
+You can also set colors (`--om-widget-bg`, `-fg`, `-muted`, `-border`, `-hover-bg`, `-accent`) and spacing (`--om-widget-inset-x/-y`, `--om-widget-gap-x/-y`, `--om-widget-opacity`, `--om-widget-radius`) with CSS custom properties. For a quick option without CSS, use `<om-map widget-style="gap:10 opacity:0.9">`.
 
 ## Accessors Without JavaScript
 

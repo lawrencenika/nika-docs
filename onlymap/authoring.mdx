@@ -55,6 +55,7 @@ The built-in functions include `scale()` (it needs an explicit `domain=`), `colo
 | Apache Arrow / GeoArrow | `data="./big.arrow"` — points stay columnar; zstd IPC supported |
 | Shapefile | `data="./countries.shp"` — `.dbf` attributes joined automatically |
 | KML | `data="./tour.kml"` |
+| CityJSON / CityJSONSeq | `data="./tile.city.json"` (or `.city.jsonl`, streamed) — 3D city models; see below |
 | WebSocket stream | `data="wss://feed" key="id" flush="250ms"` — upsert-by-key live entities |
 | Polled REST snapshot | `data="/api/fleet.json" refresh="5s"` |
 | Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
@@ -63,6 +64,17 @@ The built-in functions include `scale()` (it needs an explicit `domain=`), `colo
 You can add custom formats and stream decoders with `OmMap.registerFormat` and `OmMap.registerSource`. For an authenticated endpoint, use `OmMap.configureData({ headers, credentials, fetch })`. Credentials do not belong in the markup.
 
 A raster is the one exception to the `data` attribute. The layer's own reader streams a GeoTIFF as tiles, with HTTP Range requests against a Cloud-Optimized GeoTIFF. It does not parse the raster into rows, so you use `src`. Set `min` and `max` for float or 16-bit data; the default stretch is 0–255. A single-band source takes a bundled `colormap` (`viridis`, `terrain`, `rdbu`, …). A source with 3 or more bands composites as RGB, with no attributes. A restretch or a recolor is a GPU uniform update, so the tiles are not fetched again. The legend shows the colormap ramp automatically.
+
+## CityJSON 3D City Models
+
+Point `data` at a CityJSON `.city.json` file (or a `.city.jsonl` sequence, which fills the map as it downloads). CityJSON is the format of national building datasets such as 3DBAG, PLATEAU, and swisstopo. There is no CityJSON layer type — the `data` URL decodes to one of two shapes:
+
+- **Extruded footprints** (default): one row per building. Use `type="GeoJsonLayer"` with `extruded` and `get-elevation="$roof_height"`.
+- **Per-face surfaces** (`?om-surfaces=1`): one row per face, each at its own real height, so a pitched roof looks pitched. Use `type="SolidPolygonLayer"` with `get-polygon="$polygon"` and `full3d`. Each row carries a `surface_type` (RoofSurface / WallSurface / GroundSurface) and a default `fill_color`, which `get-fill-color` reads automatically — so the buildings render in sensible colors with no styling.
+
+Both modes add derived properties: `roof_height`, `eaves_height`, `ridge_height`, `ground_height`, `roof_area`, `surface_count`, `lod`, and the CityObject ids. Surfaces mode also adds `polygon` and `outline` — bind a companion `type="PathLayer"` with `get-path="$outline"` for visible face edges, because surfaces mode is flat-shaded.
+
+National grids (NL, CH, DE, JP, AT, SG) reproject automatically, axis order included; any other EPSG code fails with an error that names it. The highest LoD is used — pin one with `?om-lod=1.2` (combine as `?om-lod=1.2&om-surfaces=1`). Surfaces mode costs about 30× the rows, so it reaches the free-tier 25,000-row cap at a few hundred buildings; past that the layer renders its first 25,000 rows with an on-map notice.
 
 ## Interactions and State
 

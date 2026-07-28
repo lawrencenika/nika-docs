@@ -59,9 +59,10 @@ Two optional commands complete the setup:
 - **Terrain**: `terrain="terrarium"` adds real elevation with no configuration (keyless AWS tiles). Geographic layers drape onto the surface automatically. You can also give your own DEM tile URL or register presets.
 - **Scene lighting**: set `lighting="daylight|studio|flat|custom"`, with `lighting-*` attributes for fine control. `lighting-sun-date` computes the sun position from a date and the map location. A `lighting` widget shows these as presets and sliders.
 - **Snapshots**: `map.snapshot()` captures the basemap and the WebGL canvas together, as a PNG data URL or a Blob. Use it for print and export pipelines.
+- **3D city models** <sup>new in 0.5</sup>: point `data` at a CityJSON file (`.city.json`, or a streamed `.city.jsonl`) — national building datasets such as 3DBAG and PLATEAU. The library decodes it to extruded footprints by default, or to real per-face roof geometry with `?om-surfaces=1`, and reprojects national coordinate grids (NL, CH, DE, JP, AT, SG) automatically.
 
 ### Data That Stays Fresh
-- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, and KML. Large parsers load on first use.
+- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML, and **CityJSON / CityJSONSeq** (semantic 3D city models). Large parsers load on first use.
 - **GeoTIFF and Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request. The min/max restretch and the colormap are GPU uniforms, so the tiles are not fetched again. Nodata pixels are transparent.
 - **Live sources**: WebSocket streams with upsert-by-key and burst coalescing. Polled REST snapshots with `refresh="5s"`.
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of the markup.

@@ -14,7 +14,7 @@ Without a license key, a map runs on the free plan:
 
 - Up to **5 layers** per map, and **25,000 rows per layer** (20 MB per data fetch).
 - A small badge shows on the map: **"OnlyMap by NIKA. Free for non-commercial use."** You must keep the badge visible. This is a condition of the free non-commercial grant.
-- A limit never breaks the map. The layer over the limit does not render, and the validation stream names the exact limit and how to lift it.
+- A limit never breaks the map. A layer past the **layer** cap does not render. A layer past the **row** cap renders its first 25,000 rows and shows a dismissible on-map notice that the data is partial, so a capped map is still useful without pretending to be complete. Either way, the validation stream names the exact limit and how to lift it.
 - The limits are the same everywhere, including localhost. Development behavior always matches production.
 
 ### License Keys

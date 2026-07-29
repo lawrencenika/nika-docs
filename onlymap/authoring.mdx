@@ -85,7 +85,7 @@ GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`).
 To wire your own logic, read the DOM events on `<om-map>`:
 
 - `om-view-changed` fires when the camera settles. `detail` carries the camera and an `origin` of `"user"` or `"programmatic"`. Use `origin` to suppress echoes during state sync.
-- `om-map-point` fires on each click or hover. `detail = {coordinate, kind}`, and it includes empty-map clicks that a pick discards. Use it for a custom capture tool that the draw widget does not cover.
+- `om-map-point` fires on each click or hover. `detail = {coordinate, kind}` — `coordinate` is `[lng, lat]` (or `null` off the map), and `kind` is `"click"` or `"hover"`. It fires on every click and hover, including empty-map clicks a pick discards. This is how you build a tool the `draw` widget does not cover: a distance measurer, a drop-a-pin, a custom rectangle or circle area. Read the coordinate from this event. Do not read deck.gl internals or convert canvas pixels yourself — the map does not expose those.
 - `om-tileset-load` gives a `Tile3DLayer`'s live deck `Tileset3D`. `detail = {layerId, tileset}`. Use it for a tool such as region export.
 
 To mirror state instead of reading events, use `getStore(token)`. It gives a `{subscribe, getSnapshot}` store for each token: `viewport`, `selection`, `layers`, and `data:<id>`. The store works directly with `useSyncExternalStore`, MobX, Redux, or Zustand.

@@ -46,6 +46,8 @@ get-text="formatDate($time, 'datetime', 'UTC')"
 
 The built-in functions include `scale()` (it needs an explicit `domain=`), `colorRamp()`, `clamp()`, `lerp()`, `formatDate()`, and `Math.*`. The compiler is an AST whitelist, not an eval, so untrusted, agent-written expressions are safe by design. To use arbitrary JavaScript, you must add an explicit `js` opt-in on the layer.
 
+Dashed lines are a single attribute — `dash="[6, 3]"` (or SVG-style `dash="6 3"`, plus optional `dash-justified`) on a line layer (`PathLayer`, `GeoJsonLayer`, `PolygonLayer`, `TripsLayer`). The values are `[dashLength, gapLength]` in the same units as the line width; you do not wire deck.gl's `PathStyleExtension` yourself.
+
 `formatDate(value, style?, timeZone?)` formats epoch-millisecond numbers or ISO strings without exposing JavaScript's `Date` or `Intl` objects. Its styles are `date`, `datetime` (the default), `time`, and `iso`. The default time zone is `UTC`; use `local` for the viewer's zone or an IANA name such as `Asia/Singapore`. Numeric timestamps always mean milliseconds—multiply Unix seconds by 1000 first. Invalid values produce an empty label rather than stopping layer rendering.
 
 ## Data Sources

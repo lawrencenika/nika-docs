@@ -51,7 +51,7 @@ Two optional commands complete the setup:
 ## Key Features
 
 ### Declarative Everything
-- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, and a native `COGLayer` for GeoTIFF rasters.
+- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, and an `ImageOverlay` for georeferenced drone photos.
 - **Live manifest**: the markup is the state. When you change an attribute — from a widget, a behavior, a script, or devtools — the map updates automatically.
 - **Built-in undo and redo**: you can undo a layer toggle, a filter change, a basemap switch, an element edit, or a drawn sketch. Use `<om-widget type="undo-redo">` or Cmd/Ctrl-Z.
 
@@ -62,8 +62,9 @@ Two optional commands complete the setup:
 - **3D city models** <sup>new in 0.5</sup>: point `data` at a CityJSON file (`.city.json`, or a streamed `.city.jsonl`) — national building datasets such as 3DBAG and PLATEAU. The library decodes it to extruded footprints by default, or to real per-face roof geometry with `?om-surfaces=1`, and reprojects national coordinate grids (NL, CH, DE, JP, AT, SG) automatically.
 
 ### Data That Stays Fresh
-- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML, and **CityJSON / CityJSONSeq** (semantic 3D city models). Large parsers load on first use.
+- **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML, GPX, the cloud-native **FlatGeobuf** (`.fgb`) and **GeoParquet** (`.parquet`) vector formats, and **CityJSON / CityJSONSeq** (semantic 3D city models). Large parsers load on first use.
 - **GeoTIFF and Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request. The min/max restretch and the colormap are GPU uniforms, so the tiles are not fetched again. Nodata pixels are transparent.
+- **Georeferenced drone photos** <sup>new in 0.5.6</sup>: `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` reads a JPEG's EXIF/DJI-XMP, computes its WGS84 footprint, and overlays the image — no manual corner-pinning. `OmMap.resolveImageOverlay(file)` preprocesses once for saved maps; explicit `bounds` reconstructs without re-reading EXIF.
 - **Live sources**: WebSocket streams with upsert-by-key and burst coalescing. Polled REST snapshots with `refresh="5s"`.
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of the markup.
 

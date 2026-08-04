@@ -58,11 +58,15 @@ The built-in functions include `scale()` (it needs an explicit `domain=`), `colo
 | Apache Arrow / GeoArrow | `data="./big.arrow"` — points stay columnar; zstd IPC supported |
 | Shapefile | `data="./countries.shp"` — `.dbf` attributes joined automatically |
 | KML | `data="./tour.kml"` |
+| GPX | `data="./hike.gpx"` — waypoints/tracks/routes → features tagged `_gpxKind`; `#waypoints`/`#tracks`/`#routes` selects one part |
+| FlatGeobuf | `data="./cities.fgb"` — cloud-native binary vector, whole-file decode |
+| GeoParquet | `data="./data.parquet"` (or `.geoparquet`) — cloud-native columnar vector; all-Point files stay columnar, lines/polygons → features; needs `geo` metadata + CRS84/EPSG:4326 (projected CRS errors — reproject first) |
 | CityJSON / CityJSONSeq | `data="./tile.city.json"` (or `.city.jsonl`, streamed) — 3D city models; see below |
 | WebSocket stream | `data="wss://feed" key="id" flush="250ms"` — upsert-by-key live entities |
 | Polled REST snapshot | `data="/api/fleet.json" refresh="5s"` |
 | Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
 | GeoTIFF / COG raster | `<om-layer type="COGLayer" src="./dem.tif" min="0" max="1900" colormap="viridis">` |
+| Drone JPEG image | `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` — georeferenced photo overlay; see below |
 
 You can add custom formats and stream decoders with `OmMap.registerFormat` and `OmMap.registerSource`. For an authenticated endpoint, use `OmMap.configureData({ headers, credentials, fetch })`. Credentials do not belong in the markup.
 
@@ -78,6 +82,34 @@ Point `data` at a CityJSON `.city.json` file (or a `.city.jsonl` sequence, which
 Both modes add derived properties: `roof_height`, `eaves_height`, `ridge_height`, `ground_height`, `roof_area`, `surface_count`, `lod`, and the CityObject ids. Surfaces mode also adds `polygon` and `outline` — bind a companion `type="PathLayer"` with `get-path="$outline"` for visible face edges, because surfaces mode is flat-shaded.
 
 National grids (NL, CH, DE, JP, AT, SG) reproject automatically, axis order included; any other EPSG code fails with an error that names it. The highest LoD is used — pin one with `?om-lod=1.2` (combine as `?om-lod=1.2&om-surfaces=1`). Surfaces mode costs about 30× the rows, so it reaches the free-tier 25,000-row cap at a few hundred buildings; past that the layer renders its first 25,000 rows with an on-map notice.
+
+## Georeferenced Image Overlays
+
+`type="ImageOverlay"` drops a geotagged drone photo onto the map. It is the OnlyMap-owned preprocessing path over deck.gl's `BitmapLayer`: the browser reads the JPEG's EXIF + DJI XMP, computes an axis-aligned WGS84 footprint, bakes the camera yaw and any upside-down roll correction into the pixels, and renders the processed image at those bounds.
+
+```html
+<om-layer id="survey-photo" type="ImageOverlay"
+          src="./DJI_0123.jpg" georeference="exif" opacity="0.8"></om-layer>
+```
+
+The JPEG must carry GPS latitude/longitude, a positive `RelativeAltitude`, image dimensions, and gimbal yaw/pitch. Known DJI and Parrot cameras use a bundled sensor database; focal length comes from EXIF and is never guessed. For an unlisted camera, supply the physical sensor size (and focal length if EXIF omits it):
+
+```html
+<om-layer id="survey-photo" type="ImageOverlay"
+          src="./survey.jpg" georeference="exif"
+          sensor-width-mm="13.2" sensor-height-mm="8.8" focal-length-mm="8.8"></om-layer>
+```
+
+The source follows `OmMap.configureData` for authenticated endpoints, and `map.ready` waits for the image to resolve; a failed image is logged and skipped rather than rendering wrong.
+
+**Persist once, reconstruct cheaply.** For saved or collaborative maps, preprocess a file once with `OmMap.resolveImageOverlay(file)` → `{ image, bounds, metadata }`, upload the returned image, and store its bounds. Reconstructing with explicit `bounds` skips all fetching and EXIF work:
+
+```html
+<om-layer id="survey-photo" type="ImageOverlay"
+          src="./processed/0123.png" bounds="[103.841,1.286,103.845,1.290]"></om-layer>
+```
+
+This is a visualization-grade flat-ground estimate (pinhole camera, pitch-adjusted center, axis-aligned bbox), not orthorectification. Terrain relief, lens distortion, and a perspective-correct four-corner footprint are not modeled; large orthomosaics belong in a Cloud-Optimized GeoTIFF via `COGLayer`.
 
 ## Interactions and State
 

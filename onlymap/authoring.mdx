@@ -68,6 +68,7 @@ Dashed lines are a single attribute — `dash="[6, 3]"` (or SVG-style `dash="6 3
 | Polled REST snapshot | `data="/api/fleet.json" refresh="5s"` |
 | Drawing store | `data="draw:sketch"` + `<om-widget type="draw" target="sketch">` |
 | GeoTIFF / COG raster | `<om-layer type="COGLayer" src="./dem.tif" min="0" max="1900" colormap="viridis">` |
+| Zarr / GeoZarr raster | `<om-layer type="ZarrLayer" src="./x.zarr" variable="temp" select="time=0" colormap="viridis" min="…" max="…">` — chunked N-D arrays; see below |
 | Drone JPEG image | `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` — georeferenced photo overlay; see below |
 
 You can add custom formats and stream decoders with `OmMap.registerFormat` and `OmMap.registerSource`. For an authenticated endpoint, use `OmMap.configureData({ headers, credentials, fetch })`. Credentials do not belong in the markup.
@@ -112,6 +113,25 @@ The source follows `OmMap.configureData` for authenticated endpoints, and `map.r
 ```
 
 This is a visualization-grade flat-ground estimate (pinhole camera, pitch-adjusted center, axis-aligned bbox), not orthorectification. Terrain relief, lens distortion, and a perspective-correct four-corner footprint are not modeled; large orthomosaics belong in a Cloud-Optimized GeoTIFF via `COGLayer`.
+
+## Zarr / GeoZarr Rasters
+
+`type="ZarrLayer"` renders chunked, N-dimensional array data (climate and weather grids, datacubes) on the GPU. It is built on `@developmentseed/deck.gl-zarr` and zarrita, and loads on first use. Styling — `min`, `max`, `colormap`, `nodata` — and the legend work exactly like `COGLayer`.
+
+```html
+<om-layer id="temp" type="ZarrLayer"
+          src="https://example.com/store.zarr"
+          variable="temperature" select="time=0"
+          bounds="[-30, 25, 40, 72]" crs="EPSG:4326" spatial-dims="latitude longitude"
+          colormap="turbo" min="-35" max="40"></om-layer>
+```
+
+- `src` (required) — the `.zarr` store URL. Like `COGLayer`, chunks stream through the layer's own reader; they are never parsed rows.
+- `variable` — the array within the store to render.
+- `select` — pin every non-spatial dimension: `"time=0"`, `"init_time=0, lead_time=0, ensemble_member=0"`. The two spatial dimensions are handled for you; a 2-D array needs no `select`. Changing `select` re-slices without reopening the store, so you can animate a time axis by rewriting the attribute.
+- A **GeoZarr**-compliant store georeferences itself. A **plain Zarr** needs manual `bounds="[west,south,east,north]"`, `crs="EPSG:4326"`, and `spatial-dims="<yName> <xName>"` (the two spatial dimension names).
+
+**External / remote stores.** `src` can be any absolute URL, and a remote store needs no server setup — a static host (S3, GCS, a CDN, any object store) serves Zarr's chunk files natively. Two current constraints: the store is fetched directly from the browser, so it must be **CORS-enabled** (`Access-Control-Allow-Origin`); and it must be **public** — authenticated stores that need a header or token are not yet supported (the layer does not route through `OmMap.configureData`). Also mind the store's chunking: a dataset chunked coarsely over its non-spatial dimensions (for example, every forecast step in one chunk) decodes far more than the single pinned frame needs.
 
 ## Interactions and State
 

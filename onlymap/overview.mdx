@@ -64,7 +64,7 @@ Two optional commands complete the setup:
 ### Data That Stays Fresh
 - **Formats**: JSON/GeoJSON, CSV/TSV, Apache Arrow and GeoArrow (columnar fast path, zstd IPC), Shapefile with `.dbf` attributes, KML, GPX, the cloud-native **FlatGeobuf** (`.fgb`) and **GeoParquet** (`.parquet`) vector formats, and **CityJSON / CityJSONSeq** (semantic 3D city models). Large parsers load on first use.
 - **GeoTIFF and Cloud-Optimized GeoTIFF** <sup>new in 0.3.1</sup>: `<om-layer type="COGLayer" src="./dem.tif">` streams raster tiles by HTTP Range request. The min/max restretch and the colormap are GPU uniforms, so the tiles are not fetched again. Nodata pixels are transparent.
-- **Georeferenced drone photos** <sup>new in 0.5.6</sup>: `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` reads a JPEG's EXIF/DJI-XMP, computes its WGS84 footprint, and overlays the image — no manual corner-pinning. `OmMap.resolveImageOverlay(file)` preprocesses once for saved maps; explicit `bounds` reconstructs without re-reading EXIF.
+- **Georeferenced drone photos** <sup>new in 0.5.7</sup>: `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` reads a JPEG's EXIF/DJI-XMP, computes its WGS84 footprint, and overlays the image — no manual corner-pinning. `OmMap.resolveImageOverlay(file)` preprocesses once for saved maps; explicit `bounds` reconstructs without re-reading EXIF.
 - **Live sources**: WebSocket streams with upsert-by-key and burst coalescing. Polled REST snapshots with `refresh="5s"`.
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of the markup.
 

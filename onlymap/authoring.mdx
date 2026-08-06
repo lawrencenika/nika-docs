@@ -133,6 +133,30 @@ This is a visualization-grade flat-ground estimate (pinhole camera, pitch-adjust
 
 **External / remote stores.** `src` can be any absolute URL, and a remote store needs no server setup — a static host (S3, GCS, a CDN, any object store) serves Zarr's chunk files natively. Two current constraints: the store is fetched directly from the browser, so it must be **CORS-enabled** (`Access-Control-Allow-Origin`); and it must be **public** — authenticated stores that need a header or token are not yet supported (the layer does not route through `OmMap.configureData`). Also mind the store's chunking: a dataset chunked coarsely over its non-spatial dimensions (for example, every forecast step in one chunk) decodes far more than the single pinned frame needs.
 
+## BIM / IFC Models
+
+`type="BIMLayer"` loads an `.ifc` file entirely in the browser — no pre-conversion, no server. The web-ifc WASM parser is fetched from a CDN on first use (integrity-pinned, never bundled), and the model renders as 3D Tiles with a companion edge-outline layer.
+
+```html
+<om-layer id="clinic" type="BIMLayer" src="./Clinic_Architectural.ifc"
+          pick-features pickable
+          site-origin="[-71.059776, 42.358429]" site-heading="32"></om-layer>
+```
+
+For interactive loading, `<om-widget type="ifc-loader">` is a drop zone that parses the file and builds the layer pair for you; add `federate` and one drop zone accepts several discipline models into a co-registered scene (the first model fixes the shared origin), each with its own visibility toggle and remove button.
+
+**Per-element picking and styling** works on any 3D Tiles layer, not just IFC. Add `pick-features` to a `Tile3DLayer` (or `BIMLayer`) and picks resolve individual elements — a wall, a window, one IFC product — with their `EXT_structural_metadata` properties. On top of that, everything is attributes:
+
+- **Isolate / hide / ghost**: `feature-filter-field="component"` plus `isolate-features='["Wall"]'` / `hide-features` / `ghost-features` (JSON arrays of values). Isolate is exclusive scope; hiding is a shader discard, so a hidden element also stops blocking picks.
+- **Color by property**: `feature-color-by="material"` (categorical, colour-blind-safe palette; override with `feature-palette`) or `feature-color-scale="netVolume"` (graduated). `feature-color-strength` below 1 tints instead of replacing. Setting neither is the default and renders the model's own IFC surface colours.
+- Being attributes, all of this is undoable and story-steppable.
+
+**Widgets**: `ifc-browser` groups the model by any property field with per-value isolate/hide/ghost buttons; `feature-inspector` shows the picked element's properties; `ifc-clash` flags interpenetrating element pairs across two co-registered models and flies to each clash.
+
+**Placement**: `site-origin="[lng, lat]"`, `site-heading` (degrees clockwise from north), and `site-scale` position the model — they override what the file declares. A model with real georeferencing (`IfcMapConversion`) places itself, but do not trust a declared position without looking: most IFC2x3 exports carry an authoring-tool default location that is indistinguishable from a survey.
+
+**Terrain is yours to author.** The library never writes scene attributes as a side effect: a model that resolves real-world elevation loading on a map with no `terrain` attribute raises a validation **error** (any value satisfies it, including an explicit `terrain="off"`), and a georeferenced model landing on a map with no basemap and no terrain raises a "no spatial context" warning — instead of the map switching either on for you.
+
 ## Interactions and State
 
 Every built-in action uses one payload contract, across every trigger: behaviors, widget `data-emit` buttons, `ctx.emit`, and story steps. The actions include `show-overlay`, `hide-overlay`, `show-tooltip`, `hide-tooltip`, `toggle-layer`, `highlight-feature`, `zoom-to-feature`, `filter-layer`, `fly-to`, `set-basemap`, `set-lighting`, `set-terrain`, `undo`, and `redo`. Add your own with `OmMap.registerAction`.

@@ -51,7 +51,7 @@ Two optional commands complete the setup:
 ## Key Features
 
 ### Declarative Everything
-- **34 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, a `ZarrLayer` for chunked Zarr/GeoZarr rasters, and an `ImageOverlay` for georeferenced drone photos.
+- **37 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, a `ZarrLayer` for chunked Zarr/GeoZarr rasters, an `ImageOverlay` for georeferenced drone photos, and a `BIMLayer` for in-browser IFC models.
 - **Live manifest**: the markup is the state. When you change an attribute — from a widget, a behavior, a script, or devtools — the map updates automatically.
 - **Built-in undo and redo**: you can undo a layer toggle, a filter change, a basemap switch, an element edit, or a drawn sketch. Use `<om-widget type="undo-redo">` or Cmd/Ctrl-Z.
 
@@ -59,6 +59,7 @@ Two optional commands complete the setup:
 - **Terrain**: `terrain="terrarium"` adds real elevation with no configuration (keyless AWS tiles). Geographic layers drape onto the surface automatically. You can also give your own DEM tile URL or register presets.
 - **Scene lighting**: set `lighting="daylight|studio|flat|custom"`, with `lighting-*` attributes for fine control. `lighting-sun-date` computes the sun position from a date and the map location. A `lighting` widget shows these as presets and sliders.
 - **Snapshots**: `map.snapshot()` captures the basemap and the WebGL canvas together, as a PNG data URL or a Blob. Use it for print and export pipelines.
+- **BIM / IFC models** <sup>new in 0.6.1</sup>: `<om-layer type="BIMLayer" src="./model.ifc">` (or the `ifc-loader` drop-zone widget, with multi-model federation) parses IFC in the browser via CDN-fetched web-ifc and renders it as 3D Tiles. `pick-features` gives per-element picking on any 3D Tiles layer; declarative isolate/hide/ghost, colour-by-property, an `ifc-browser` model tree, a `feature-inspector`, and an `ifc-clash` overlay come as attributes and widgets.
 - **3D city models** <sup>new in 0.5</sup>: point `data` at a CityJSON file (`.city.json`, or a streamed `.city.jsonl`) — national building datasets such as 3DBAG and PLATEAU. The library decodes it to extruded footprints by default, or to real per-face roof geometry with `?om-surfaces=1`, and reprojects national coordinate grids (NL, CH, DE, JP, AT, SG) automatically.
 
 ### Data That Stays Fresh

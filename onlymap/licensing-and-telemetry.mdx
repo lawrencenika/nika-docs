@@ -30,7 +30,15 @@ A license key lifts all limits and removes the badge:
 OmMap.configureLicense("om_live_…");
 ```
 
-A key is **publishable and origin-restricted**. It is bound to your domains, so it is safe to put in the page source, like a map-provider API key. It verifies offline, with no network round-trip, so it works in CI and in air-gapped environments. For licensing questions, see [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
+A key is **publishable and deployment-restricted**. It is bound to your domains, so it is safe to put in the page source, like a map-provider API key. It verifies offline, with no network round-trip, so it works in CI and in air-gapped environments. For licensing questions, see [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
+
+A key can also be scoped to one or more packaged applications, for a map shipped inside a native app shell rather than served from a domain. The app passes its own identifier at startup:
+
+```ts
+await OmMap.configureLicense("om_live_…", { appId: "com.example.riders" });
+```
+
+The identifier must come from the platform's own build metadata — never from page script or a bridge message, which the library cannot tell apart from the real thing. Because of that, app scoping is a deployment marker rather than an enforced boundary the way a domain is: ask for a key scoped by **both** your domains and your app identifiers where a deployment has both.
 
 ### Third-Party Software
 

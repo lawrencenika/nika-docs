@@ -57,14 +57,14 @@ Run compute-heavy functions on dedicated VMs. Decorate any Python function with 
 
 Every run you submit with `@run(...).submit()` is tracked in the workspace, so you can follow its progress and read its logs in the UI.
 
-- **Active Runs**: a section at the top of the Virtual Machine side panel that lists runs still in progress, each with a status dot, name, and elapsed time. It refreshes automatically; **See all runs** opens the full list.
-- **All Runs**: every run submitted in the workspace, grouped by time and filterable by status (Pending, Initializing, Running, Succeeded, Failed, Cancelled). Search by name or run ID, and expand a fan-out run to see its children.
+- **Active Runs**: a section at the top of the Virtual Machine side panel that lists runs still in progress, each with a status dot, name, status, and elapsed time. A run waiting on compute shows **Queuing** with the time left before its queue timeout. It refreshes automatically; **See all runs** opens the full list.
+- **All Runs**: every run submitted in the workspace, grouped by time and filterable by status (Pending, Queuing, Initializing, Running, Succeeded, Failed, Cancelled). Search by name or run ID, and expand a fan-out run to see its children.
   ![All Runs panel](/nika-planet/nika-notebook-3.png)
 
 - **Cancel runs in bulk**: tick the checkbox on any active runs in the All Runs list — a floating bar shows how many are selected, with **Clear** and a **Cancel N runs** action. Confirm in the dialog by typing the highlighted phrase. Cancellation is requested for each selected run and can't be undone, so in-progress work may be lost; child runs that have already started are not affected and can be cancelled individually.
   ![Batch cancellation confirmation dialog](/nika-planet/nika-notebook-6.png)
 
-- **Run Detail**: opens from any run. A fan-out **run graph** shows the run tree (a parent run and its child runs), and **Overview**, **Children**, **Logs**, and **Metrics** tabs cover the run's status, configuration (name, run ID, timeout, resource, submitted and started times), child runs, logs, and resource usage.
+- **Run Detail**: opens from any run. A fan-out **run graph** shows the run tree (a parent run and its child runs), and **Overview**, **Children**, **Logs**, and **Metrics** tabs cover the run's status, configuration (name, run ID, resource, queue timeout, run/execution timeout, and submitted, started, finished and duration times), child runs, logs, and resource usage.
   ![Run Detail panel](/nika-planet/nika-notebook-4.png)
 
 - **Metrics tab**: for completed runs, see CPU, memory, and (when the machine has one) GPU utilisation, VRAM, and power draw sampled across the run. Peak headline cards summarise the run at a glance, and each chart carries a fit verdict — _Well-utilised_, _Right-sized_, _Over-provisioned_, _Near limit_, _OOM risk_ — so it's obvious whether the machine size matched the workload.

@@ -4,6 +4,29 @@ description: "Product updates and announcements for NikaPlanet products"
 rss: true
 ---
 
+<Update label="August 14, 2026" description="v0.5.38">
+  ## Queuing Feature for Remote Runs
+
+### New Features
+
+- **Queuing runs that are waiting on compute**: When dedicated compute for a run submitted from [NikaNotebook](/nika-planet/nika-notebook) is not available within 5 minutes, the run will be queued and be shown as **Queuing** in the All Runs and Run Detail panels, alongside the time left before its queue timeout.
+- **Configurable queue timeout**: The [NIKA Python SDK](/guides/code-cloud-delegation/python-sdk) `@run` decorator accepts a new `queue_timeout_hours` option — the maximum time a run may wait for compute before it is failed. Left unset, a default of 24h will apply. A run that cannot be scheduled in time now either queues or fails with an explicit reason instead of waiting indefinitely. Pair this with the machine availability indicator and accurately estimate the maximum queue time to set for your runs.
+
+### Breaking Changes
+
+- The `@run` decorator's `timeout` option is now `run_timeout_hours`, aligning with the new `queue_timeout_hours`. Rename it in existing scripts before running them.
+
+</Update>
+
+<Update label="August 13, 2026" description="v0.5.37">
+## Machine Resource Availability
+
+### New Features
+
+- **Machine Availability** indicator: Check the current availability of your preferred machines, especially for large runs on premium GPU machines.
+
+</Update>
+
 <Update label="July 10, 2026" description="v0.5.36">
   ## Batch Cancellation for Runs
 

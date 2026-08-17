@@ -40,8 +40,11 @@ import "@nika-js/onlymap/onlymapjs.css";
 You can also load it from a CDN with no build step:
 
 ```html
-<script type="module" src="https://esm.sh/@nika-js/onlymap"></script>
+<link rel="stylesheet" href="https://unpkg.com/@nika-js/onlymap/dist/onlymapjs.css">
+<script type="module" src="https://unpkg.com/@nika-js/onlymap"></script>
 ```
+
+Use a raw-file CDN (unpkg, jsDelivr) — the bare package URL serves a single-file standalone bundle built for this. Do not use a rebundling CDN such as esm.sh or skypack: re-bundling duplicates the deck.gl/luma.gl runtime and every layer fails shader compilation.
 
 Two optional commands complete the setup:
 
@@ -51,7 +54,7 @@ Two optional commands complete the setup:
 ## Key Features
 
 ### Declarative Everything
-- **37 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, a `ZarrLayer` for chunked Zarr/GeoZarr rasters, an `ImageOverlay` for georeferenced drone photos, and a `BIMLayer` for in-browser IFC models.
+- **39 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, a `ZarrLayer` for chunked Zarr/GeoZarr rasters, an `ImageOverlay` for georeferenced drone photos, a `BIMLayer` for in-browser IFC models, and `Route`/`Tracking` for styled routes and live position tracking.
 - **Live manifest**: the markup is the state. When you change an attribute — from a widget, a behavior, a script, or devtools — the map updates automatically.
 - **Built-in undo and redo**: you can undo a layer toggle, a filter change, a basemap switch, an element edit, or a drawn sketch. Use `<om-widget type="undo-redo">` or Cmd/Ctrl-Z.
 
@@ -70,6 +73,8 @@ Two optional commands complete the setup:
 - **Zarr / GeoZarr rasters** <sup>new in 0.5.11</sup>: `<om-layer type="ZarrLayer" src="./x.zarr" variable="temp" select="time=0">` renders chunked N-dimensional array data (climate/weather grids, datacubes) on the GPU. Pin the non-spatial dimensions with `select`; GeoZarr stores georeference themselves, a plain Zarr takes manual `bounds`/`crs`/`spatial-dims`. `src` can point at any CORS-enabled public remote store — no server setup needed.
 - **Georeferenced drone photos** <sup>new in 0.5.7</sup>: `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` reads a JPEG's EXIF/DJI-XMP, computes its WGS84 footprint, and overlays the image — no manual corner-pinning. `OmMap.resolveImageOverlay(file)` preprocesses once for saved maps; explicit `bounds` reconstructs without re-reading EXIF.
 - **Live sources**: WebSocket streams with upsert-by-key and burst coalescing. Polled REST snapshots with `refresh="5s"`.
+- **Routing and tracking** <sup>new in 0.6.7</sup>: `<om-layer type="Route">` draws a styled route (casing, line, origin/destination markers) from a GeoJSON LineString you already have, or resolves one from `origin`/`destination` through a pluggable `RoutingProvider` — a ~15-line adapter covers OSRM's keyless demo server, Mapbox, OpenRouteService, or your own engine. `follow="fit-route"` frames the camera on arrival. `<om-layer type="Tracking">` renders a moving entity that glides between GPS fixes with bearing-based rotation and an optional follow camera; the position feed is ordinary layer `data` (a WebSocket stream, a polled endpoint), not a separate API.
+- **Multi-dimension GPU filters** <sup>new in 0.6.5–0.6.6</sup>: up to 4 numeric ranges (`filter-fields`) and up to 4 categorical keep-lists (`filter-category-fields`) filter a layer at once, combined on the GPU with no data re-upload. The same `filter` widget renders a slider for a numeric field and a checkbox list for a categorical one, and widget statistics respect every active dimension.
 - **Private endpoints**: `OmMap.configureData({ headers, credentials, fetch })` keeps credentials out of the markup.
 
 ### Application UI Without an App Framework
@@ -96,7 +101,7 @@ Two optional commands complete the setup:
 
 ## Roadmap
 
-These features are designed but not shipped yet: Mapbox GL basemaps, depth-interleaved 3D compositing, globe projection, SSE transport, multi-field filters, `dblclick` behaviors, the `transform` data pipeline, the typed fluent builder, and stories and draw as React components. The README lists the current state in its "Not implemented yet" section at each release.
+These features are designed but not shipped yet: Mapbox GL basemaps, depth-interleaved 3D compositing, globe projection, SSE transport, `dblclick` behaviors, the `transform` data pipeline, the typed fluent builder, and stories and draw as React components. The README lists the current state in its "Not implemented yet" section at each release.
 
 ## Resources
 

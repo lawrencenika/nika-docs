@@ -242,6 +242,33 @@ GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`).
 
 `format` is `number` (the default) or `date`; `date-style` and `time-zone` use the same contract as `formatDate()`. The manifest is the state, so all of this is undoable. Scene state (basemap, lighting, terrain) is attributes on `<om-map>`, so a story step can change it, and a scrub restores it exactly.
 
+A layer can filter on several fields at once. `filter-fields` takes up to 4 numeric `{field, range}` dimensions as a JSON array, and `filter-category-fields` takes up to 4 categorical `{field, categories}` keep-lists — a row must pass every active dimension of both kinds. Place one `filter` widget per field: the widget renders a range slider for a numeric field and a checkbox list (with per-value counts) for a categorical one, and each widget moves only its own dimension. `ctx.stats` and the built-in statistics respect whichever filters are active.
+
+## Routes and Live Tracking
+
+`<om-layer type="Route">` draws a styled A-to-B route — casing, colored line, and origin/destination markers — and `<om-layer type="Tracking">` renders one moving entity that glides between position updates. Both expand into ordinary deck.gl layers, so `pickable`, `opacity`, and the other layer attributes work unchanged.
+
+```html
+<!-- You already have the path: resolves instantly, no network -->
+<om-layer id="trip" type="Route" follow="fit-route"
+          geometry='{"type":"LineString","coordinates":[[-122.42,37.77],[-122.41,37.79]]}'></om-layer>
+
+<!-- A routing engine computes the path -->
+<om-layer id="trip" type="Route" follow="fit-route" provider="osrm"
+          origin="[-122.4194,37.7749]" destination="[-122.4130,37.7805]"></om-layer>
+
+<!-- A moving marker over a live feed -->
+<om-layer id="rider" type="Tracking" get-position="[$lng,$lat]"
+          follow="follow" interpolate-ms="1200"
+          data="wss://feed.example/rider" source="my-decoder" key="id"></om-layer>
+```
+
+A `RoutingProvider` is a small adapter you register once — `OmMap.registerRoutingProvider(name, { computeRoute })` — and reference by name in the `provider` attribute. A ~15-line adapter covers OSRM's keyless public demo server (it returns GeoJSON natively), and the same shape works for Mapbox Directions, OpenRouteService, GraphHopper, or a self-hosted engine. Re-routing is attribute writes: change `origin` or `destination` (from a click handler, a story step, an undo) and the layer re-resolves, aborting any in-flight request.
+
+The Tracking layer's position feed is ordinary layer `data` — a WebSocket stream with a decoder, a polled REST endpoint, or inline JSON your script replaces. There is no separate tracking subscription API. `bearing-field` names the data field that rotates the marker, `interpolate-ms` sets how long the marker glides between two fixes instead of jumping, and `follow="follow"` eases the camera along with it. One entity per layer: for a fleet, use a plain `IconLayer` over a keyed stream instead.
+
+The full guide, including per-engine adapter notes, is [docs/routing.md](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/routing.md) in the package.
+
 To wire your own logic, read the DOM events on `<om-map>`:
 
 - `om-view-changed` fires when the camera settles. `detail` carries the camera and an `origin` of `"user"` or `"programmatic"`. Use `origin` to suppress echoes during state sync.

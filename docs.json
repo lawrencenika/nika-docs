@@ -190,6 +190,7 @@
 								"pages": [
 									"onlymap/overview",
 									"onlymap/authoring",
+									"onlymap/react-native",
 									"onlymap/licensing-and-telemetry"
 								]
 							},

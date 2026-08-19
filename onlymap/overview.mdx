@@ -46,6 +46,9 @@ You can also load it from a CDN with no build step:
 
 Use a raw-file CDN (unpkg, jsDelivr) — the bare package URL serves a single-file standalone bundle built for this. Do not use a rebundling CDN such as esm.sh or skypack: re-bundling duplicates the deck.gl/luma.gl runtime and every layer fails shader compilation.
 
+Building a mobile app? The same runtime ships as an Expo React Native
+adapter, `@nika-js/onlymap-native` — see [React Native](/onlymap/react-native).
+
 Two optional commands complete the setup:
 
 - **`npx @nika-js/onlymap init`** — adds VS Code IntelliSense for every `om-*` element and attribute. It also adds `!`-prefix snippets (`!starter`, `!map`, …).

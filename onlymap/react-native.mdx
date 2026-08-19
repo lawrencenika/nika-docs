@@ -1,0 +1,115 @@
+---
+title: "React Native"
+description: "@nika-js/onlymap-native runs the full OnlyMap runtime inside an Expo React Native app: the same layers, expression accessors, and live data, driven from JSX over a JSON bridge."
+icon: "mobile"
+---
+
+## What it is
+
+`@nika-js/onlymap-native` is the official React Native adapter for OnlyMap JS.
+It packages the complete web runtime — every layer type, data format, live
+transport, and validation rule — inside a secure WebView served from a
+loopback-only host, and gives you `<OmMap>` and `<OmLayer>` components that
+speak the same vocabulary as the web library. The adapter owns the JSON
+bridge, the app lifecycle (background suspend, foreground resume), and
+WebView renderer recovery.
+
+It is not a native MapLibre renderer and not the web `@nika-js/onlymap/react`
+adapter: it is the OnlyMap runtime itself, hosted natively. A 20-fixture
+parity gate keeps the React Native surface byte-identical to the web React
+adapter at the intermediate-representation level.
+
+```tsx
+import { OmLayer, OmMap } from "@nika-js/onlymap-native";
+
+export default function RiderMap() {
+  return (
+    <OmMap style={{ flex: 1 }} center={[103.852, 1.287]} zoom={13.5} basemap="positron">
+      <OmLayer
+        id="riders"
+        type="ScatterplotLayer"
+        data={riders}
+        getPosition="[$lon, $lat]"
+        getFillColor="$color"
+        getRadius="9"
+        radiusUnits="pixels"
+        pickable
+        onClick={(selection) => console.log(selection.object)}
+      />
+    </OmMap>
+  );
+}
+```
+
+## Support matrix
+
+| Environment | Status |
+|---|---|
+| Expo SDK 57 development build (iOS, Android) | Supported |
+| Expo SDK 57 local Release build (iOS, Android) | Supported |
+| Expo Go | Unsupported — the adapter includes native modules |
+| EAS Build / EAS Update | Not yet verified |
+| Bare React Native | Planned (`0.2.0`) |
+| Flutter (`onlymap_flutter`) | Planned — same bridge protocol |
+
+Install the package and follow the setup in its bundled `llms.txt` (local
+networking permission, cleartext-for-loopback exception, and the Metro config
+extension for the packaged host assets):
+
+```bash
+npm install @nika-js/onlymap-native
+npx expo install expo-build-properties
+```
+
+## The rules that differ from web
+
+- **Accessors are expression strings, never functions.** `getPosition="[$lon, $lat]"`
+  crosses the JSON bridge; `getPosition={(d) => ...}` cannot and is rejected.
+- **Props are camelCase JSX**, not the web manifest's kebab-case attributes.
+- **Everything crossing the bridge is finite plain JSON.** Bulk data stays out
+  of the bridge: pass URLs (the full web format matrix works unchanged from a
+  URL inside the packaged host — GeoJSON, CSV, KML, GPX, FlatGeobuf, GeoArrow
+  including zstd, GeoParquet, Shapefile, range-requested COG), WebSocket
+  `source="upsert"` streams with `streamKey`, or `refresh` polling.
+- **Native UI lives beside the map**, driven by the imperative handle and
+  `useOmMapWatch`; the web's `<om-widget>`/`<om-overlay>` elements have no
+  native components yet.
+- **`emit()` runs core-backed actions** (`fly-to`, `zoom-in`, `zoom-out`,
+  `zoom-to-feature`, registered custom actions) exactly as on the web
+  `MapController`. DOM-manifest actions (`toggle-layer`, `filter-layer`,
+  overlay/tooltip/story actions, `set-basemap`) deliberately warn and do
+  nothing natively — express those through React props and state.
+
+## The imperative handle
+
+A ref (or `useOmMap()` in descendants) exposes the `MapController` surface,
+all Promise-returning: `flyTo`, `flyToBounds`, `zoomBy`, `setView`,
+`getViewState`, `project`, `getSelection`, `emit`, `snapshot`, `stats`,
+`data`, `dataInViewport`, `irSnapshot`, `reload`, and `injectPick`.
+
+`injectPick` is the consumer testing surface: a synthetic selection travels
+the same code path as a real tap and reaches your per-layer
+`onClick`/`onHover`, so interaction handling is testable in CI without a
+device. `reload()` deliberately rebuilds the WebView renderer and replays
+canonical state; repeated calls are harmless.
+
+## Lifecycle, verified on hardware
+
+The adapter suspends rendering and live transports when the app backgrounds
+and restores them on foreground; WebView renderer loss replays configuration,
+the complete layer document, settled camera, and watches. These are tested
+claims, not intentions: the acceptance suite runs on an iOS simulator and an
+Android emulator in CI on every change, and on physical hardware the full
+flow suite is green — including a five-minute background against a live
+WebSocket feed (current data within seconds of returning), airplane-mode
+network loss with structured errors and unattended recovery, and bridge
+round-trip latency measured at ~8.5 ms median on a mid-range Android phone.
+
+## Reference
+
+- The package ships `llms.txt` (the complete agent-facing authoring
+  reference) and an installable agent skill — both inside the npm tarball.
+- Repository, examples, and acceptance evidence:
+  [github.com/NikaGeospatial/onlymap-native](https://github.com/NikaGeospatial/onlymap-native)
+- Licensing: commercial keys support app-scoped `apps` claims for packaged
+  applications — see [Licensing & Telemetry](/onlymap/licensing-and-telemetry).

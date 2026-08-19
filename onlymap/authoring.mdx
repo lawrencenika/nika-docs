@@ -10,7 +10,7 @@ A small set of elements follows one rule. An attribute is the kebab-case form of
 
 - **`<om-map>`** — the root element. Give it a height. A custom element is inline by default and collapses to zero size, so a bare map shows nothing. Set `om-map { display: block; height: 100vh }` (with `html, body { height: 100% }`), or put the map in a sized container. Without a height the library fills a sized parent or falls back to a 400px default, and it warns in the console if the map still has no size. It takes `center`, `zoom`, `pitch`, and `bearing`. `basemap` takes a free preset (`positron`, `liberty`, `dark-matter`, `osm`, …), a style URL, or `"none"`, and it switches live. The 3D scene is also attributes: `terrain="terrarium"` (or a DEM tile URL) adds elevation, and `lighting="daylight|studio|flat|custom"` with `lighting-*` attributes lights it. Add `validate` for an error panel on the page while you author.
 - **`<om-layer>`** — any registered deck.gl layer type, by name. `id` is required. `label` and `color` feed the legend. Under active terrain, a geographic layer drapes onto the surface by default (set `terrain="drape|offset|off"` per layer).
-- **`<om-widget>`** — a UI panel: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `attribution`, `filter`, `vega-lite`, `draw`, `player`, `widgets-toggle` — or your own HTML with a `<script type="om/widget">` block. You can theme every built-in widget with `--om-widget-*` CSS custom properties from plain page CSS. The library manages placement (see below).
+- **`<om-widget>`** — a UI panel: `legend`, `layer-switcher`, `basemap-switcher`, `lighting`, `zoom-controls`, `undo-redo`, `scale-bar`, `attribution`, `filter`, `time-slider`, `vega-lite`, `draw`, `player`, `widgets-toggle` — or your own HTML with a `<script type="om/widget">` block. You can theme every built-in widget with `--om-widget-*` CSS custom properties from plain page CSS. The library manages placement (see below).
 - **`<om-overlay>`** — HTML anchored to a coordinate, the current selection, or a feature's geometry. `{{field}}` inserts a value from the picked feature, HTML-escaped by default.
 - **`<om-behavior>`** — a declarative interaction: `on="click|hover|drag|load|data-loaded"` runs a named action.
 - **`<om-story>` / `<om-step>`** — a storyboard. Each step fires actions on a timeline. The `player` widget plays, pauses, and scrubs it.
@@ -45,6 +45,15 @@ get-text="formatDate($time, 'datetime', 'UTC')"
 ```
 
 The built-in functions include `scale()` (it needs an explicit `domain=`), `colorRamp()`, `clamp()`, `lerp()`, `formatDate()`, and `Math.*`. The compiler is an AST whitelist, not an eval, so untrusted, agent-written expressions are safe by design. To use arbitrary JavaScript, you must add an explicit `js` opt-in on the layer.
+
+When the class boundaries should come from the data itself rather than a hand-written `domain=`, use classification attributes instead of an expression: `classify-by="magnitude"` on a layer computes class breaks from the loaded rows and colors the fill. `classify-scale` picks the method — `quantile` (the default, equal counts per class), `equal-interval` (equal spans), or `jenks` (natural breaks) — `classify-classes` sets 2–12 classes (default 5), and `classify-ramp` names one of 14 built-in color ramps (`viridis`, `plasma`, `turbo`, `blues`, `reds`, `ylorrd`, `rdbu`, `spectral`, …). The legend shows the computed class rows automatically. A hand-authored fill color always wins over classification, and `OmMap.validate` names the conflict. A URL-backed layer classifies when its data arrives.
+
+```html
+<om-layer id="quakes" type="ScatterplotLayer" data="./quakes.csv"
+          get-position="[$longitude,$latitude]" radius="6" radius-units="pixels"
+          classify-by="mag" classify-scale="jenks" classify-classes="5"
+          classify-ramp="viridis"></om-layer>
+```
 
 Dashed lines are a single attribute — `dash="[6, 3]"` (or SVG-style `dash="6 3"`, plus optional `dash-justified`) on a line layer (`PathLayer`, `GeoJsonLayer`, `PolygonLayer`, `TripsLayer`). The values are `[dashLength, gapLength]` in the same units as the line width; you do not wire deck.gl's `PathStyleExtension` yourself.
 
@@ -244,6 +253,15 @@ GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`).
 
 A layer can filter on several fields at once. `filter-fields` takes up to 4 numeric `{field, range}` dimensions as a JSON array, and `filter-category-fields` takes up to 4 categorical `{field, categories}` keep-lists — a row must pass every active dimension of both kinds. Place one `filter` widget per field: the widget renders a range slider for a numeric field and a checkbox list (with per-value counts) for a categorical one, and each widget moves only its own dimension. `ctx.stats` and the built-in statistics respect whichever filters are active.
 
+For temporal playback, the `time-slider` widget animates a filter over a time field instead of making you scrub it by hand:
+
+```html
+<om-widget type="time-slider" layer="quakes" field="time" duration="20s" loop
+           format="date" date-style="datetime" time-zone="UTC"></om-widget>
+```
+
+Play sweeps the layer's filter from the field's minimum to its maximum over `duration` of wall time — cumulative by default, or a sliding interval with `window="86400000"` (in field units, here one day of milliseconds). It drives the ordinary `filter-layer` action, so `ctx.stats`, the statistics readouts, and undo stay coherent with what the map renders, and any external filter edit (a story step, another widget, a script) moves the thumb rather than fighting it. `format`/`date-style`/`time-zone` label the current value with the same contract as the `filter` widget.
+
 ## Routes and Live Tracking
 
 `<om-layer type="Route">` draws a styled A-to-B route — casing, colored line, and origin/destination markers — and `<om-layer type="Tracking">` renders one moving entity that glides between position updates. Both expand into ordinary deck.gl layers, so `pickable`, `opacity`, and the other layer attributes work unchanged.
@@ -265,7 +283,11 @@ A layer can filter on several fields at once. `filter-fields` takes up to 4 nume
 
 A `RoutingProvider` is a small adapter you register once — `OmMap.registerRoutingProvider(name, { computeRoute })` — and reference by name in the `provider` attribute. A ~15-line adapter covers OSRM's keyless public demo server (it returns GeoJSON natively), and the same shape works for Mapbox Directions, OpenRouteService, GraphHopper, or a self-hosted engine. Re-routing is attribute writes: change `origin` or `destination` (from a click handler, a story step, an undo) and the layer re-resolves, aborting any in-flight request.
 
-The Tracking layer's position feed is ordinary layer `data` — a WebSocket stream with a decoder, a polled REST endpoint, or inline JSON your script replaces. There is no separate tracking subscription API. `bearing-field` names the data field that rotates the marker, `interpolate-ms` sets how long the marker glides between two fixes instead of jumping, and `follow="follow"` eases the camera along with it. One entity per layer: for a fleet, use a plain `IconLayer` over a keyed stream instead.
+The Tracking layer's position feed is ordinary layer `data` — a WebSocket stream with a decoder, a polled REST endpoint, or inline JSON your script replaces. There is no separate tracking subscription API. `bearing-field` names the data field that rotates the marker, `interpolate-ms` sets how long the marker glides between two fixes instead of jumping, and `follow="follow"` eases the camera along with it. `icon="arrow|car|motorcycle"` picks the marker's shape (default arrow) — every shape points nose-up and is baked in the layer's `color`, so bearing rotation and per-entity tinting work identically; `size` scales it. One entity per layer: for a fleet, run one `Tracking` layer per vehicle (each glides independently), and beyond a handful drop down to a plain `IconLayer` over a keyed stream.
+
+Link a Route to a Tracking layer with `progress-from="<tracking-layer-id>"` and the route splits at the marker's live position — the split advances per frame with the glide, projected onto the route line, since real GPS fixes sit slightly off it. `tail` picks how the traveled portion renders: `tail="none"` shows only current position → destination (the client view — a customer waiting on a delivery), `tail="dim"` darkens the traveled portion (the operator view; `tail-color` overrides the automatic darkening), and `tail="full"` (the default) keeps today's single-color line.
+
+Whenever a Route resolves — direct `geometry` or a provider round-trip alike — the map dispatches `om-route-resolved`: `detail = { layerId, route }`, where `route` carries the normalized `geometry`, `distanceMeters`, `durationSec`, `legs`, and the fitted `bounds`. That is how a page reads a provider-computed route (an ETA readout, a turn list) without re-fetching it.
 
 The full guide, including per-engine adapter notes, is [docs/routing.md](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/routing.md) in the package.
 
@@ -274,6 +296,7 @@ To wire your own logic, read the DOM events on `<om-map>`:
 - `om-view-changed` fires when the camera settles. `detail` carries the camera and an `origin` of `"user"` or `"programmatic"`. Use `origin` to suppress echoes during state sync.
 - `om-map-point` fires on each click or hover. `detail = {coordinate, kind}` — `coordinate` is `[lng, lat]` (or `null` off the map), and `kind` is `"click"` or `"hover"`. It fires on every click and hover, including empty-map clicks a pick discards. This is how you build a tool the `draw` widget does not cover: a distance measurer, a drop-a-pin, a custom rectangle or circle area. Read the coordinate from this event. Do not read deck.gl internals or convert canvas pixels yourself — the map does not expose those.
 - `om-tileset-load` gives a `Tile3DLayer`'s live deck `Tileset3D`. `detail = {layerId, tileset}`. Use it for a tool such as region export.
+- `om-route-resolved` fires when a `Route` layer's path is ready. `detail = {layerId, route}` with the normalized geometry, distance, duration, legs, and bounds — see Routes and Live Tracking above.
 - `om-measure` carries the measure widget's whole readout. `detail` has the mode and units, `totalMeters`/`areaMeters2`/`perimeterMeters`, and in volume mode `cutMeters3`/`fillMeters3`/`netMeters3`/`totalMeters3` plus `cellSizeM`, `gsdM`, `cutErrorM3`/`fillErrorM3` and `nodataFraction` (the error model the numbers were computed under), the material-adjusted `cutAdjustedMeters3`/`fillAdjustedMeters3` and `cutMassKg`/`fillMassKg`, and `profileSeries`. A `stale` flag marks the brief window after a footprint commits but before its terrain sample resolves, so you never mistake a previous shape's numbers for the current ones.
 
 To mirror state instead of reading events, use `getStore(token)`. It gives a `{subscribe, getSnapshot}` store for each token: `viewport`, `selection`, `layers`, and `data:<id>`. The store works directly with `useSyncExternalStore`, MobX, Redux, or Zustand.
@@ -284,6 +307,7 @@ The legend widget builds each entry from the layer's real symbology. Write the s
 
 - `scale($f, sequential|diverging, […], domain=[a,b])` → a gradient ramp with the domain ends labeled.
 - `scale($f, threshold, […], domain=[b1, b2])` → discrete class rows (`< b1`, `b1 – b2`, `≥ b2`).
+- `classify-by="mag" classify-scale="jenks"` → the same discrete class rows, with the boundaries the classification computed from the data.
 - `$type == 'a' ? '#c1' : $type == 'b' ? '#c2' : '#fallback'` → a category palette with an "other" row.
 - A `COGLayer` with `colormap` and `min`/`max` → the colormap ramp over the rescale window.
 

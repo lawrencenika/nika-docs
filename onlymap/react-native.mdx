@@ -72,8 +72,11 @@ npx expo install expo-build-properties
   including zstd, GeoParquet, Shapefile, range-requested COG), WebSocket
   `source="upsert"` streams with `streamKey`, or `refresh` polling.
 - **Native UI lives beside the map**, driven by the imperative handle and
-  `useOmMapWatch`; the web's `<om-widget>`/`<om-overlay>` elements have no
-  native components yet.
+  `useOmMapWatch`. The web's widgets, overlays, stories, and draw have no
+  native components yet — but `<OmMap html={manifestString}>` hosts a raw
+  HTML manifest so the full DOM lane runs in the WebView; sketches reach
+  React Native as GeoJSON via `onDrawChange`, measure readouts via
+  `onMeasure`.
 - **`emit()` runs core-backed actions** (`fly-to`, `zoom-in`, `zoom-out`,
   `zoom-to-feature`, registered custom actions) exactly as on the web
   `MapController`. DOM-manifest actions (`toggle-layer`, `filter-layer`,
@@ -85,7 +88,9 @@ npx expo install expo-build-properties
 A ref (or `useOmMap()` in descendants) exposes the `MapController` surface,
 all Promise-returning: `flyTo`, `flyToBounds`, `zoomBy`, `setView`,
 `getViewState`, `project`, `getSelection`, `emit`, `snapshot`, `stats`,
-`data`, `dataInViewport`, `irSnapshot`, `reload`, and `injectPick`.
+`data`, `dataInViewport`, `irSnapshot`, `reload`, `hostFile` (copies a device
+file into the served tree and returns a local URL for layer `data`), and
+`injectPick`.
 
 `injectPick` is the consumer testing surface: a synthetic selection travels
 the same code path as a real tap and reaches your per-layer

@@ -77,6 +77,11 @@ npx expo install expo-build-properties
   HTML manifest so the full DOM lane runs in the WebView; sketches reach
   React Native as GeoJSON via `onDrawChange`, measure readouts via
   `onMeasure`.
+- **Events for taps, watch tokens for continuous state.** Per-layer
+  `onClick` is the tap-selection channel. `useOmMapWatch` mirrors
+  continuous state (viewport, layers, data) last-write-wins — hover picks
+  share the `selection` token, so a tap's trailing hover can overwrite the
+  click in the same render batch if you try to drive selection UI from it.
 - **`emit()` runs core-backed actions** (`fly-to`, `zoom-in`, `zoom-out`,
   `zoom-to-feature`, registered custom actions) exactly as on the web
   `MapController`. DOM-manifest actions (`toggle-layer`, `filter-layer`,

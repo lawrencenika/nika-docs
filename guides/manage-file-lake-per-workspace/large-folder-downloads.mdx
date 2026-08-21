@@ -1,0 +1,159 @@
+---
+title: "Large Folder Downloads"
+description: "Use the Nika Planet Downloader to pull folders that are too large for the browser"
+---
+
+Browsers download a folder by building the whole ZIP in memory before anything
+reaches your disk. Past about 2 GB that stalls, and there is no way to resume —
+so Nika Planet hands folders that size to a small terminal tool instead.
+
+The **Nika Planet Downloader** writes straight to the drive you choose, transfers
+files in parallel, resumes where it left off, and verifies every file against the
+checksum storage reports.
+
+## Install
+
+Download the build for your platform from
+[the releases page](https://github.com/NikaGeospatial/nika-planet-downloader/releases/latest).
+One install covers every export, in any workspace.
+
+<Tabs>
+
+<Tab title="macOS">
+
+```bash
+tar -xzf nika-planet-downloader-*-macos-universal.tar.gz
+sudo mv nika-planet-downloader /usr/local/bin/
+```
+
+</Tab>
+
+<Tab title="Linux">
+
+```bash
+tar -xzf nika-planet-downloader-*-linux-x86_64.tar.gz
+sudo mv nika-planet-downloader /usr/local/bin/
+```
+
+</Tab>
+
+<Tab title="Windows">
+
+Rename the downloaded `.exe` to `nika-planet-downloader.exe` and put it
+somewhere on your `PATH`.
+
+</Tab>
+
+</Tabs>
+
+## Download a folder
+
+Point the tool at a folder using a `nikafs://` address:
+
+```bash
+nika-planet-downloader export nikafs://<project-id>/data/stac/cogs --output ~/Downloads
+```
+
+You do not need to sign in first. If no session is cached, the command opens your
+browser once, and continues into the download as soon as you have authorised it.
+
+<Note>
+  **`--output` is the parent directory.** The folder structure from Nika Planet
+  is recreated inside it, so `--output ~/Downloads` saves the example above to
+  `~/Downloads/stac/cogs`. Passing `--output ~/Downloads/stac` would give you
+  `~/Downloads/stac/stac`.
+</Note>
+
+### Finding the address
+
+The `nikafs://` address is your project id followed by the folder path:
+
+1. **Project id** — the UUID in the workspace URL while the project is open
+2. **Folder path** — right-click the folder in File Storage and choose
+   **Copy Path**, which gives you something like `/data/stac/cogs/`
+
+Join them: `nikafs://<project-id>/data/stac/cogs`
+
+Addresses do not expire. Keep one in a script or runbook and it will keep working
+for as long as you have access to that folder.
+
+### Several folders at once
+
+Pass as many addresses as you like. They may span different projects.
+
+```bash
+nika-planet-downloader export \
+  nikafs://<project-id>/data/stac/cogs \
+  nikafs://<project-id>/data/imagery/2024 \
+  --output ~/Downloads
+```
+
+### Starting from the web app
+
+If you select folders in File Storage and choose **Download**, anything too large
+for the browser collapses into a single row in Active Operations. Click
+**Download via CLI** for a dialog with the exact command already filled in —
+copy it and run it.
+
+## Options
+
+| Flag            | Default  | What it does                                                            |
+| --------------- | -------- | ----------------------------------------------------------------------- |
+| `--output`      | required | Parent directory for the download                                       |
+| `--concurrency` | `4`      | Files transferred at once. Raise it if your connection is not saturated |
+| `--force`       | off      | Re-download files even when a verified local copy exists                |
+| `--dry-run`     | off      | List what would transfer, then stop                                     |
+
+<Note>
+  The flags above are the ones you are likely to reach for; run
+  `nika-planet-downloader export --help` for the full list.
+</Note>
+
+## Resuming
+
+Press **Ctrl-C** at any point. Partly-transferred files are kept as `.nikapart`
+files, and re-running the identical command picks up where it stopped. Files that
+already finished are skipped after a size check, so repeating a command is cheap
+and safe.
+
+## Other commands
+
+```bash
+nika-planet-downloader login     # sign in ahead of time
+nika-planet-downloader whoami    # show the current sign-in state
+nika-planet-downloader logout    # forget the cached session on this machine
+```
+
+## Access and privacy
+
+The tool signs in as **you**. It can only download what your own Nika Planet
+account is already allowed to download, and that permission is re-checked on
+every request — so if your workspace access changes, an in-progress download
+stops. Read access is granted one hour at a time and can be revoked.
+
+Your session is stored in your operating system's keychain, never in a file.
+
+## If something goes wrong
+
+<AccordionGroup>
+  <Accordion title="'no folders given, and nothing is waiting on this account'">
+    You ran `export` with no address. Pass a `nikafs://` address, or start a
+    download from the web app and use **Download via CLI**.
+  </Accordion>
+  <Accordion title="'No files found under …'">
+    The path is wrong or the folder is empty. Re-copy it with **Copy Path** and
+    check the project id matches the workspace the folder is in.
+  </Accordion>
+  <Accordion title="'You do not have permission to download from this workspace'">
+    Your access to that project changed. Ask a workspace owner to confirm you
+    are still a contributor or above.
+  </Accordion>
+  <Accordion title="Some files failed">
+    Re-run the identical command. Only the files that failed are retried;
+    everything already downloaded is skipped.
+  </Accordion>
+</AccordionGroup>
+
+Still stuck? Email [support@nikaplanet.com](mailto:support@nikaplanet.com), or
+[book a call](https://cal.com/lawrence-nika/export-20-gb-files-from-nika.eco) for
+help with very large migrations.

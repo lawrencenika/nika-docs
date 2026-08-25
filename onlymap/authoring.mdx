@@ -289,6 +289,14 @@ Link a Route to a Tracking layer with `progress-from="<tracking-layer-id>"` and 
 
 Whenever a Route resolves — direct `geometry` or a provider round-trip alike — the map dispatches `om-route-resolved`: `detail = { layerId, route }`, where `route` carries the normalized `geometry`, `distanceMeters`, `durationSec`, `legs`, and the fitted `bounds`. That is how a page reads a provider-computed route (an ETA readout, a turn list) without re-fetching it.
 
+## Sharp Flybys Over 3D Tiles, and Recording Them
+
+Story fly-bys over 3D tiles (photogrammetry, BIM, Google Photorealistic) normally show tiles popping in or refining from blurry to sharp as the camera moves — tiles only start downloading when the camera needs them. Because a story's camera route is known before it plays, OnlyMapJS can fix this three ways, in increasing strength:
+
+- **`<om-story warm-tiles>`** pre-loads every 3D tileset's tiles along the story's fly-to route in the background as soon as the page loads. Manual form: the `warm-tiles` action; the `om-tiles-warmed` event on `<om-map>` announces completion. For long routes, keep more tiles cached with `load-options='{"tileset":{"maximumMemoryUsage":512}}'` on the tiles layer.
+- **`<om-story paced>`** goes further: playback holds each frame until the tiles under the camera are fully sharp before advancing. The flight takes longer, but no frame ever shows blurry tiles. `paced-max-hold` caps how long one frame may wait (default 10s; `"none"` waits unconditionally); each frame reports its wait through the `om-paced-tick` event. Combine with `warm-tiles` to shorten the holds.
+- **`npx onlymapjs record map.html --out flyby.mp4`** plays the story load-paced in headless Chromium and writes a video in which every frame is sharp — widgets, overlays, and attribution included. Uses ffmpeg when installed (otherwise you get PNG frames plus the exact command); `--gpu` is ~3× faster on heavy scenes; `--fps`, `--width/--height/--scale`, `--story`, `--max-hold` tune the take. Custom pipelines hook the same seam with `storyEl.setPacedCapture(...)` — the story waits for your capture, so frames can never tear.
+
 The full guide, including per-engine adapter notes, is [docs/routing.md](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/routing.md) in the package.
 
 To wire your own logic, read the DOM events on `<om-map>`:

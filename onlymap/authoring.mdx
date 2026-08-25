@@ -289,6 +289,14 @@ Link a Route to a Tracking layer with `progress-from="<tracking-layer-id>"` and 
 
 Whenever a Route resolves — direct `geometry` or a provider round-trip alike — the map dispatches `om-route-resolved`: `detail = { layerId, route }`, where `route` carries the normalized `geometry`, `distanceMeters`, `durationSec`, `legs`, and the fitted `bounds`. That is how a page reads a provider-computed route (an ETA readout, a turn list) without re-fetching it.
 
+## Travel-Map Animations and On-Map Annotations
+
+The classic animated-travel-map moves are native story verbs. A `trace` step draws a line progressively; add `follow` to lock the camera to the drawing tip, and `easing="linear|ease-in|ease-out|ease-in-out"` to shape the clock. Per-feature tracing (`trace` with `feature-id`) draws a polygon's outline at uniform speed — every part of a MultiPolygon, largest first — then reveals its fill. For labels on the shapes themselves (no popup card), put `anchor="surface"` on a `TextLayer` over polygon data: each row's text anchors inside its own polygon, with concave shapes handled; pair with `font-settings='{"sdf":true}'` and `outline-width`/`outline-color` for a legible halo.
+
+## Driving Stories From External Video Renderers
+
+Frameworks that own the clock (Remotion-class) render frame-by-frame: mark the map `data-om-recording` — the determinism switch (camera moves land instantly, effects snap to their end state, transitions and gesture interruption turn off, `snapshot()` returns byte-stable captures) — then per frame call `story.seek(t, { interpolateCamera: true })` (mid-fly-to seeks land on the real flight arc), `await mapEl.whenSettled()` (resolves when the map has genuinely finished drawing; also available on `MapController`), and capture. The same frame renders byte-identically across processes and orderings, which is what licenses parallel rendering. `npx onlymapjs record` remains the built-in one-command path.
+
 ## Sharp Flybys Over 3D Tiles, and Recording Them
 
 Story fly-bys over 3D tiles (photogrammetry, BIM, Google Photorealistic) normally show tiles popping in or refining from blurry to sharp as the camera moves — tiles only start downloading when the camera needs them. Because a story's camera route is known before it plays, OnlyMapJS can fix this three ways, in increasing strength:

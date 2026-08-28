@@ -1,0 +1,144 @@
+---
+title: "Remotion"
+description: "@nika-js/onlymap-remotion renders OnlyMap maps as frames inside a Remotion composition: bring a route, a list of places, or a story, and the camera, markers and video length are derived from that data."
+icon: "clapperboard"
+---
+
+## What it is
+
+Remotion makes videos by screenshotting a React page once per frame. A map is
+the worst possible thing to screenshot: tiles stream in asynchronously, labels
+settle over hundreds of milliseconds, and the camera animates on its own clock.
+Point Remotion at a map naively and you get blurry frames, missing labels, and
+a video that renders differently every time.
+
+`@nika-js/onlymap-remotion` makes a map safe to screenshot. Every frame is held
+until the map reports it has genuinely finished drawing, and a frame is a pure
+function of the frame number — the same frame renders byte-identically whether
+it is produced alone, in sequence, or out of order.
+
+```tsx
+import { OmMapVideo, omMapVideoMetadata } from "@nika-js/onlymap-remotion";
+
+// One component. The prop you pass decides how the camera moves.
+<OmMapVideo src={staticFile("map.html")} route={route} zoom={14} pitch={55} />
+```
+
+It is an independent integration, not affiliated with or endorsed by Remotion.
+
+## Which tool for which job
+
+<Note>
+If the video is *just the map moving* — no titles, no overlays, one output —
+you do not need this package. `npx onlymapjs record map.html --out flyby.mp4`
+is one command and has none of the caveats below.
+</Note>
+
+| You want | Use |
+|---|---|
+| An MP4 of a flyby, nothing layered on top | `onlymapjs record` |
+| A map clip inside a larger Remotion edit | `record` → `<OffthreadVideo>` |
+| Text, labels or charts that react to the map per frame | This package |
+| One composition rendering many videos from data | This package |
+
+## Bring data, not coordinates
+
+The camera should be derived from data you already have. The prop you pass to
+`<OmMapVideo>` selects the source, and `omMapVideoMetadata` derives the
+composition's duration from that same prop — so a longer route is a longer
+video, and an extra stop is a longer tour.
+
+| You have | Prop | Derived for you |
+|---|---|---|
+| GeoJSON LineString | `route` | position, follow-bearing, marker, duration from ground distance |
+| A list of places | `places` | dwell-and-travel tour, duration from the list |
+| An OnlyMap story | *(none)* | camera and duration from the story |
+| Composed shots | `keyframes` | interpolation between poses |
+
+```tsx
+<Composition
+  id="flyover"
+  component={MyVideo}
+  fps={30}
+  width={1920}
+  height={1080}
+  durationInFrames={1}                    // replaced by calculateMetadata
+  defaultProps={{ route }}
+  calculateMetadata={omMapVideoMetadata({ fps: 30, metersPerSecond: 600 })}
+/>
+```
+
+TypeScript permits only one camera source at a time, so a contradictory
+composition does not compile. Anything the wrapper cannot express — a spring, a
+data-driven zoom, a camera chasing live telemetry — drops to the `useOmManifest`
+and `useOmCamera` hooks it is built from.
+
+Hand-typed coordinate arrays are the escape hatch, not the starting point. If
+you find yourself typing longitudes, you probably want a route file instead.
+
+## Overlays that track geography
+
+This is the capability a recorded MP4 cannot offer. Because the map is live DOM
+inside your React tree, `projectLngLat` gives a coordinate's screen position
+each frame, so Remotion content — `<Sequence>`-timed, `interpolate()`-animated —
+stays pinned to a place as the camera flies over it.
+
+```tsx
+<OmMapVideo src={staticFile("map.html")} route={route}
+  onFrameSettled={() => project({ hq: [-122.4, 37.79] })}>
+  {points.hq && <Label style={{ left: points.hq[0], top: points.hq[1] }}>HQ</Label>}
+</OmMapVideo>
+```
+
+<Warning>
+Projection must be committed with `flushSync` inside `onFrameSettled` — a plain
+`setState` lands after the frame is captured, so every overlay renders one frame
+stale and visibly lags the map. The `useProjectedPoints` helper does this for
+you.
+</Warning>
+
+## The rules that differ from ordinary Remotion
+
+- **ANGLE GL is required, not preferred.** Remotion's default software renderer
+  cannot create a WebGL context for the map — every render fails. Set
+  `Config.setChromiumOpenGlRenderer("angle")` in `remotion.config.ts`, or pass
+  `chromiumOptions: { gl: "angle" }` to programmatic `@remotion/renderer` calls,
+  which do not read the config file.
+- **Preview and render gate differently, on purpose.** Studio releases each
+  frame as soon as the camera is written, so scrubbing is instant and tiles pop
+  in behind the playhead. Rendering always waits for the map to settle,
+  whatever the preview does. Set `previewGate="exact"` to preview at final
+  quality.
+- **Studio cannot host interactive map UI.** Its preview overlays consume
+  pointer events before a composition sees them, so buttons and map gestures
+  inside a composition receive nothing. Interactive shot composing runs as a
+  separate page (`npm run rig`) that writes a JSON file a composition loads;
+  tweaks belong in the props panel via a zod `schema`.
+- **Manifests are prepared before mounting.** Every `<om-map>` gains the
+  recording switch, `<script>` tags are removed (they never execute under
+  `innerHTML`, and a second OnlyMap runtime would fail deck.gl's
+  duplicate-version check), and `loop` is stripped. Each warns once.
+- **Concurrency turns over.** Measured on a basemap scene: `2` → 1.66×,
+  `4` → 1.90×, `8` → **slower than 4**. Use `--concurrency 2`; every worker is
+  a browser tab with a cold tile cache, so start at `1` on metered providers.
+
+## Verified, not asserted
+
+The determinism claim is enforced by a render suite that boots a real browser:
+the same frame rendered twice in separate processes must be byte-identical, and
+a frame rendered out of order must equal the same frame rendered cold. A
+cross-check renders the same manifest through `onlymapjs record` and through the
+plugin and compares them — currently 0.9999 structural similarity at aligned
+story time, across two different Chromium and GL stacks.
+
+## Reference
+
+- The package ships `llms.txt` (the complete agent-facing reference) and an
+  installable agent skill — both inside the npm tarball.
+- Peers: `@nika-js/onlymap` at an exact version (it bundles deck.gl, which
+  fails on duplicate versions), `remotion` ≥ 4.0.342, React ≥ 18. `zod` is
+  optional, for props-panel schemas.
+- Licensing: free for non-commercial use provided the in-frame OnlyMap
+  attribution survives into the output; commercial use needs a key. Remotion
+  and OnlyMap JS carry their own separate terms — see
+  [Licensing & Telemetry](/onlymap/licensing-and-telemetry).

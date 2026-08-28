@@ -192,6 +192,7 @@
 									"onlymap/overview",
 									"onlymap/authoring",
 									"onlymap/react-native",
+									"onlymap/remotion",
 									"onlymap/licensing-and-telemetry"
 								]
 							},

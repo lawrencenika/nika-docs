@@ -60,6 +60,7 @@ Two optional commands complete the setup:
 - **39 layer types by name**: all of deck.gl's core, geo, aggregation, and mesh layers (Scatterplot, GeoJson, Arc, Path, Heatmap, Hexagon, Trips, Tile, Tile3D, Scenegraph, and more). It adds a built-in `PopupLayer` for WebGL labels at scale, a native `COGLayer` for GeoTIFF rasters, a `ZarrLayer` for chunked Zarr/GeoZarr rasters, an `ImageOverlay` for georeferenced drone photos, a `BIMLayer` for in-browser IFC models, and `Route`/`Tracking` for styled routes and live position tracking.
 - **Live manifest**: the markup is the state. When you change an attribute — from a widget, a behavior, a script, or devtools — the map updates automatically.
 - **Built-in undo and redo**: you can undo a layer toggle, a filter change, a basemap switch, an element edit, or a drawn sketch. Use `<om-widget type="undo-redo">` or Cmd/Ctrl-Z.
+- **Print-ready cartographs** <sup>new in 0.8.0</sup>: the separate `@nika-js/onlymap/cartograph` entry composes millimetre-based map sheets with live or static georeferenced frames, derived legends, graticules, scale bars, north arrows, press marks, and atlas export. It stays out of the interactive-map bundle, and a static-only sheet never loads the map runtime. See [Cartographs & Atlases](/onlymap/cartographs).
 
 ### A Full 3D Scene, Still Just Attributes <sup>new in 0.3</sup>
 - **Terrain**: `terrain="terrarium"` adds real elevation with no configuration (keyless AWS tiles). Geographic layers drape onto the surface automatically. You can also give your own DEM tile URL or register presets.

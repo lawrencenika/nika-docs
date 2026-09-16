@@ -1,0 +1,135 @@
+---
+title: "Cartographs & Atlases"
+description: "Build print-ready map sheets and multi-page atlases with OnlyMap JS 0.8.0: millimetre layouts, georeferenced frames, derived furniture, and print-resolution export."
+icon: "print"
+---
+
+## Print maps are documents
+
+OnlyMap JS 0.8.0 adds `@nika-js/onlymap/cartograph`, a separate entry for composing
+print-ready map sheets in HTML. A cartograph is measured in millimetres, not browser
+layout units. It can combine live OnlyMap scenes and static georeferenced rasters with
+legends, scale bars, north indicators, graticules, text, shapes, and images.
+
+The cartograph entry is lazy and separate from the interactive-map entry. It does not
+increase the core map bundle, and a sheet containing only static frames never loads the
+map runtime.
+
+```html
+<!doctype html>
+<link rel="stylesheet"
+  href="https://unpkg.com/@nika-js/onlymap@0.8.0/dist/cartograph.css">
+<script type="module"
+  src="https://unpkg.com/@nika-js/onlymap@0.8.0/dist/cartograph.standalone.js"></script>
+
+<om-cartograph size="A4" orientation="landscape" title="Parcel survey" dpi="300">
+  <om-text kind="title" x="10" y="8" w="190" h="10">{{title}}</om-text>
+
+  <om-frame id="main" x="10" y="24" w="220" h="150"
+            center="[103.81, 1.31]" zoom="14.4">
+    <om-map basemap="positron">
+      <om-layer id="parcels" type="GeoJsonLayer" data="./parcels.geojson"
+                label="Parcels" color="#0f766e"
+                get-fill-color="'#0f766e'" pickable></om-layer>
+    </om-map>
+  </om-frame>
+
+  <om-legend for="main" x="235" y="24" w="48" h="55"></om-legend>
+  <om-scalebar for="main" x="10" y="178" w="65" h="9"
+               units="metric"></om-scalebar>
+  <om-north for="main" x="210" y="176" w="16" h="18"
+            kind="rose"></om-north>
+  <om-graticule for="main" x="10" y="24" w="220" h="150"
+                interval="0.005" labels="outside"></om-graticule>
+</om-cartograph>
+```
+
+## Frames and cartographic furniture
+
+`<om-frame>` supports two sources:
+
+- A **live frame** contains an inline `<om-map>` or references a map document with
+  `src`. The frame owns its camera, so the same map can appear at different extents on
+  one sheet. Export captures it again at the requested print resolution.
+- A **static frame** uses `mode="static"`, a raster image, `crs`, and four geographic
+  `corners`. Scale bars, grids, and north indicators use that georeference without
+  loading the interactive map runtime.
+
+Furniture references a frame with `for="frame-id"`. A live-frame legend derives its
+rows from the map's resolved symbology, including classified breaks and raster ramps,
+so the map and legend cannot drift apart. Static frames can use literal
+`<om-legend-row>` entries with `derived="false"`.
+
+Use `overview-of="main"` on a second frame to draw the main frame's footprint as a
+locator inset. Text supports page, frame, and atlas tokens such as `{{title}}`,
+`{{date}}`, `{{frame.main.scale}}`, and `{{atlas.name}}`.
+
+## Print and image export
+
+Sheets print at their real physical size through CSS `@page`. Live WebGL frames are
+re-rendered and temporarily replaced with print-resolution images before the print
+dialog opens, avoiding blank or screen-resolution map canvases.
+
+```js
+import {
+  renderCartograph,
+  validateCartographString,
+} from "@nika-js/onlymap/cartograph";
+
+const page = document.querySelector("om-cartograph");
+const result = await renderCartograph(page, { dpi: 300 });
+// result.blob is a PNG by default; result.dpi reports the delivered resolution.
+```
+
+Use `page.print({ dpi: 300 })` for print/PDF or `renderCartograph(page, { dpi: 300 })`
+for PNG/JPEG. A hosted cartograph can opt into `?print=1` and
+`?export=png&dpi=300` automation by setting `allow-url-actions` on its root.
+
+Press-work attributes are available on `<om-cartograph>`:
+
+- `bleed` expands the printable sheet beyond the trim box.
+- `crop-marks` draws trim marks inside that bleed.
+- `safe-zone` shows a screen-only guide and never appears in output.
+- `flatten` renders the final sheet as one raster for print workflows that mishandle
+  SVG or CSS effects.
+
+## One page per feature
+
+`<om-atlas>` turns a layer into a run of sheets—one page per feature. Frames carrying
+`atlas-fit="feature"` refit to the current feature, scale bars and tokens update for
+that page, and `renderCartographAtlas()` writes the run to one ZIP.
+
+```html
+<om-frame id="main" atlas-fit="feature" atlas-margin="0.25" ...></om-frame>
+<om-atlas for="main" layer="parcels" sort="lot"
+          filter="$area > 500"
+          filename="lot-{{atlas.lot}}-{{atlas.name}}"></om-atlas>
+```
+
+```js
+import { renderCartographAtlas } from "@nika-js/onlymap/cartograph";
+
+const { blob, filenames, pages } = await renderCartographAtlas(page, { dpi: 300 });
+```
+
+Pages render sequentially through one live map rather than cloning WebGL contexts, so
+large atlases do not fail at the browser's context limit.
+
+## Colour and validation
+
+Set `cvd="deuteranopia"`, `protanopia`, `tritanopia`, or `achromatopsia` to review the
+whole page through a colour-vision-deficiency simulation. `lintLegendColours()` detects
+legend entries that collapse under those simulations.
+
+`validateCartographString()` checks the page without loading the map core.
+`validateCartographDeep()` additionally validates inline live-map manifests when the
+core is already available. Diagnostics use the same structured error and warning shape
+as `OmMap.validate()`.
+
+Free non-commercial cartographs include an OnlyMap foot credit in print and image
+exports. An authored `<om-text>` credit mentioning OnlyMap satisfies the attribution
+requirement; a verified commercial key on a live frame removes it. See
+[Licensing & Telemetry](/onlymap/licensing-and-telemetry).
+
+For the complete element and attribute reference, see the
+[package cartograph guide](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/cartograph.md).

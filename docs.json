@@ -191,6 +191,7 @@
 								"pages": [
 									"onlymap/overview",
 									"onlymap/authoring",
+									"onlymap/cartographs",
 									"onlymap/react-native",
 									"onlymap/remotion",
 									"onlymap/licensing-and-telemetry"

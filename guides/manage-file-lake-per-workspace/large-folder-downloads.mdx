@@ -13,34 +13,47 @@ checksum storage reports.
 
 ## Install
 
-Download the build for your platform from
-[the releases page](https://github.com/NikaGeospatial/nika-planet-downloader/releases/latest).
 One install covers every export, in any workspace.
 
 <Tabs>
 
 <Tab title="macOS">
 
+With [Homebrew](https://brew.sh):
+
 ```bash
-tar -xzf nika-planet-downloader-*-macos-universal.tar.gz
-sudo mv nika-planet-downloader /usr/local/bin/
+brew install nikageospatial/nika-planet-downloader/nika-planet-downloader
 ```
+
+It is ready to use as soon as the command finishes.
+
+No Homebrew? Use the install script instead:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NikaGeospatial/nika-planet-downloader/main/install.sh | sh
+```
+
+The script adds the downloader to your `PATH`, so **open a new terminal
+window** before running it.
 
 </Tab>
 
 <Tab title="Linux">
 
 ```bash
-tar -xzf nika-planet-downloader-*-linux-x86_64.tar.gz
-sudo mv nika-planet-downloader /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/NikaGeospatial/nika-planet-downloader/main/install.sh | sh
 ```
+
+The script adds the downloader to your `PATH`, so **open a new terminal
+window** before running it. x86_64 only for now.
 
 </Tab>
 
 <Tab title="Windows">
 
-Rename the downloaded `.exe` to `nika-planet-downloader.exe` and put it
-somewhere on your `PATH`.
+Download `nika-planet-downloader-windows-x86_64.exe` from
+[the releases page](https://github.com/NikaGeospatial/nika-planet-downloader/releases/latest),
+rename it to `nika-planet-downloader.exe`, and put it somewhere on your `PATH`.
 
 </Tab>
 

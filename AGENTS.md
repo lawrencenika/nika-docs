@@ -311,3 +311,46 @@ Insert it before the existing unsubscribe link.
 | Analytics UI is AI-chat-focused | Use Google Analytics 4 for proper traffic and SEO funnel data |
 | No built-in link validation | Add a GitHub Action to check for broken internal links before deploy |
 | Sitemap excludes access-controlled pages | Fine for public docs; just ensure all public pages are in `navigation` |
+
+---
+
+## OnlyMap JS pages track a released package — keep them in step
+
+The six pages under `onlymap/` restate the public surface of `@nika-js/onlymap`,
+which releases often (seventeen releases between 0.8.0 and 0.10.9 in one month). The
+core repo has no way to update this site, so the pages rot silently: they sat at 0.8.0
+while the core shipped projected maps, shaded relief, geometry transforms, curved
+labels, SVG export, print finishes, fallback frame sources and atlas paging — none of
+which this site mentioned. A claim that "the docs were updated" is only true if
+`git log -- onlymap/` says so.
+
+**Which page restates what:**
+
+| Page | Restates |
+|---|---|
+| `onlymap/overview.mdx` | the layer-type count and roster; every headline feature with its `<sup>new in X</sup>` tag; the Roadmap (anything shipped must LEAVE it) |
+| `onlymap/authoring.mdx` | `<om-map>`/`<om-layer>` attributes, data sources, Cartographic Maps, Print Finishes, legends, exports, validation |
+| `onlymap/cartographs.mdx` | the cartograph entry: frames and their sources, atlas, export, credit; **the CDN pin in its install snippet** |
+| `onlymap/licensing-and-telemetry.mdx` | free-plan limits, the badge and `keep-badge`, the sheet credit |
+| `onlymap/react-native.mdx`, `onlymap/remotion.mdx` | the two sibling packages, each with its own version |
+
+**The ritual, on every core release** (or when asked to "update the docs"):
+
+1. Find what shipped: `git -C ../OmniMap log --oneline` is not enough — read
+   `CHANGELOG.md` in the core repo from the version this site last documented
+   forward. Every `### Added` bullet is a claim this site must make; every `### Changed`
+   bullet may make a sentence here wrong; every `### Fixed` bullet is a workaround an
+   author may have learned that they can now drop.
+2. Touch every page in the table that restates the affected surface. Tag new
+   capabilities `<sup>new in X.Y.Z</sup>`, the house convention.
+3. Move the CDN pin in `onlymap/cartographs.mdx` to the released version. A stale pin
+   teaches the reader to install a version without the feature documented beside it.
+4. Check mechanically, not from memory: `grep -rn "onlymap@0\." onlymap/` must show only
+   the current version (plus the historical "0.6.19 or later" note in the overview), and
+   a grep for each new attribute or element name from the changelog must find at least
+   one page.
+5. Commit with the core version in the subject, e.g. `docs(onlymap): 0.10.9 — …`, so
+   `git log -- onlymap/` is the record of what this site covers.
+
+Source material is already written and verified in the core repo — `docs/*.md`,
+`llms.txt`, `skills/onlymapjs/` — so condense from it rather than rewriting from memory.

@@ -30,6 +30,19 @@ A license key lifts all limits and removes the badge:
 OmMap.configureLicense("om_live_…");
 ```
 
+Removing the badge is something a commercial license *permits*, not something it
+requires. `keep-badge` on `<om-map>` (or `OmMap.setKeepBadge(true)`) lifts the free-plan
+limits while still crediting OnlyMap <sup>new in 0.8.4</sup>; the badge then shows the
+credit without the "free for non-commercial use" sentence, which would not describe a
+paid deployment. The preference is page-level and live, and a cartograph's foot credit
+follows it — `<om-cartograph keep-badge>` opts a static sheet in on its own, with no map
+runtime.
+
+A print sheet credits itself **once** <sup>since 0.10.8</sup>: a map mounted inside a
+cartograph frame carries no badge of its own, because the sheet is the published
+artefact and renders the credit for the whole page. A plate with a main map and two
+locator insets is credited once, not three times.
+
 A key is **publishable and deployment-restricted**. It is bound to your domains, so it is safe to put in the page source, like a map-provider API key. It verifies offline, with no network round-trip, so it works in CI and in air-gapped environments. For licensing questions, see [nikaplanet.com/onlymap](https://www.nikaplanet.com/onlymap).
 
 A key can also be scoped to one or more packaged applications, for a map shipped inside a native app shell rather than served from a domain. The app passes its own identifier at startup:

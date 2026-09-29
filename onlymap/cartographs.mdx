@@ -1,15 +1,15 @@
 ---
 title: "Cartographs & Atlases"
-description: "Build print-ready map sheets and multi-page atlases with OnlyMap JS 0.8.0: millimetre layouts, georeferenced frames, derived furniture, and print-resolution export."
+description: "Build print-ready map sheets and multi-page atlases with OnlyMap JS: millimetre layouts, georeferenced frames with fallback sources, derived furniture, projected plates, and print-resolution export."
 icon: "print"
 ---
 
 ## Print maps are documents
 
-OnlyMap JS 0.8.0 adds `@nika-js/onlymap/cartograph`, a separate entry for composing
-print-ready map sheets in HTML. A cartograph is measured in millimetres, not browser
-layout units. It can combine live OnlyMap scenes and static georeferenced rasters with
-legends, scale bars, north indicators, graticules, text, shapes, and images.
+`@nika-js/onlymap/cartograph` is a separate entry for composing print-ready map sheets
+in HTML. A cartograph is measured in millimetres, not browser layout units. It combines
+live OnlyMap scenes and static georeferenced rasters with legends, scale bars, north
+indicators, graticules, text, shapes, and images.
 
 The cartograph entry is lazy and separate from the interactive-map entry. It does not
 increase the core map bundle, and a sheet containing only static frames never loads the
@@ -18,9 +18,9 @@ map runtime.
 ```html
 <!doctype html>
 <link rel="stylesheet"
-  href="https://unpkg.com/@nika-js/onlymap@0.8.0/dist/cartograph.css">
+  href="https://unpkg.com/@nika-js/onlymap@0.10.9/dist/cartograph.css">
 <script type="module"
-  src="https://unpkg.com/@nika-js/onlymap@0.8.0/dist/cartograph.standalone.js"></script>
+  src="https://unpkg.com/@nika-js/onlymap@0.10.9/dist/cartograph.standalone.js"></script>
 
 <om-cartograph size="A4" orientation="landscape" title="Parcel survey" dpi="300">
   <om-text kind="title" x="10" y="8" w="190" h="10">{{title}}</om-text>
@@ -46,7 +46,7 @@ map runtime.
 
 ## Frames and cartographic furniture
 
-`<om-frame>` supports two sources:
+`<om-frame>` shows a picture from one of three kinds of source:
 
 - A **live frame** contains an inline `<om-map>` or references a map document with
   `src`. The frame owns its camera, so the same map can appear at different extents on
@@ -54,15 +54,84 @@ map runtime.
 - A **static frame** uses `mode="static"`, a raster image, `crs`, and four geographic
   `corners`. Scale bars, grids, and north indicators use that georeference without
   loading the interactive map runtime.
+- **Ordered sources** <sup>new in 0.10.6</sup>: a live frame can list several places its
+  picture may come from, as `<om-source>` children, and shows the first that actually
+  renders. See [Fallback sources](#fallback-sources) below.
 
 Furniture references a frame with `for="frame-id"`. A live-frame legend derives its
-rows from the map's resolved symbology, including classified breaks and raster ramps,
-so the map and legend cannot drift apart. Static frames can use literal
-`<om-legend-row>` entries with `derived="false"`.
+rows from the map's resolved symbology, including classified breaks, raster ramps, and
+flat colours <sup>0.10.5</sup>, so the map and legend cannot drift apart. Static frames
+can use literal `<om-legend-row>` entries with `derived="false"`.
 
 Use `overview-of="main"` on a second frame to draw the main frame's footprint as a
 locator inset. Text supports page, frame, and atlas tokens such as `{{title}}`,
 `{{date}}`, `{{frame.main.scale}}`, and `{{atlas.name}}`.
+
+### A live frame follows its map <sup>since 0.8.3</sup>
+
+A live frame georeferences whatever its map is showing. Pan, rotate or tilt the map
+inside a frame and, once it settles, the north arrow, scale bar, graticule, locator
+inset and `{{frame.<id>.scale}}` all describe the view on screen — not the camera the
+document was saved with. Zoom out far enough and the world wraps inside the frame like
+any web map: the graticule labels each copy, the scale bar measures its own row. The
+frame never caps or rewrites the camera. `max-pitch` and `min-zoom` on `<om-map>` exist
+as author-set controls for a kiosk-style map, and nothing applies them for you.
+
+### Projected plates <sup>new in 0.10.0</sup>
+
+A live frame inherits the projection of the map it shows. Point it at a map whose
+`<om-map>` carries `crs="EPSG:5070"` and you get a properly projected plate — Albers,
+UTM, a national grid — with the graticule, scale bar and north arrow all placed through
+that plane. Choose the projection in the **map**, not the frame; see
+[Cartographic Maps](/onlymap/authoring#cartographic-maps) for what a projected map can
+and cannot carry.
+
+### Freeze a frame to vector <sup>new in 0.10.0</sup>
+
+`frame.freeze({ format: "svg" })` turns a live frame into editable artwork in place —
+real `<path>` outlines and real `<text>` labels, with relief and imagery as images
+underneath. The frozen sheet opens with no JavaScript at all and still reads correctly.
+Freezing a projected frame writes the map's CRS onto it.
+
+## Fallback sources <sup>new in 0.10.6</sup>
+
+`src=` names one place a frame's picture comes from and assumes it works. That holds in
+the app that wrote the sheet and often nowhere else: a relative path into an app's
+storage, or layers served by an app-local protocol, both fail when the file is opened
+elsewhere — and they fail *silently*. The map mounts, reports success, and draws an
+empty box ringed by a perfectly correct legend, scale bar and title.
+
+A frame can therefore declare several sources and show the first that **renders**:
+
+```html
+<om-frame id="main" x="15" y="41" w="255" h="155" center="[-96, 38]" zoom="3.25">
+  <om-source src="../maps/map-abc.html"></om-source>
+  <om-source src="captures/main@2x.png"
+             corners="[[-126,50],[-66,50],[-66,23],[-126,23]]" crs="EPSG:5070"></om-source>
+</om-frame>
+```
+
+- **`src=` on the frame is shorthand** for the first `<om-source>`, so every existing
+  sheet keeps working. An inline `<om-map>` child always outranks both.
+- **One attribute, `src`, for both kinds.** The kind is read from the extension:
+  `.html` is a map document; `.png`, `.jpg`, `.jpeg`, `.webp`, `.avif`, `.gif` or
+  `.svg` is a capture. Anything else is a validation error naming both — never a guess.
+- **"Rendered" means one drawable thing** after the map settles — a basemap, or rows on
+  any layer. Deliberately not "every layer loaded": a sheet whose fifth layer 404s is
+  degraded, not failed, and swapping it for a stale capture would be worse.
+- **A capture carries its own `corners` and `crs`**, because if it is what you are
+  seeing, the live map did not load and there is nothing else to take coordinates
+  from. Validation asks for them.
+- **The frame says which source it settled on** — a `data-om-carto-source="<index>"`
+  attribute and an `om-frame-source` event — so an editor can say "showing a capture".
+  Furniture re-places itself against whichever source won.
+
+<Note>
+A saved sheet renders **in place**; it is not portable. Capture paths are relative, so
+moving the file alone breaks them, exactly as it already breaks a relative `src=`.
+Exporting is what produces a file that survives being sent to someone — it inlines the
+map and embeds the pictures.
+</Note>
 
 ## Print and image export
 
@@ -83,7 +152,8 @@ const result = await renderCartograph(page, { dpi: 300 });
 
 Use `page.print({ dpi: 300 })` for print/PDF or `renderCartograph(page, { dpi: 300 })`
 for PNG/JPEG. A hosted cartograph can opt into `?print=1` and
-`?export=png&dpi=300` automation by setting `allow-url-actions` on its root.
+`?export=png&dpi=300` automation by setting `allow-url-actions` on its root; for an
+atlas, `?export=png&page=N` (1-based) exports one page of the run.
 
 Press-work attributes are available on `<om-cartograph>`:
 
@@ -93,17 +163,22 @@ Press-work attributes are available on `<om-cartograph>`:
 - `flatten` renders the final sheet as one raster for print workflows that mishandle
   SVG or CSS effects.
 
+A map carrying an `<om-effect>` print finish exports as a single raster band, because
+the finish treats the whole frame — see
+[Print Finishes](/onlymap/authoring#print-finishes).
+
 ## One page per feature
 
-`<om-atlas>` turns a layer into a run of sheets—one page per feature. Frames carrying
+`<om-atlas>` turns a layer into a run of sheets — one page per feature. Frames carrying
 `atlas-fit="feature"` refit to the current feature, scale bars and tokens update for
 that page, and `renderCartographAtlas()` writes the run to one ZIP.
 
 ```html
-<om-frame id="main" atlas-fit="feature" atlas-margin="0.25" ...></om-frame>
+<om-frame id="main" atlas-fit="feature" atlas-margin="0.15" ...></om-frame>
 <om-atlas for="main" layer="parcels" sort="lot"
           filter="$area > 500"
-          filename="lot-{{atlas.lot}}-{{atlas.name}}"></om-atlas>
+          filename="lot-{{atlas.lot}}-{{atlas.name}}"
+          page-name="{{atlas.name}}"></om-atlas>
 ```
 
 ```js
@@ -112,8 +187,40 @@ import { renderCartographAtlas } from "@nika-js/onlymap/cartograph";
 const { blob, filenames, pages } = await renderCartographAtlas(page, { dpi: 300 });
 ```
 
+<Warning>
+**`atlas-margin` is a fraction of the feature's extent, not millimetres** — the one
+spatial number in the sheet vocabulary that is not mm. The default is `0.15`; `0.1`–`0.3`
+is the useful range. `atlas-margin="10"` pads each side by ten feature-widths, so every
+page shows its subject as a speck. Since 0.10.9 the validator warns on a margin above 2,
+on a non-numeric value, and on a margin set without `atlas-fit="feature"`, where it does
+nothing.
+</Warning>
+
 Pages render sequentially through one live map rather than cloning WebGL contexts, so
-large atlases do not fail at the browser's context limit.
+large atlases do not fail at the browser's context limit. The layer's features must be
+in the document — an atlas cannot page over what a tiled or server-backed layer has
+not loaded.
+
+### Turning the pages <sup>new in 0.10.9</sup>
+
+A reader can page an atlas anywhere the runtime runs — a plain browser, an embedding
+app's preview, an exported file:
+
+- **Keyboard:** `←`/`→`, `PageUp`/`PageDown`, `Home`, `End`, whenever focus is not in a
+  form field.
+- **An on-sheet pager**, `‹ 3 / 49 · Alabama ›`, at the sheet's foot. It is screen-only:
+  never printed, never in a PNG or JPEG, and stripped before a host saves the document.
+  `pager="none"` on `<om-atlas>` removes it for a host that draws its own.
+- **A host protocol**, for an app that shows the sheet in a cross-origin iframe and so
+  cannot reach `seek()`. On every page change the runtime posts
+  `{ source: "onlymap-cartograph", type: "atlas-page", index, count, name }` to its
+  parent window, and accepts
+  `{ source: "onlymap-cartograph-host", type: "atlas-seek", index }` back. The index is
+  0-based, like `seek(i)`.
+
+Programmatically, the page element exposes `cartographEl.atlas` with `count`, `index`,
+`current`, `seek(i)`, `next()`, `filenames()` and `pageName(i)`, and fires
+`om-atlas-page`.
 
 ## Colour and validation
 
@@ -126,10 +233,31 @@ legend entries that collapse under those simulations.
 core is already available. Diagnostics use the same structured error and warning shape
 as `OmMap.validate()`.
 
+## Attribution on a sheet
+
 Free non-commercial cartographs include an OnlyMap foot credit in print and image
 exports. An authored `<om-text>` credit mentioning OnlyMap satisfies the attribution
-requirement; a verified commercial key on a live frame removes it. See
+requirement; a verified commercial key on a live frame's map removes it, and
+`<om-cartograph keep-badge>` keeps it voluntarily <sup>0.8.4</sup>. The sheet credits
+itself **once**: a map inside a frame carries no badge of its own <sup>0.10.8</sup>, so a
+plate with a main map and two locator insets is credited once, not three times. See
 [Licensing & Telemetry](/onlymap/licensing-and-telemetry).
+
+## Changes since 0.8.0
+
+Behaviour fixes a sheet author may have worked around:
+
+- **0.8.1** — A frame switched from static back to live no longer shows its old capture
+  as a ghost behind the map. `max-pitch` on `<om-map>` added.
+- **0.8.2 / 0.8.3** — The tilt cap a frame briefly imposed is gone; the frame now
+  handles any view the map can show, and its furniture follows the map's settled view.
+  Sheets saved zoomed-out or steeply tilted open as authored. `min-zoom` added.
+- **0.10.0** — A projected frame is no longer placed upside down; relief reaches a
+  projected sheet's corners; contour lines stop re-downloading elevation on every edit.
+- **0.10.7** — A sheet now shows the *current* version of the map it points at. It used
+  to serve the copy it fetched first, so a restyled map never reached the sheet — and a
+  sheet that seemed to work only after you opened the map first was this.
+- **0.10.8** — One attribution credit per sheet, not one per frame.
 
 For the complete element and attribute reference, see the
 [package cartograph guide](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/cartograph.md).

@@ -18,9 +18,9 @@ map runtime.
 ```html
 <!doctype html>
 <link rel="stylesheet"
-  href="https://unpkg.com/@nika-js/onlymap@0.10.9/dist/cartograph.css">
+  href="https://unpkg.com/@nika-js/onlymap@0.10.10/dist/cartograph.css">
 <script type="module"
-  src="https://unpkg.com/@nika-js/onlymap@0.10.9/dist/cartograph.standalone.js"></script>
+  src="https://unpkg.com/@nika-js/onlymap@0.10.10/dist/cartograph.standalone.js"></script>
 
 <om-cartograph size="A4" orientation="landscape" title="Parcel survey" dpi="300">
   <om-text kind="title" x="10" y="8" w="190" h="10">{{title}}</om-text>
@@ -62,6 +62,23 @@ Furniture references a frame with `for="frame-id"`. A live-frame legend derives 
 rows from the map's resolved symbology, including classified breaks, raster ramps, and
 flat colours <sup>0.10.5</sup>, so the map and legend cannot drift apart. Static frames
 can use literal `<om-legend-row>` entries with `derived="false"`.
+
+### Colours by attribute <sup>new in 0.10.10</sup>
+
+A sheet has five themes (`theme="default|dark|sepia|blueprint|minimal"`), and each
+element's look can now be set on the element itself, beside the theme:
+
+| Element | Attributes |
+|---|---|
+| `<om-cartograph>` | `bg`, `color`, `font` |
+| `<om-legend>` | `bg`, `color`, `stroke`, `font-size` (pt), `padding` (mm) |
+| `<om-scalebar>`, `<om-north>`, `<om-graticule>` | `color` |
+| `<om-text>`, `<om-shape>` | `color`/`bg` and `fill`/`stroke`, as before |
+
+Each override writes the same `--om-carto-*` property the theme sets, scoped to that
+element, so the sheet on screen, the printed page and the exported image agree. Nothing
+else is styleable: an attribute outside these lists is a validator warning, not a quiet
+no-op — writing `background=` on the page, for instance, warns and changes nothing.
 
 Use `overview-of="main"` on a second frame to draw the main frame's footprint as a
 locator inset. Text supports page, frame, and atlas tokens such as `{{title}}`,

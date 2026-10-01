@@ -18,9 +18,9 @@ map runtime.
 ```html
 <!doctype html>
 <link rel="stylesheet"
-  href="https://unpkg.com/@nika-js/onlymap@0.11.3/dist/cartograph.css">
+  href="https://unpkg.com/@nika-js/onlymap@0.11.4/dist/cartograph.css">
 <script type="module"
-  src="https://unpkg.com/@nika-js/onlymap@0.11.3/dist/cartograph.standalone.js"></script>
+  src="https://unpkg.com/@nika-js/onlymap@0.11.4/dist/cartograph.standalone.js"></script>
 
 <om-cartograph size="A4" orientation="landscape" title="Parcel survey" dpi="300">
   <om-text kind="title" x="10" y="8" w="190" h="10">{{title}}</om-text>
@@ -266,7 +266,10 @@ longer shows its own OpenStreetMap or CARTO attribution: the sheet credits every
 its providers in an `attribution` attribute —
 `attribution="© OpenStreetMap contributors · © CARTO"` — so a static or exported sheet still
 credits its tiles with nothing loaded; set it yourself on a placed image whose tiles need
-credit. If your own `<om-text>` already names a provider, the sheet leaves it out of its line.
+credit. A fallback capture `<om-source>` takes the same `attribution`, and the sheet credits it
+while that capture is what the frame shows <sup>0.11.4</sup> — record it with the capture's
+`corners`, since a capture is only shown when the live map did not load. If your own
+`<om-text>` already names a provider, the sheet leaves it out of its line.
 
 ## Changes since 0.8.0
 
@@ -285,6 +288,7 @@ Behaviour fixes a sheet author may have worked around:
 - **0.10.8** — One attribution credit per sheet, not one per frame.
 - **0.11.3** — Basemap credits (OpenStreetMap, CARTO, …) move off the frames into one
   line in the page's corner, and frozen frames keep them.
+- **0.11.4** — A frame that falls back to its saved capture credits that capture's providers.
 
 For the complete element and attribute reference, see the
 [package cartograph guide](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/cartograph.md).

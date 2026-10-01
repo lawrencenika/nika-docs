@@ -18,9 +18,9 @@ map runtime.
 ```html
 <!doctype html>
 <link rel="stylesheet"
-  href="https://unpkg.com/@nika-js/onlymap@0.11.1/dist/cartograph.css">
+  href="https://unpkg.com/@nika-js/onlymap@0.11.3/dist/cartograph.css">
 <script type="module"
-  src="https://unpkg.com/@nika-js/onlymap@0.11.1/dist/cartograph.standalone.js"></script>
+  src="https://unpkg.com/@nika-js/onlymap@0.11.3/dist/cartograph.standalone.js"></script>
 
 <om-cartograph size="A4" orientation="landscape" title="Parcel survey" dpi="300">
   <om-text kind="title" x="10" y="8" w="190" h="10">{{title}}</om-text>
@@ -260,6 +260,14 @@ itself **once**: a map inside a frame carries no badge of its own <sup>0.10.8</s
 plate with a main map and two locator insets is credited once, not three times. See
 [Licensing & Telemetry](/onlymap/licensing-and-telemetry).
 
+**Basemap credits move to the sheet too** <sup>new in 0.11.3</sup>. A map inside a frame no
+longer shows its own OpenStreetMap or CARTO attribution: the sheet credits every provider
+**once**, at the page's bottom-right, opposite the OnlyMap credit. A frozen frame records
+its providers in an `attribution` attribute —
+`attribution="© OpenStreetMap contributors · © CARTO"` — so a static or exported sheet still
+credits its tiles with nothing loaded; set it yourself on a placed image whose tiles need
+credit. If your own `<om-text>` already names a provider, the sheet leaves it out of its line.
+
 ## Changes since 0.8.0
 
 Behaviour fixes a sheet author may have worked around:
@@ -275,6 +283,8 @@ Behaviour fixes a sheet author may have worked around:
   to serve the copy it fetched first, so a restyled map never reached the sheet — and a
   sheet that seemed to work only after you opened the map first was this.
 - **0.10.8** — One attribution credit per sheet, not one per frame.
+- **0.11.3** — Basemap credits (OpenStreetMap, CARTO, …) move off the frames into one
+  line in the page's corner, and frozen frames keep them.
 
 For the complete element and attribute reference, see the
 [package cartograph guide](https://github.com/NikaGeospatial/onlymapjs/blob/main/docs/cartograph.md).

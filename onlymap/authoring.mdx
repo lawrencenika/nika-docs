@@ -476,7 +476,9 @@ straightest stretch it fits on (`placement="auto"`, the default; `start`/`middle
 pin it), `max-angle` sets how sharply a name may bend between neighbouring letters
 (45°, MapLibre's figure), and `orientation="chord"` lays the whole name straight along
 the stretch it covers for data too jagged to follow. `letter-spacing` tracks a name out —
-the convention for rivers and ranges rather than a flourish.
+the convention for rivers and ranges rather than a flourish. Add `pickable` to make labels
+clickable <sup>0.11.6</sup>: a click reports the feature the label names, so a `{{name}}` popup
+shows that river's fields.
 
 ### Editable vector export <sup>new in 0.10.0</sup>
 

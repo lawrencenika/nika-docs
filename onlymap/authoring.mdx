@@ -275,7 +275,7 @@ Every built-in action uses one payload contract, across every trigger: behaviors
 
 A card that carries an image or a link — `<img src="{{photo}}">` — goes inside a `<template>` child of the `<om-overlay>` <sup>0.11.1</sup>: a template is inert when the page loads, so the browser never requests the literal `{{photo}}`; tokens stay blank until a pick fills them, and tooltips behave the same way.
 
-A tooltip opened by a click closes when the selection clears — a click on empty map, or a pick that moves off every feature <sup>0.10.2</sup>. A popup carrying its own `data-emit` controls keeps pointer events and stays until it is dismissed. Nothing needs a hand-wired `hide-tooltip`.
+A tooltip opened by a click closes when the selection clears — a click on empty map, or a pick that moves off every feature <sup>0.10.2</sup>. A popup carrying its own `data-emit` controls keeps pointer events and stays until it is dismissed. Nothing needs a hand-wired `hide-tooltip`. A popup that a click behavior opens with `show-overlay` stays open while the pointer moves on <sup>0.11.8</sup>: hovering another feature neither moves nor closes it, and the next click moves it to that feature or, on empty map, closes it. Before 0.11.8 this needed `selection-type="click"` on the `<om-overlay>`; that attribute still works and still wins.
 
 GPU filtering is declarative (`filter-field="magnitude" filter-range="[4,10]"`). It updates live from the `filter` widget, and the widget statistics match what the map renders. For an epoch-millisecond field, the built-in widget can show readable labels:
 

@@ -80,6 +80,8 @@ Dashed lines are a single attribute — `dash="[6, 3]"` (or SVG-style `dash="6 3
 | Zarr / GeoZarr raster | `<om-layer type="ZarrLayer" src="./x.zarr" variable="temp" select="time=0" colormap="viridis" min="…" max="…">` — chunked N-D arrays; see below |
 | Drone JPEG image | `<om-layer type="ImageOverlay" src="./DJI_0123.jpg" georeference="exif">` — georeferenced photo overlay; see below |
 
+`data` is always an address, never the rows themselves: `data='[{…}]'` draws nothing, and the validator reports it as an error <sup>0.11.9</sup>. Put inline rows in a `<script type="application/json">` child instead. A `data` address that fails to load (a typo, a missing file, a blocked request) is reported in the map's validation panel and diagnostics until it loads <sup>0.11.9</sup>.
+
 You can add custom formats and stream decoders with `OmMap.registerFormat` and `OmMap.registerSource`. For an authenticated endpoint, use `OmMap.configureData({ headers, credentials, fetch })`. Credentials do not belong in the markup.
 
 A raster is the one exception to the `data` attribute. The layer's own reader streams a GeoTIFF as tiles, with HTTP Range requests against a Cloud-Optimized GeoTIFF. It does not parse the raster into rows, so you use `src`. Set `min` and `max` for float or 16-bit data; the default stretch is 0–255. A single-band source takes a bundled `colormap` (`viridis`, `terrain`, `rdbu`, …). A source with 3 or more bands composites as RGB, with no attributes. A restretch or a recolor is a GPU uniform update, so the tiles are not fetched again. The legend shows the colormap ramp automatically.

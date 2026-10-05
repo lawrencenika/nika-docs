@@ -3,6 +3,8 @@ title: "How to Download Large Folders from Nika Planet"
 description: "Install the Nika Planet Downloader to transfer folders over 2 GiB or 2,000 files, resume interrupted downloads, and verify each file."
 ---
 
+import PlatformSelector from '/snippets/platform-selector.mdx';
+
 Browsers download a folder by building the whole ZIP in memory before anything
 reaches your disk. Folders over 2 GiB or 2,000 files can stall, and there is no
 way to resume — so Nika Planet hands folders past either limit to a small
@@ -18,6 +20,8 @@ large. The downloader transfers the objects inside each selected folder
 individually; you can also run it directly for folders without starting from
 the web app.
 
+<PlatformSelector />
+
 ## Install
 
 One install covers every export, in any workspace.
@@ -32,7 +36,8 @@ With [Homebrew](https://brew.sh):
 brew install nikageospatial/nika-planet-downloader/nika-planet-downloader
 ```
 
-It is ready to use as soon as the command finishes.
+It is ready to use as soon as the command finishes. `brew upgrade
+nika-planet-downloader` picks up new versions.
 
 No Homebrew? Use the install script instead:
 
@@ -41,7 +46,30 @@ curl -fsSL https://raw.githubusercontent.com/NikaGeospatial/nika-planet-download
 ```
 
 The script adds the downloader to your `PATH`, so **open a new terminal
-window** before running it.
+window** before running it. Run the script again to update.
+
+</Tab>
+
+<Tab title="Windows">
+
+In PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/NikaGeospatial/nika-planet-downloader/main/install.ps1 | iex
+```
+
+It installs to `%LOCALAPPDATA%\Programs\nika-planet-downloader` and adds that
+folder to your `PATH` — no administrator rights needed — and the window you ran
+it in can use the downloader straight away.
+
+Rather not paste a command? Download
+[`install.cmd`](https://github.com/NikaGeospatial/nika-planet-downloader/releases/latest/download/install.cmd)
+and double-click it, then **open a new PowerShell window** to use the
+downloader. It is not code-signed yet, so Windows may ask you to confirm before
+it runs.
+
+Run either one again to update. 64-bit Windows only; on Windows on Arm the x64
+build runs under emulation.
 
 </Tab>
 
@@ -52,15 +80,8 @@ curl -fsSL https://raw.githubusercontent.com/NikaGeospatial/nika-planet-download
 ```
 
 The script adds the downloader to your `PATH`, so **open a new terminal
-window** before running it. x86_64 only for now.
-
-</Tab>
-
-<Tab title="Windows">
-
-Download `nika-planet-downloader-windows-x86_64.exe` from
-[the releases page](https://github.com/NikaGeospatial/nika-planet-downloader/releases/latest),
-rename it to `nika-planet-downloader.exe`, and put it somewhere on your `PATH`.
+window** before running it. Run the script again to update. x86_64 only for
+now.
 
 </Tab>
 
@@ -70,9 +91,37 @@ rename it to `nika-planet-downloader.exe`, and put it somewhere on your `PATH`.
 
 Point the tool at a folder using a `nikafs://` address:
 
+<Tabs>
+
+<Tab title="macOS">
+
 ```bash
-nika-planet-downloader export nikafs://<project-id>/data/stac/cogs --output ~/Downloads
+nika-planet-downloader export 'nikafs://<project-id>/data/stac/cogs' --output ~/Downloads
 ```
+
+</Tab>
+
+<Tab title="Windows">
+
+```powershell
+nika-planet-downloader export 'nikafs://<project-id>/data/stac/cogs' --output "$HOME\Downloads"
+```
+
+Write the output folder as `"$HOME\Downloads"` rather than `~/Downloads`:
+Windows PowerShell passes `~` to programs unchanged, so the download would land
+in a folder literally named `~`.
+
+</Tab>
+
+<Tab title="Linux">
+
+```bash
+nika-planet-downloader export 'nikafs://<project-id>/data/stac/cogs' --output ~/Downloads
+```
+
+</Tab>
+
+</Tabs>
 
 You do not need to sign in first. If no session is cached, the command opens your
 browser once, and continues into the download as soon as you have authorised it.
@@ -80,8 +129,9 @@ browser once, and continues into the download as soon as you have authorised it.
 <Note>
   **`--output` is the parent directory.** The folder structure from Nika Planet
   is recreated inside it, so `--output ~/Downloads` saves the example above to
-  `~/Downloads/stac/cogs`. Passing `--output ~/Downloads/stac` would give you
-  `~/Downloads/stac/stac`.
+  `~/Downloads/stac/cogs` (on Windows, `--output "$HOME\Downloads"` saves it to
+  `Downloads\stac\cogs` in your user folder). Passing `--output ~/Downloads/stac`
+  would give you `~/Downloads/stac/stac`.
 </Note>
 
 ### Finding the address
@@ -101,19 +151,51 @@ for as long as you have access to that folder.
 
 Pass as many addresses as you like. They may span different projects.
 
+<Tabs>
+
+<Tab title="macOS">
+
 ```bash
 nika-planet-downloader export \
-  nikafs://<project-id>/data/stac/cogs \
-  nikafs://<project-id>/data/imagery/2024 \
+  'nikafs://<project-id>/data/stac/cogs' \
+  'nikafs://<project-id>/data/imagery/2024' \
   --output ~/Downloads
 ```
+
+</Tab>
+
+<Tab title="Windows">
+
+```powershell
+nika-planet-downloader export `
+  'nikafs://<project-id>/data/stac/cogs' `
+  'nikafs://<project-id>/data/imagery/2024' `
+  --output "$HOME\Downloads"
+```
+
+</Tab>
+
+<Tab title="Linux">
+
+```bash
+nika-planet-downloader export \
+  'nikafs://<project-id>/data/stac/cogs' \
+  'nikafs://<project-id>/data/imagery/2024' \
+  --output ~/Downloads
+```
+
+</Tab>
+
+</Tabs>
 
 ### Starting from the web app
 
 If you select folders in File Storage and choose **Download**, anything too large
 for the browser collapses into a single row in Active Operations. Click
-**Download via CLI** for a dialog with the exact command already filled in —
-copy it and run it.
+**Download via CLI** for a dialog with the install command and the exact export
+command already filled in. It shows the commands for the operating system you
+are on; switch between **macOS**, **Windows** and **Linux** at the top if you
+are setting up another machine. Copy them and run them.
 
 ## Options
 
@@ -151,11 +233,16 @@ account is already allowed to download, and that permission is re-checked on
 every request — so if your workspace access changes, an in-progress download
 stops. Read access is granted one hour at a time and can be revoked.
 
-Your session is stored in your operating system's keychain, never in a file.
+Your session is stored in your operating system's credential store — the
+Keychain on macOS, Credential Manager on Windows — never in a file.
 
 ## If something goes wrong
 
 <AccordionGroup>
+  <Accordion title="'command not found' or 'is not recognized'">
+    Open a new terminal window. The installer added the downloader to your
+    `PATH`, and windows that were already open do not see the change.
+  </Accordion>
   <Accordion title="'no folders given, and nothing is waiting on this account'">
     You ran `export` with no address. Pass a `nikafs://` address, or start a
     download from the web app and use **Download via CLI**.
@@ -171,6 +258,22 @@ Your session is stored in your operating system's keychain, never in a file.
   <Accordion title="Some files failed">
     Re-run the identical command. Only the files that failed are retried;
     everything already downloaded is skipped.
+  </Accordion>
+  <Accordion title="Windows: the browser shows 'Sign-in failed — Missing code'">
+    Earlier versions of the downloader opened the sign-in page on Windows
+    without the details it needs. Re-run the Windows install command to update,
+    then sign in again.
+  </Accordion>
+  <Accordion title="Windows: 'An Application Control policy has blocked this file'">
+    Smart App Control, which is on by default on new Windows 11 installations,
+    blocks programs it does not recognise yet, and the downloader is not
+    code-signed. Windows offers no way to allow a single program past it, so
+    run the downloader on another computer, or contact us below.
+  </Accordion>
+  <Accordion title="Windows: double-clicking install.ps1 does not install anything">
+    Windows does not run downloaded PowerShell scripts that way. Use
+    `install.cmd`, or paste the `irm … | iex` command from the Windows install
+    tab into PowerShell.
   </Accordion>
 </AccordionGroup>
 

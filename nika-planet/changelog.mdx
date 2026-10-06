@@ -1,8 +1,25 @@
 ---
 title: "Changelog"
 description: "Product updates and announcements for NikaPlanet products"
+icon: "clock-rotate-left"
 rss: true
 ---
+
+<Update label="September 23, 2026" description="v0.5.39">
+  ## Nika Planet Downloader for Large Folder Exports
+
+### New Features
+
+- **Download large folders from your terminal**: When a selected folder exceeds 2 GiB or 2,000 files, Nika Planet offers a command for the Nika Planet Downloader instead of trying to build the full ZIP in your browser. Install the tool on macOS, Linux, or Windows, then run the command from Active Operations. You can also pass `nikafs://` folder paths directly to download one or more folders.
+- **Resume and verify transfers**: The downloader transfers folder contents in parallel, writes directly to your chosen drive, verifies files against storage checksums, and resumes unfinished downloads when you rerun the same command.
+- **Keep workspace access controls**: Sign in with your Nika Planet account. The downloader checks your current workspace access when it requests files, and access can be revoked.
+- **Step-by-step setup guide**: See the [large folder download guide](/guides/manage-file-lake-per-workspace/large-folder-downloads) for installation, copying folder paths, choosing an output directory, and troubleshooting.
+
+![Nika Planet Downloader dialog for exporting a large folder](/nika-planet/changelog-images/2026-09-23-nika-planet-downloader.jpg)
+
+Individual file selections continue to use the regular browser download.
+
+</Update>
 
 <Update label="August 14, 2026" description="v0.5.38">
   ## Queuing Feature for Remote Runs

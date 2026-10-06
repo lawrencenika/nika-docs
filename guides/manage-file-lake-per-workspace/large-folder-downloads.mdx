@@ -1,15 +1,22 @@
 ---
-title: "Large Folder Downloads"
-description: "Use the Nika Planet Downloader to pull folders that are too large for the browser"
+title: "How to Download Large Folders from Nika Planet"
+description: "Install the Nika Planet Downloader to transfer folders over 2 GiB or 2,000 files, resume interrupted downloads, and verify each file."
 ---
 
 Browsers download a folder by building the whole ZIP in memory before anything
-reaches your disk. Past about 2 GB that stalls, and there is no way to resume —
-so Nika Planet hands folders that size to a small terminal tool instead.
+reaches your disk. Folders over 2 GiB or 2,000 files can stall, and there is no
+way to resume — so Nika Planet hands folders past either limit to a small
+terminal tool instead.
 
 The **Nika Planet Downloader** writes straight to the drive you choose, transfers
 files in parallel, resumes where it left off, and verifies every file against the
 checksum storage reports.
+
+The web app sends large **folders** to the downloader. Individual file
+selections continue to use the normal browser download, even when a file is
+large. The downloader transfers the objects inside each selected folder
+individually; you can also run it directly for folders without starting from
+the web app.
 
 ## Install
 

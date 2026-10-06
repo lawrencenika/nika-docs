@@ -51,12 +51,13 @@
 								]
 							},
 							{
-								"group": "NIKA Planet (Cloud GIS Platform)",
+								"group": "NIKA Planet",
 								"pages": [
 									"nika-planet/overview",
 									"nika-planet/changelog",
 									{
 										"group": "NikaWorkspace",
+										"icon": "folder-open",
 										"root": "nika-planet/nika-workspace",
 										"expanded": false,
 										"pages": [
@@ -75,6 +76,7 @@
 									},
 									{
 										"group": "NikaNotebook",
+										"icon": "book-open",
 										"root": "nika-planet/nika-notebook",
 										"expanded": false,
 										"pages": [
@@ -92,6 +94,7 @@
 									"nika-planet/nika-hub",
 									{
 										"group": "NikaMap",
+										"icon": "map",
 										"root": "nika-planet/nika-map",
 										"expanded": false,
 										"pages": [
@@ -110,6 +113,7 @@
 									},
 									{
 										"group": "NikaDBMS",
+										"icon": "database",
 										"root": "nika-planet/nika-dbms",
 										"expanded": false,
 										"pages": [
@@ -121,6 +125,7 @@
 									},
 									{
 										"group": "NikaFlow",
+										"icon": "diagram-project",
 										"root": "nika-planet/nika-flow",
 										"expanded": false,
 										"pages": [
@@ -132,6 +137,7 @@
 									"nika-planet/nika-workers",
 									{
 										"group": "NikaLabeler",
+										"icon": "tags",
 										"root": "nika-planet/nika-labeler",
 										"expanded": false,
 										"pages": [
@@ -145,6 +151,7 @@
 									},
 									{
 										"group": "NikaStudio",
+										"icon": "wand-magic-sparkles",
 										"root": "nika-planet/nika-studio",
 										"expanded": false,
 										"pages": [
